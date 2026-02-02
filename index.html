@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Srishti Mukherjee - Creative Developer Portfolio | Data Science Student Hoping to Make a Change">
+    <title>Srishti Mukherjee | Creative Developer Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content"><span class="loader-text">SM</span>
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Welcome Section (Landing Page) -->
+    <section class="welcome" id="welcome">
+        <div class="grid-bg"></div>
+        <div class="welcome-content">
+            <div class="hero-title"><span class="creative-text">Creative</span><span
+                    class="developer-text">DEVELOPER</span></div>
+            <h2 class="welcome-text">welcome to my portfolio</h2>
+            <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
+            <div class="hero-name">SRISHTI MUKHERJEE</div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">SM</div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#about">01 | About</a></li>
+                <li><a href="#projects">02 | Projects</a></li>
+                <li><a href="#skills">03 | Skills</a></li>
+                <li><a href="#experience">04 | Experience</a></li>
+                <li><a href="#education">05 | Education</a></li>
+                <li><a href="#contact">06 | Contact</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="section about" id="about">
+        <div class="container">
+            <div class="section-header"><span class="section-number">01</span>
+                <h2 class="section-title">About Me</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-intro">I'm <strong>Srishti Mukherjee</strong>, a motivated B.Tech Computer Science
+                        student specializing in Data Science at Manipal University Jaipur. I'm passionate about
+                        leveraging AI, deep learning, and emerging technologies to build innovative solutions that make
+                        a real impact.</p>
+                    <p>Currently in my 3rd year, I've worked on projects ranging from news summarization systems to
+                        sustainability-focused neural networks. I'm always eager to learn new technologies and
+                        contribute to meaningful technical projects.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item"><span class="stat-number" data-target="3">0</span><span
+                            class="stat-label">Projects</span></div>
+                    <div class="stat-item"><span class="stat-number" data-target="4">0</span><span
+                            class="stat-label">Internships</span></div>
+                    <div class="stat-item"><span class="stat-number" data-target="3">0</span><span
+                            class="stat-label">Year Student</span></div>
+                </div>
+            </div>
+            <div class="about-contact">
+                <a href="mailto:srishtii.mukherjee@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>
+                    srishtii.mukherjee@gmail.com</a>
+                <a href="tel:+918527956330" class="contact-link"><i class="fas fa-phone"></i> +91 8527956330</a>
+                <a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank" class="contact-link"><i
+                        class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="https://github.com/srishtiim" target="_blank" class="contact-link"><i
+                        class="fab fa-github"></i> GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section projects" id="projects">
+        <div class="container">
+            <div class="section-header"><span class="section-number">02</span>
+                <h2 class="section-title">Selected Projects</h2>
+            </div>
+            <div class="projects-grid" id="projects-grid"></div>
+        </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-image"><img id="modal-img" src="" alt="Project"></div>
+            <div class="modal-body">
+                <span class="modal-category" id="modal-category"></span>
+                <h3 class="modal-title" id="modal-title"></h3>
+                <p class="modal-description" id="modal-description"></p>
+                <div class="modal-features" id="modal-features">
+                    <h4>Key Features</h4>
+                    <ul id="modal-features-list"></ul>
+                </div>
+                <div class="modal-tech" id="modal-tech"></div>
+                <div class="modal-links" id="modal-links"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Section -->
+    <section class="section skills" id="skills">
+        <div class="container">
+            <div class="section-header"><span class="section-number">03</span>
+                <h2 class="section-title">Skills & Technologies</h2>
+            </div>
+            <div class="skills-grid" id="skills-grid">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Programming & Languages</h3>
+                    <div class="skill-list" id="programming-skills"></div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="skill-category-title">AI & Machine Learning</h3>
+                    <div class="skill-list" id="ai-skills"></div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Tools & Technologies</h3>
+                    <div class="skill-list" id="tools-skills"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section experience" id="experience">
+        <div class="container">
+            <div class="section-header"><span class="section-number">04</span>
+                <h2 class="section-title">Professional Experience</h2>
+            </div>
+            <div class="timeline" id="timeline"></div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section education" id="education">
+        <div class="container">
+            <div class="section-header"><span class="section-number">05</span>
+                <h2 class="section-title">Education</h2>
+            </div>
+            <div class="education-grid" id="education-grid"></div>
+            <div class="certifications">
+                <h3 class="certifications-title">Certifications</h3>
+                <div class="certifications-grid" id="certifications-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+        <div class="container">
+            <div class="section-header"><span class="section-number">06</span>
+                <h2 class="section-title">Get In Touch</h2>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 class="contact-heading">Let's build something amazing together.</h3>
+                    <div class="contact-details">
+                        <a href="mailto:srishtii.mukherjee@gmail.com" class="contact-item"><i
+                                class="fas fa-envelope"></i><span>srishtii.mukherjee@gmail.com</span></a>
+                        <a href="tel:+918527956330" class="contact-item"><i class="fas fa-phone"></i><span>+91
+                                8527956330</span></a>
+                        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>Jaipur, Rajasthan,
+                                India</span></div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank" class="social-link"><i
+                                class="fab fa-linkedin-in"></i><span>LinkedIn</span></a>
+                        <a href="https://github.com/srishtiim" target="_blank" class="social-link"><i
+                                class="fab fa-github"></i><span>GitHub</span></a>
+                    </div>
+                </div>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group"><input type="text" id="name" name="name" placeholder="Your Name"
+                            required><label for="name">Name</label></div>
+                    <div class="form-group"><input type="email" id="email" name="email" placeholder="Your Email"
+                            required><label for="email">Email</label></div>
+                    <div class="form-group"><input type="text" id="subject" name="subject" placeholder="Subject"
+                            required><label for="subject">Subject</label></div>
+                    <div class="form-group"><textarea id="message" name="message" rows="5" placeholder="Your Message"
+                            required></textarea><label for="message">Message</label></div>
+                    <button type="submit" class="btn btn-primary" id="submit-btn"><span>Send Message</span><i
+                            class="fas fa-paper-plane"></i></button>
+                    <div class="form-status" id="form-status"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-copyright">© 2025 Srishti Mukherjee. All rights reserved.</p>
+                <div class="footer-links"><a href="#about">About</a><a href="#projects">Projects</a><a
+                        href="#skills">Skills</a><a href="#experience">Experience</a><a
+                        href="#education">Education</a><a href="#contact">Contact</a></div>
+                <div class="footer-social"><a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank"><i
+                            class="fab fa-linkedin-in"></i></a><a href="https://github.com/srishtiim" target="_blank"><i
+                            class="fab fa-github"></i></a></div>
+            </div>
+            <div class="footer-bottom">
+                <p>Designed & Developed by Srishti Mukherjee</p>
+                <p>Built with HTML, CSS, JavaScript & Firebase</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
