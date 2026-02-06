@@ -3,6 +3,12 @@
    ======================================== */
 
 // ============ DATA ============
+import { db } from "./firebase-config.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 const projectsData = [
     {
         id: 1,
