@@ -474,3 +474,44 @@ function initContactForm() {
         }, 5000);
     });
 }
+
+
+
+
+
+
+async function loadSkills() {
+  const skillsRef = collection(db, "skills");
+  const snapshot = await getDocs(skillsRef);
+
+  const programming = document.getElementById("programming-skills");
+  const ai = document.getElementById("ai-skills");
+  const tools = document.getElementById("tools-skills");
+
+  programming.innerHTML = "";
+  ai.innerHTML = "";
+  tools.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const skill = doc.data();
+
+    let stars = "";
+    for (let i = 1; i <= 5; i++) {
+      stars += i <= skill.rating ? "★" : "<span class='empty'>★</span>";
+    }
+
+    const html = `
+      <div class="skill-item">
+        <span class="skill-name">${skill.name}</span>
+        <span class="skill-stars">${stars}</span>
+      </div>
+    `;
+
+    if (skill.category === "Programming") programming.innerHTML += html;
+    if (skill.category === "AI") ai.innerHTML += html;
+    if (skill.category === "Tools") tools.innerHTML += html;
+  });
+}
+
+loadSkills();
+
