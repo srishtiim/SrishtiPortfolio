@@ -1116,6 +1116,31 @@ body {
     color: var(--cream);
 }
 
+.download-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    background: var(--red);
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.certification-badge:hover .download-btn-content {
+    background: var(--white);
+    color: var(--red);
+}
+
+.download-btn-content i {
+    color: inherit;
+    font-size: 0.9rem;
+}
+
+
 /* ========== CONTACT SECTION ========== */
 .contact {
     background: var(--beige);
@@ -1429,4 +1454,329 @@ a.contact-item:hover {
 .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* ========== EXPERIENCE SECTION ========== */
+.experience {
+    background: var(--cream);
+    overflow: hidden;
+    /* For animations */
+}
+
+/* Timeline Container */
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Vertical Red Line */
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50px;
+    /* As per spec */
+    width: 3px;
+    background: var(--red);
+    border-radius: 3px;
+}
+
+/* Individual Experience Item */
+.experience-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 100px;
+    /* Space for timeline */
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.6s ease;
+}
+
+/* Fade in animation class */
+.experience-item.fade-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Stagger animation delays */
+.experience-item:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.experience-item:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.experience-item:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.experience-item:nth-child(4) {
+    transition-delay: 0.4s;
+}
+
+/* Timeline Marker (Red Circle) */
+.timeline-marker {
+    position: absolute;
+    left: 44px;
+    /* Center on line (50px + 1.5px width - 8px radius) -> approx */
+    /* Exact calc: Line at 50px (center at 51.5px). Circle 16px. Center at 8px. 51.5 - 8 = 43.5px */
+    left: 43.5px;
+    top: 25px;
+    width: 16px;
+    height: 16px;
+    background: var(--red);
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 0 2px var(--red);
+}
+
+/* Experience Card */
+.experience-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border-left: 4px solid transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+.experience-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(211, 47, 47, 0.15);
+}
+
+.experience-card.expanded {
+    border-left-color: var(--red);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+}
+
+.company-logo {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.company-initials {
+    width: 100%;
+    height: 100%;
+    background: var(--red-light);
+    color: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+}
+
+.header-content {
+    flex-grow: 1;
+}
+
+.company-name {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+}
+
+.position-title {
+    color: var(--red);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.meta-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-info i {
+    color: var(--red);
+    font-size: 0.8rem;
+}
+
+/* Card Body */
+.short-description {
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.read-more {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.read-more:hover {
+    gap: 0.8rem;
+}
+
+/* Expanded Details */
+.full-details {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--beige);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.full-description {
+    margin-bottom: 1.5rem;
+    color: var(--gray);
+}
+
+.full-details h4 {
+    font-family: var(--font-serif);
+    margin-bottom: 0.8rem;
+    color: var(--dark);
+    font-size: 1.1rem;
+}
+
+.responsibilities-list,
+.achievements-list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.responsibilities-list li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--gray);
+    font-size: 0.95rem;
+}
+
+.responsibilities-list li::before {
+    content: '•';
+    color: var(--red);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.achievements-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.achievements-list li i {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    color: var(--red);
+    font-size: 0.8rem;
+}
+
+/* Skills Tags */
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.tag.tech {
+    background: var(--red);
+    color: var(--white);
+}
+
+.tag.soft {
+    background: var(--beige);
+    color: var(--dark);
+}
+
+.tag.tool {
+    background: var(--cream);
+    color: var(--dark);
+    border: 1px solid var(--red-light);
+}
+
+/* Responsive Experience */
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-marker {
+        left: 13.5px;
+    }
+
+    .experience-item {
+        padding-left: 50px;
+        margin-bottom: 2rem;
+    }
+
+    .card-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .company-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .section-number {
+        font-size: 4rem;
+    }
+
+    .experience-card {
+        padding: 1.5rem;
+    }
 }

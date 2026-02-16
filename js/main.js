@@ -512,13 +512,14 @@ function initExperienceInteractivity() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
+                entry.target.classList.add('visible');
                 observer.unobserve(entry.target); // Only animate once
             }
         });
     }, observerOptions);
 
     document.querySelectorAll('.experience-item').forEach(item => {
+        item.classList.add('fade-in'); // Start hidden
         observer.observe(item);
     });
 }
@@ -552,7 +553,10 @@ function renderCertifications() {
                 <span class="certification-name">${cert.name}</span>
                 <span class="certification-provider">${cert.provider}</span>
             </div>
-            <i class="fas fa-external-link-alt"></i>
+            <div class="download-btn-content">
+                <i class="fas fa-download"></i>
+                <span>Download Certificate</span>
+            </div>
         </a>
     `).join('');
 }
