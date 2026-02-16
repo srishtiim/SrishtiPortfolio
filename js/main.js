@@ -3,6 +3,7 @@
    ======================================== */
 
 // ============ DATA ============
+// ============ DATA ============
 const projectsData = [
     {
         id: 1,
@@ -79,55 +80,121 @@ const skillsData = {
 
 const experienceData = [
     {
-        position: "Software Intern",
+        id: 1,
         company: "Total Shift Left",
-        duration: "Jun 2025 - Aug 2025",
+        position: "Software Intern",
+        duration: "June 2025 - August 2025",
         location: "Remote",
+        type: "Internship",
+        shortDescription: "Contributed to enterprise software development, focusing on ERP and CRM systems while building automation tools for software testing.",
+        fullDescription: "During my software internship at Total Shift Left, I gained hands-on experience in enterprise software development and quality assurance. I actively participated in the development lifecycle of ERP and CRM projects, learning industry-standard practices for building scalable business applications.",
         responsibilities: [
-            "Actively contributed to ERP and CRM project activities",
-            "Gained solid understanding of software systems",
-            "Assisted with development and system testing tasks",
-            "Created testing-focused automation project using VSCode"
+            "Actively contributed to project activities involving ERP (Enterprise Resource Planning) and CRM (Customer Relationship Management) systems",
+            "Conducted thorough system testing to identify bugs and ensure software quality",
+            "Created a testing-focused automation project using Visual Studio Code to streamline QA processes",
+            "Collaborated with cross-functional teams including developers, QA engineers, and project managers"
         ],
-        skills: ["Python", "Software Testing", "ERP/CRM Systems", "Automation"]
+        skills: [
+            { name: "Python", type: "tech" },
+            { name: "Software Testing", type: "tech" },
+            { name: "ERP Systems", type: "tech" },
+            { name: "CRM Systems", type: "tech" },
+            { name: "VSCode", type: "tool" },
+            { name: "Automation", type: "tech" },
+            { name: "Git", type: "tool" },
+            { name: "Agile/Scrum", type: "soft" },
+            { name: "Quality Assurance", type: "tech" },
+            { name: "System Testing", type: "tech" },
+            { name: "Bug Tracking", type: "tech" }
+        ]
     },
     {
-        position: "Sales and Marketing Intern",
+        id: 2,
         company: "Wedd.Ai",
-        duration: "Jul 2025 - Sep 2025",
+        position: "Sales and Marketing Intern",
+        duration: "July 2025 - September 2025",
         location: "Remote",
+        type: "Internship",
+        shortDescription: "Bridged technical AI expertise with marketing initiatives, optimizing AI models while driving sales outreach and content creation.",
+        fullDescription: "At Wedd.Ai, an AI-powered wedding planning platform, I had the unique opportunity to work at the intersection of technology and marketing. This role allowed me to apply my technical AI knowledge while developing business and marketing skills.",
         responsibilities: [
-            "Engaged in content creation and sales outreach efforts",
-            "Facilitated marketing initiatives",
-            "Optimized AI model performance and ensured data quality",
-            "Collaborated with cross-functional teams to deliver AI solutions"
+            "Optimized AI/ML model performance through data preprocessing and feature engineering",
+            "Collaborated with cross-functional teams including developers, designers, and sales personnel to deliver AI solutions",
+            "Created technical documentation for AI features targeted at non-technical stakeholders",
+            "Facilitated marketing initiatives including SEO optimization, social media strategy, and email marketing campaigns"
         ],
-        skills: ["AI/ML", "Content Creation", "Marketing", "Collaboration"]
+        skills: [
+            { name: "AI/ML", type: "tech" },
+            { name: "Content Creation", type: "soft" },
+            { name: "Digital Marketing", type: "soft" },
+            { name: "Sales Outreach", type: "soft" },
+            { name: "Data Analysis", type: "tech" },
+            { name: "Social Media Marketing", type: "soft" },
+            { name: "SEO", type: "tech" },
+            { name: "Email Marketing", type: "soft" },
+            { name: "Customer Engagement", type: "soft" },
+            { name: "Technical Writing", type: "soft" },
+            { name: "Data Preprocessing", type: "tech" },
+            { name: "Model Optimization", type: "tech" }
+        ]
     },
     {
-        position: "Intern",
+        id: 3,
         company: "Smollan",
-        duration: "Jul 2025 - Sep 2025",
+        position: "Intern",
+        duration: "July 2025 - September 2025",
         location: "Remote",
+        type: "Internship",
+        shortDescription: "Created engaging visual content for Google product showcases while managing presentations and cross-functional collaboration.",
+        fullDescription: "As an intern at Smollan, a global retail solutions company, I worked on creating compelling visual content for Google product showcases. This role enhanced my creative and organizational skills while working in a fast-paced, collaborative environment.",
         responsibilities: [
-            "Collaborated with cross-functional team members",
-            "Crafted engaging visual content for Google product showcases",
-            "Managed recordings and presentations",
-            "Organized company documentation and sheets"
+            "Crafted engaging visual content for Google product showcases and demonstrations",
+            "Designed presentations, infographics, and marketing materials for various campaigns",
+            "Proficiently managed recording and documentation of presentations and meetings",
+            "Organized and maintained Google Sheets for project tracking and data management"
         ],
-        skills: ["Visual Design", "Presentations", "Documentation", "Google Workspace"]
+        skills: [
+            { name: "Visual Design", type: "soft" },
+            { name: "Google Workspace", type: "tool" },
+            { name: "Presentation Design", type: "soft" },
+            { name: "Content Creation", type: "soft" },
+            { name: "Adobe Creative Suite", type: "tool" },
+            { name: "Canva", type: "tool" },
+            { name: "Video Recording", type: "tech" },
+            { name: "Documentation", type: "soft" },
+            { name: "Project Management", type: "soft" },
+            { name: "Cross-functional Collaboration", type: "soft" },
+            { name: "Brand Guidelines", type: "soft" }
+        ]
     },
     {
-        position: "Intern",
+        id: 4,
         company: "Vatika Ltd.",
-        duration: "Jul 2025 - Sep 2025",
+        position: "Intern",
+        duration: "July 2025 - September 2025",
         location: "Remote",
+        type: "Internship",
+        shortDescription: "Managed documentation systems and data organization, ensuring accuracy and accessibility across company operations.",
+        fullDescription: "During my internship at Vatika Ltd., a prominent real estate and hospitality company, I focused on documentation management and data organization. This role strengthened my organizational skills and attention to detail while working with enterprise-level data systems.",
         responsibilities: [
-            "Maintained accurate records of all internship activities",
-            "Utilized document management system for file organization",
-            "Ensured data was up-to-date and easily accessible"
+            "Utilized document management system (DMS) to organize company files systematically",
+            "Ensured all data and documents were kept up-to-date and easily accessible",
+            "Created standardized templates for recurring documentation needs",
+            "Implemented file naming conventions and folder structures for better organization"
         ],
-        skills: ["Documentation", "Data Management", "Organization"]
+        skills: [
+            { name: "Document Management Systems", type: "tech" },
+            { name: "Data Entry", type: "tech" },
+            { name: "Microsoft Office Suite", type: "tool" },
+            { name: "File Organization", type: "soft" },
+            { name: "Database Management", type: "tech" },
+            { name: "Attention to Detail", type: "soft" },
+            { name: "Process Optimization", type: "soft" },
+            { name: "Data Accuracy", type: "soft" },
+            { name: "Record Keeping", type: "soft" },
+            { name: "Template Design", type: "soft" },
+            { name: "Archival Systems", type: "tech" }
+        ]
     }
 ];
 
@@ -181,19 +248,36 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProjects();
     renderSkills();
     renderTimeline();
+    initExperienceInteractivity();
     renderEducation();
     renderCertifications();
     initContactForm();
     initModal();
 });
 
-// Loader
+// Loader - Optimized for fast loading
 function initLoader() {
-    window.addEventListener('load', () => {
-        setTimeout(() => {
+    let loaderHidden = false;
+
+    const hideLoader = () => {
+        if (!loaderHidden) {
+            loaderHidden = true;
             loader.classList.add('hidden');
             document.body.style.overflow = 'auto';
-        }, 1500);
+        }
+    };
+
+    // Hide loader after a short delay once DOM is ready (much faster than waiting for all resources)
+    // This ensures the page content is visible quickly
+    setTimeout(() => {
+        hideLoader();
+    }, 800);
+
+    // Also hide on window load as a fallback (in case DOM loads very slowly)
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            hideLoader();
+        }, 500);
     });
 }
 
@@ -313,26 +397,115 @@ function renderTimeline() {
     if (!timeline) return;
 
     timeline.innerHTML = experienceData.map(exp => `
-        <div class="timeline-item">
+        <div class="experience-item" data-experience="${exp.id}">
             <div class="timeline-marker"></div>
-            <div class="timeline-content">
-                <div class="timeline-header">
-                    <h3 class="timeline-title">${exp.position}</h3>
-                    <span class="timeline-duration">${exp.duration}</span>
+            <div class="experience-card">
+                <div class="card-header">
+                    <div class="company-logo">
+                        <div class="company-initials">${exp.company.slice(0, 2).toUpperCase()}</div>
+                    </div>
+                    <div class="header-content">
+                        <h3 class="company-name">${exp.company}</h3>
+                        <p class="position-title">${exp.position}</p>
+                        <div class="meta-info">
+                            <span class="duration">
+                                <i class="fas fa-calendar-alt"></i>
+                                ${exp.duration}
+                            </span>
+                            <span class="location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${exp.location}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="timeline-company">
-                    <span><i class="fas fa-building"></i> ${exp.company}</span>
-                    <span class="timeline-location"><i class="fas fa-map-marker-alt"></i> ${exp.location}</span>
-                </div>
-                <ul class="timeline-details">
-                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
-                </ul>
-                <div class="timeline-skills">
-                    ${exp.skills.map(s => `<span>${s}</span>`).join('')}
+                
+                <div class="card-body">
+                    <p class="short-description">
+                       ${exp.shortDescription}
+                    </p>
+                    <button class="read-more">Read more <i class="fas fa-arrow-right"></i></button>
+                    
+                    <div class="full-details" style="display: none;">
+                        <p class="full-description">
+                           ${exp.fullDescription}
+                        </p>
+                        
+                        <h4>Key Responsibilities:</h4>
+                        <ul class="responsibilities-list">
+                           ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                        
+                        <h4>Skills & Technologies:</h4>
+                        <div class="skills-tags">
+                            ${exp.skills.map(s => `<span class="tag ${s.type}">${s.name}</span>`).join('')}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     `).join('');
+}
+
+// Initialize Experience Interactivity
+function initExperienceInteractivity() {
+    // Expand/Collapse Experience Cards
+    document.querySelectorAll('.experience-card').forEach(card => {
+        const readMoreBtn = card.querySelector('.read-more');
+        const fullDetails = card.querySelector('.full-details');
+
+        if (!readMoreBtn || !fullDetails) return;
+
+        readMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            if (fullDetails.style.display === 'none') {
+                fullDetails.style.display = 'block';
+                // Small timeout to allow display:block to apply before animating height if we were using CSS transitions on height
+                // For now, simple display toggle is fine, but we can animate opacity/transform
+                requestAnimationFrame(() => {
+                    fullDetails.style.opacity = '1';
+                });
+
+                readMoreBtn.innerHTML = 'Read less <i class="fas fa-arrow-up"></i>';
+                card.classList.add('expanded');
+            } else {
+                fullDetails.style.opacity = '0';
+                setTimeout(() => {
+                    fullDetails.style.display = 'none';
+                }, 300); // Match transition time
+
+                readMoreBtn.innerHTML = 'Read more <i class="fas fa-arrow-right"></i>';
+                card.classList.remove('expanded');
+            }
+        });
+
+        // Click anywhere on card (except inside full details to allow text selection) to expand
+        card.addEventListener('click', (e) => {
+            // Don't collapse if clicking inside the details or on the button itself (since button has its own handler)
+            if (e.target.closest('.full-details') || e.target.closest('.read-more')) return;
+            readMoreBtn.click();
+        });
+    });
+
+    // Scroll Animation - Fade in cards as they enter viewport
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                observer.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.experience-item').forEach(item => {
+        observer.observe(item);
+    });
 }
 
 // Render Education
