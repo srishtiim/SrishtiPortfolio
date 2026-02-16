@@ -14,4 +14,8 @@ async function saveMessage(message) {
   await addDoc(collection(db, "messages"), message);
 }
 
+// Export for use in other modules
+export { db, saveMessage };
+
+// Also expose to window for backwards compatibility
 window.saveMessage = saveMessage;

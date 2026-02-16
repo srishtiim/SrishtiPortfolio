@@ -246,7 +246,8 @@ const modalClose = document.getElementById('modal-close');
 const contactForm = document.getElementById('contact-form');
 
 // ============ INITIALIZATION ============
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize the application
+const init = () => {
     initLoader();
     initNavigation();
     initThemeToggle();
@@ -258,7 +259,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCertifications();
     initContactForm();
     initModal();
-});
+};
+
+// Handle both cases: DOM still loading or already loaded
+// This is crucial for ES modules which are deferred and may load after DOMContentLoaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    // DOM already loaded (common with ES modules), run immediately
+    init();
+}
 
 // Loader - Optimized for fast loading
 function initLoader() {
