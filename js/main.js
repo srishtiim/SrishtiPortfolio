@@ -18,8 +18,8 @@ const projectsData = [
         techStack: ["Python", "TensorFlow", "OpenCV", "Hugging Face", "Streamlit", "GNews API"],
         features: ["Interactive Streamlit web app for students", "Real-time news processing", "Automated MCQ generation"],
         image: "assets/images/projects/news_summarizer.png",
-        githubLink: "#",
-        liveLink: "#"
+        githubLink: "https://github.com/srishtiim/news-summarizer",
+        liveLink: "https://news-summarizer-9ijwv2wrwjpsjbbw9eezao.streamlit.app/"
     },
     {
         id: 2,
