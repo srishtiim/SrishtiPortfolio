@@ -618,6 +618,7 @@ body {
     margin-bottom: 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1063,81 +1064,86 @@ body {
 }
 
 .certifications-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
-.certification-badge {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
+.certification-card {
     background: var(--white);
-    border: 2px solid var(--red);
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--dark);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     transition: var(--transition);
+    border: 1px solid var(--beige);
 }
 
-.certification-badge:hover {
-    background: var(--red);
-    color: var(--white);
+.certification-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--red);
 }
 
-.certification-badge:hover i {
-    color: var(--white);
-}
-
-.certification-badge i {
+.certification-icon {
+    font-size: 2.5rem;
     color: var(--red);
-    font-size: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .certification-info {
-    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+/* Certifications */
+#certifications-grid {
+    margin-top: 3rem;
 }
 
 .certification-name {
     display: block;
-    font-weight: 500;
-    font-size: 0.95rem;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
 }
 
 .certification-provider {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: var(--gray);
+    font-family: var(--font-sans);
 }
 
-.certification-badge:hover .certification-provider {
-    color: var(--cream);
-}
-
-.download-btn-content {
-    display: flex;
+.download-cert-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-left: auto;
-    padding: 0.5rem 1rem;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.5rem;
     background: var(--red);
     color: var(--white);
+    text-decoration: none;
     border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.certification-badge:hover .download-btn-content {
-    background: var(--white);
-    color: var(--red);
-}
-
-.download-btn-content i {
-    color: inherit;
+    font-family: var(--font-sans);
+    font-weight: 600;
     font-size: 0.9rem;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.download-cert-btn:hover {
+    background: var(--dark);
+    transform: translateY(-2px);
+}
+
+.download-cert-btn i {
+    font-size: 1rem;
 }
 
 

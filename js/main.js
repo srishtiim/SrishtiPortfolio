@@ -18,8 +18,8 @@ const projectsData = [
         techStack: ["Python", "TensorFlow", "OpenCV", "Hugging Face", "Streamlit", "GNews API"],
         features: ["Interactive Streamlit web app for students", "Real-time news processing", "Automated MCQ generation"],
         image: "assets/images/projects/news_summarizer.png",
-        githubLink: "https://github.com/srishtiim/news-summarizer",
-        liveLink: "https://news-summarizer-9ijwv2wrwjpsjbbw9eezao.streamlit.app/"
+        githubUrl: "",
+        liveUrl: ""
     },
     {
         id: 2,
@@ -29,8 +29,8 @@ const projectsData = [
         techStack: ["Python", "Flask", "NLTK", "Hugging Face", "Streamlit", "scikit-learn", "pandas", "joblib"],
         features: ["Collaborative filtering algorithm", "Real-time recommendations", "Interactive UI"],
         image: "assets/images/projects/book_recommendation.png",
-        githubLink: "#",
-        liveLink: "#"
+        githubUrl: "",
+        liveUrl: ""
     },
     {
         id: 3,
@@ -40,8 +40,8 @@ const projectsData = [
         techStack: ["Python", "TensorFlow", "PyTorch", "Keras", "LSTM", "CNN", "pandas", "scikit-learn"],
         features: ["Temporal and spatial pattern analysis", "Pollution zone identification", "Multiple ML models comparison"],
         image: "assets/images/projects/sustainability.png",
-        githubLink: "#",
-        liveLink: "#"
+        githubUrl: "",
+        liveUrl: ""
     },
     {
         id: 4,
@@ -51,8 +51,19 @@ const projectsData = [
         techStack: ["Python", "VSCode", "Automation Frameworks"],
         features: ["Automated testing workflows", "ERP/CRM integration", "System validation"],
         image: "assets/images/projects/testing_automation.png",
-        githubLink: "#",
-        liveLink: "#"
+        githubUrl: "",
+        liveUrl: ""
+    },
+    {
+        id: 5,
+        title: "Workflow Inefficiency Analyzer",
+        category: "Data Analysis & Optimization",
+        description: "Analyzes team workflows to identify bottlenecks and inefficiencies using data visualization and process mining techniques.",
+        techStack: ["Python", "Data Analysis", "Visualization", "Process Mining"],
+        features: ["Interactive dashboards", "Bottleneck identification", "Process flow visualization"],
+        image: "assets/images/projects/workflow-analyzer.jpg",
+        githubUrl: "https://github.com/srishtiim/workflow-analyzer",
+        liveUrl: "https://workflow-analyzer-beta.vercel.app/"
     }
 ];
 
@@ -88,10 +99,10 @@ const experienceData = [
         id: 1,
         company: "Total Shift Left",
         position: "Software Intern",
-        duration: "June 2025 - August 2025",
+        duration: "Jun–Aug 2025",
         location: "Remote",
         type: "Internship",
-        shortDescription: "Contributed to enterprise software development, focusing on ERP and CRM systems while building automation tools for software testing.",
+        shortDescription: "Contributed to ERP and CRM projects, assisted with development and system testing, built a VS Code automation project for testing.",
         fullDescription: "During my software internship at Total Shift Left, I gained hands-on experience in enterprise software development and quality assurance. I actively participated in the development lifecycle of ERP and CRM projects, learning industry-standard practices for building scalable business applications.",
         responsibilities: [
             "Actively contributed to project activities involving ERP (Enterprise Resource Planning) and CRM (Customer Relationship Management) systems",
@@ -116,11 +127,11 @@ const experienceData = [
     {
         id: 2,
         company: "Wedd.Ai",
-        position: "Sales and Marketing Intern",
-        duration: "July 2025 - September 2025",
+        position: "Sales & Marketing Intern",
+        duration: "Jul–Sep 2025",
         location: "Remote",
         type: "Internship",
-        shortDescription: "Bridged technical AI expertise with marketing initiatives, optimizing AI models while driving sales outreach and content creation.",
+        shortDescription: "Content creation for sales outreach, optimised AI model performance and data quality, collaborated cross-functionally to deliver AI solutions.",
         fullDescription: "At Wedd.Ai, an AI-powered wedding planning platform, I had the unique opportunity to work at the intersection of technology and marketing. This role allowed me to apply my technical AI knowledge while developing business and marketing skills.",
         responsibilities: [
             "Optimized AI/ML model performance through data preprocessing and feature engineering",
@@ -147,10 +158,10 @@ const experienceData = [
         id: 3,
         company: "Smollan",
         position: "Intern",
-        duration: "July 2025 - September 2025",
+        duration: "Jul–Sep 2025",
         location: "Remote",
         type: "Internship",
-        shortDescription: "Created engaging visual content for Google product showcases while managing presentations and cross-functional collaboration.",
+        shortDescription: "Created visual content for Google product showcases, managed presentations and sheets, collaborated with cross-functional teams.",
         fullDescription: "As an intern at Smollan, a global retail solutions company, I worked on creating compelling visual content for Google product showcases. This role enhanced my creative and organizational skills while working in a fast-paced, collaborative environment.",
         responsibilities: [
             "Crafted engaging visual content for Google product showcases and demonstrations",
@@ -176,10 +187,10 @@ const experienceData = [
         id: 4,
         company: "Vatika Ltd.",
         position: "Intern",
-        duration: "July 2025 - September 2025",
+        duration: "Jul–Sep 2025",
         location: "Remote",
         type: "Internship",
-        shortDescription: "Managed documentation systems and data organization, ensuring accuracy and accessibility across company operations.",
+        shortDescription: "Maintained accurate activity records, used document management system to organise company files.",
         fullDescription: "During my internship at Vatika Ltd., a prominent real estate and hospitality company, I focused on documentation management and data organization. This role strengthened my organizational skills and attention to detail while working with enterprise-level data systems.",
         responsibilities: [
             "Utilized document management system (DMS) to organize company files systematically",
@@ -547,17 +558,17 @@ function renderCertifications() {
     if (!grid) return;
 
     grid.innerHTML = certificationsData.map(cert => `
-        <a href="${cert.link}" target="_blank" class="certification-badge">
-            <i class="fas fa-certificate"></i>
+        <div class="certification-card">
+            <div class="certification-icon"><i class="fas fa-certificate"></i></div>
             <div class="certification-info">
                 <span class="certification-name">${cert.name}</span>
                 <span class="certification-provider">${cert.provider}</span>
             </div>
-            <div class="download-btn-content">
+            <a href="${cert.link}" target="_blank" class="download-cert-btn">
                 <i class="fas fa-download"></i>
                 <span>Download Certificate</span>
-            </div>
-        </a>
+            </a>
+        </div>
     `).join('');
 }
 
@@ -591,12 +602,14 @@ function openProjectModal(projectId) {
         project.techStack.map(t => `<span>${t}</span>`).join('');
 
     document.getElementById('modal-links').innerHTML = `
-        <a href="${project.githubLink}" target="_blank" class="btn-github">
-            <i class="fab fa-github"></i> View on GitHub
-        </a>
-        <a href="${project.liveLink}" target="_blank" class="btn-demo">
-            <i class="fas fa-external-link-alt"></i> Live Demo
-        </a>
+        ${project.githubUrl ? `
+        <a href="${project.githubUrl}" target="_blank" class="btn-github">
+            <i class="fab fa-github"></i> View Code
+        </a>` : ''}
+        ${project.liveUrl ? `
+        <a href="${project.liveUrl}" target="_blank" class="btn-demo">
+            <i class="fas fa-external-link-alt"></i> View Live Demo
+        </a>` : ''}
     `;
 
     projectModal.classList.add('active');
