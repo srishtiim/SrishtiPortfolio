@@ -29,8 +29,8 @@ const projectsData = [
         techStack: ["Python", "Flask", "NLTK", "Hugging Face", "Streamlit", "scikit-learn", "pandas", "joblib"],
         features: ["Collaborative filtering algorithm", "Real-time recommendations", "Interactive UI"],
         image: "assets/images/projects/book_recommendation.png",
-        githubUrl: "",
-        liveUrl: ""
+        githubUrl: "https://github.com/srishtiim/book-recommendation-app",
+        liveUrl: "https://book-recommendation-app-wheat.vercel.app/library"
     },
     {
         id: 3,
@@ -262,6 +262,8 @@ const init = () => {
     initLoader();
     initNavigation();
     initThemeToggle();
+    initParticleCanvas();
+    initCustomCursor();
     renderProjects();
     renderSkills();
     renderTimeline();
@@ -270,6 +272,7 @@ const init = () => {
     renderCertifications();
     initContactForm();
     initModal();
+    initMicroInteractions();
 };
 
 // Handle both cases: DOM still loading or already loaded
@@ -309,6 +312,15 @@ function initLoader() {
 
 // Navigation
 function initNavigation() {
+    // Frosted Nav on scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
     // Hamburger menu toggle
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
@@ -677,7 +689,238 @@ function initContactForm() {
 
 
 
+// ============ MICRO-INTERACTIONS & POLISH ============
 
+function initParticleCanvas() {
+    const welcome = document.querySelector('.welcome');
+    if (!welcome) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.id = 'hero-canvas';
+    canvas.style.position = 'absolute';
+    canvas.style.inset = '0';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '0';
+    welcome.insertBefore(canvas, welcome.firstChild);
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 30 : 60;
+    
+    function resize() {
+        width = welcome.offsetWidth;
+        height = welcome.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+    
+    window.addEventListener('resize', resize);
+    resize();
+    
+    for(let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            radius: Math.random() * 1.5 + 0.5
+        });
+    }
+    
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        
+        particles.forEach((p, i) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            
+            if (p.x < 0 || p.x > width) p.vx *= -1;
+            if (p.y < 0 || p.y > height) p.vy *= -1;
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(211, 47, 47, 0.15)';
+            ctx.fill();
+            
+            for (let j = i + 1; j < particles.length; j++) {
+                const p2 = particles[j];
+                const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = `rgba(211, 47, 47, ${0.12 * (1 - dist/120)})`;
+                    ctx.stroke();
+                }
+            }
+        });
+        
+        requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+function initCustomCursor() {
+    if (window.innerWidth <= 768) return;
+    
+    const cursor = document.createElement('div');
+    cursor.id = 'custom-cursor';
+    document.body.appendChild(cursor);
+    
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    function updateCursor() {
+        const dx = mouseX - cursorX;
+        const dy = mouseY - cursorY;
+        cursorX += dx * 0.2;
+        cursorY += dy * 0.2;
+        
+        cursor.style.transform = `translate(${cursorX - 7}px, ${cursorY - 7}px)`; // offset for center
+        requestAnimationFrame(updateCursor);
+    }
+    updateCursor();
+    
+    // Bind to dynamically created elements and existing ones via event delegation
+    document.body.addEventListener('mouseover', (e) => {
+        if (e.target.tagName.toLowerCase() === 'a' || 
+            e.target.tagName.toLowerCase() === 'button' || 
+            e.target.closest('a') || 
+            e.target.closest('button') ||
+            e.target.closest('.project-card') ||
+            e.target.closest('.polaroid') ||
+            e.target.closest('.envelope-widget')) {
+            cursor.classList.add('hover');
+        }
+    });
+
+    document.body.addEventListener('mouseout', (e) => {
+        if (e.target.tagName.toLowerCase() === 'a' || 
+            e.target.tagName.toLowerCase() === 'button' || 
+            e.target.closest('a') || 
+            e.target.closest('button') ||
+            e.target.closest('.project-card') ||
+            e.target.closest('.polaroid') ||
+            e.target.closest('.envelope-widget')) {
+            cursor.classList.remove('hover');
+        }
+    });
+}
+
+function initMicroInteractions() {
+    // Envelope Widget
+    const envelope = document.getElementById('envelope-widget');
+    if (envelope) {
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+        });
+        
+        const envelopeCard = envelope.querySelector('.envelope-card');
+        if (envelopeCard) {
+            envelopeCard.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelector('#contact').scrollIntoView({behavior: 'smooth'});
+                envelope.classList.remove('open');
+            });
+        }
+    }
+    
+    // Draggable Polaroids
+    const polaroids = document.querySelectorAll('.polaroid');
+    let activePolaroid = null;
+    let startX, startY, initialX = 0, initialY = 0;
+    let zIndex = 10;
+    
+    polaroids.forEach(p => {
+        p.addEventListener('mousedown', dragStart);
+    });
+    
+    function dragStart(e) {
+        if (window.innerWidth <= 768) return;
+        
+        activePolaroid = this;
+        activePolaroid.style.zIndex = ++zIndex;
+        activePolaroid.style.transition = 'none';
+        
+        const style = window.getComputedStyle(activePolaroid);
+        const transform = style.transform;
+        
+        if (transform && transform !== 'none') {
+            const matrix = new DOMMatrixReadOnly(transform);
+            initialX = matrix.m41;
+            initialY = matrix.m42;
+        } else {
+            initialX = 0;
+            initialY = 0;
+        }
+        
+        startX = e.clientX - initialX;
+        startY = e.clientY - initialY;
+        
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('mouseup', dragEnd);
+        activePolaroid.classList.add('dragging');
+    }
+    
+    function drag(e) {
+        if (!activePolaroid) return;
+        e.preventDefault();
+        
+        const currentX = e.clientX - startX;
+        const currentY = e.clientY - startY;
+        const rotate = activePolaroid.style.getPropertyValue('--rotate');
+        
+        activePolaroid.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotate})`;
+    }
+    
+    function dragEnd() {
+        if (!activePolaroid) return;
+        activePolaroid.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        activePolaroid.classList.remove('dragging');
+        activePolaroid = null;
+        window.removeEventListener('mousemove', drag);
+        window.removeEventListener('mouseup', dragEnd);
+    }
+    
+    // Easter Egg (S -> M)
+    let keys = [];
+    window.addEventListener('keydown', (e) => {
+        keys.push(e.key.toLowerCase());
+        
+        if (keys.length > 2) keys.shift();
+        
+        if (keys.join('') === 'sm') {
+            flyAirplane();
+            keys = [];
+        }
+        
+        setTimeout(() => { keys = []; }, 1000);
+    });
+    
+    function flyAirplane() {
+        const svg = `
+            <svg class="easter-plane" viewBox="0 0 24 24" width="32" height="32" stroke="var(--red)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', svg);
+        const plane = document.querySelector('.easter-plane');
+        
+        setTimeout(() => {
+            plane.remove();
+        }, 2500);
+    }
+}
 
 async function loadSkills() {
     const skillsRef = collection(db, "skills");
