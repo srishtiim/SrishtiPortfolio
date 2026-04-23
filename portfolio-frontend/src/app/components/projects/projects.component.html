@@ -1,0 +1,42 @@
+<section class="section projects" id="projects">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Selected Projects</h2>
+        </div>
+        <div class="projects-grid" id="projects-grid">
+            <div *ngFor="let project of projects" class="project-card" (click)="openModal(project)">
+                <img [src]="project.image || 'https://via.placeholder.com/400x220?text=' + project.title" [alt]="project.title" class="project-image">
+                <div class="project-content">
+                    <span class="project-category">{{project.category}}</span>
+                    <h3 class="project-title">{{project.title}}</h3>
+                    <p class="project-description">{{project.description}}</p>
+                    <div class="project-tech">
+                        <span *ngFor="let tech of project.techStack?.slice(0, 4)">{{tech}}</span>
+                    </div>
+                    <button class="project-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Modal -->
+<div class="modal" [class.active]="isModalOpen" id="project-modal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()" *ngIf="selectedProject">
+        <button class="modal-close" id="modal-close" (click)="closeModal()">&times;</button>
+        <div class="modal-image">
+            <img [src]="selectedProject.image || 'https://via.placeholder.com/900x300?text=' + selectedProject.title" [alt]="selectedProject.title">
+        </div>
+        <div class="modal-body">
+            <span class="modal-category">{{selectedProject.category}}</span>
+            <h3 class="modal-title">{{selectedProject.title}}</h3>
+            <p class="modal-description">{{selectedProject.description}}</p>
+            <div class="modal-links">
+                <a *ngIf="selectedProject.link" [href]="selectedProject.link" target="_blank" class="btn-demo">
+                    <i class="fas fa-external-link-alt"></i> View Live Demo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,12 +31,19 @@ const animateOnScroll = new IntersectionObserver((entries) => {
 function animateCounter(element) {
     const target = parseInt(element.getAttribute('data-target'));
     const duration = 2000;
-    const step = (target / duration) * 16;
-    let current = 0;
+    const startTime = performance.now();
     
-    const updateCounter = () => {
-        current += step;
-        if (current < target) {
+    // easeOutQuart easing function
+    const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
+    
+    const updateCounter = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        let progress = Math.min(elapsed / duration, 1);
+        
+        let easeProgress = easeOutQuart(progress);
+        let current = easeProgress * target;
+        
+        if (progress < 1) {
             element.textContent = Math.floor(current);
             requestAnimationFrame(updateCounter);
         } else {
@@ -44,46 +51,45 @@ function animateCounter(element) {
         }
     };
     
-    updateCounter();
+    requestAnimationFrame(updateCounter);
 }
 
 // Initialize scroll animations
 function initScrollAnimations() {
-    // Add fade-in class to sections
+    // Collect all elements that need reveal animation
+    const elementsToReveal = [
+        ...document.querySelectorAll('.section-header'),
+        ...document.querySelectorAll('.project-card'),
+        ...document.querySelectorAll('.skill-category'),
+        ...document.querySelectorAll('.experience-item'),
+        ...document.querySelectorAll('.education-card'),
+        ...document.querySelectorAll('.certification-card')
+    ];
+    
+    elementsToReveal.forEach((el, index) => {
+        el.classList.add('reveal');
+        
+        // Add staggered delay for item groups
+        if (el.classList.contains('project-card') || 
+            el.classList.contains('skill-category') || 
+            el.classList.contains('education-card') ||
+            el.classList.contains('certification-card')) {
+            const groupIndex = Array.from(el.parentElement.children).indexOf(el);
+            el.style.transitionDelay = `${groupIndex * 0.1}s`;
+        }
+        
+        animateOnScroll.observe(el);
+    });
+    
+    // Add classes and observe sections
     document.querySelectorAll('.section').forEach(section => {
-        section.classList.add('fade-in');
+        section.classList.add('reveal');
         animateOnScroll.observe(section);
     });
     
     // Animate stat items
     document.querySelectorAll('.stat-item').forEach(item => {
         animateOnScroll.observe(item);
-    });
-    
-    // Animate timeline items
-    document.querySelectorAll('.timeline-item').forEach(item => {
-        animateOnScroll.observe(item);
-    });
-    
-    // Animate project cards
-    document.querySelectorAll('.project-card').forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.1}s`;
-        card.classList.add('fade-in');
-        animateOnScroll.observe(card);
-    });
-    
-    // Animate skill categories
-    document.querySelectorAll('.skill-category').forEach((category, index) => {
-        category.style.transitionDelay = `${index * 0.15}s`;
-        category.classList.add('fade-in');
-        animateOnScroll.observe(category);
-    });
-    
-    // Animate education cards
-    document.querySelectorAll('.education-card').forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.15}s`;
-        card.classList.add('fade-in');
-        animateOnScroll.observe(card);
     });
 }
 
@@ -120,9 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Re-initialize animations after dynamic content loads
 function refreshAnimations() {
     // Re-observe newly added elements
-    document.querySelectorAll('.project-card:not(.fade-in)').forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.1}s`;
-        card.classList.add('fade-in');
+    document.querySelectorAll('.project-card:not(.reveal)').forEach((card) => {
+        const groupIndex = Array.from(card.parentElement.children).indexOf(card);
+        card.style.transitionDelay = `${groupIndex * 0.1}s`;
+        card.classList.add('reveal');
         animateOnScroll.observe(card);
     });
 }
