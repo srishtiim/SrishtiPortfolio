@@ -18,7 +18,7 @@ const projectsData = [
         techStack: ["Python", "TensorFlow", "OpenCV", "Hugging Face", "Streamlit", "GNews API"],
         features: ["Interactive Streamlit web app for students", "Real-time news processing", "Automated MCQ generation"],
         image: "assets/images/projects/news_summarizer.png",
-        githubUrl: "",
+        githubUrl: "https://github.com/srishtiim/news-summarizer",
         liveUrl: ""
     },
     {
@@ -41,22 +41,12 @@ const projectsData = [
         features: ["Temporal and spatial pattern analysis", "Pollution zone identification", "Multiple ML models comparison"],
         image: "assets/images/projects/sustainability.png",
         githubUrl: "",
-        liveUrl: ""
-    },
-    {
-        id: 4,
-        title: "Testing Automation Tool",
-        category: "Software Testing",
-        description: "Testing-focused automation project developed during internship at Total Shift Left. Built using VSCode for efficient software system testing.",
-        techStack: ["Python", "VSCode", "Automation Frameworks"],
-        features: ["Automated testing workflows", "ERP/CRM integration", "System validation"],
-        image: "assets/images/projects/testing_automation.png",
-        githubUrl: "",
-        liveUrl: ""
+        liveUrl: "",
+        downloadPaper: "assets/neural-networks-sustainability.pdf"
     },
     {
         id: 5,
-        title: "Workflow Inefficiency Analyzer",
+        title: "Workflow Analyzer",
         category: "Data Analysis & Optimization",
         description: "Analyzes team workflows to identify bottlenecks and inefficiencies using data visualization and process mining techniques.",
         techStack: ["Python", "Data Analysis", "Visualization", "Process Mining"],
@@ -64,6 +54,28 @@ const projectsData = [
         image: "assets/images/projects/workflow-analyzer.jpg",
         githubUrl: "https://github.com/srishtiim/workflow-analyzer",
         liveUrl: "https://workflow-analyzer-beta.vercel.app/"
+    },
+    {
+        id: 6,
+        title: "Stock Data Intelligence Dashboard",
+        category: "Financial Technology",
+        description: "A mini fintech platform built during an internship that tracks real NSE stock data. Features a Python FastAPI backend, SQLite database, and a machine learning engine using Linear Regression to generate 7-day stock price forecasts. Includes a volatility score metric, top gainers/losers, and stock comparison tools.",
+        techStack: ["Python", "FastAPI", "SQLite", "scikit-learn", "yfinance", "Chart.js", "HTML/CSS"],
+        features: ["7-day stock price forecasts", "Volatility score metric", "Stock comparison tools"],
+        image: "assets/images/projects/stock-dashboard.png",
+        githubUrl: "https://github.com/srishtiim/stock-dashboard",
+        liveUrl: "https://finance-dashboard-two-mu.vercel.app/"
+    },
+    {
+        id: 7,
+        title: "Clause Guard",
+        category: "Legal Technology",
+        description: "An AI-powered legal technology platform that analyzes rental agreements and lease documents. Uses NLP and Retrieval-Augmented Generation (RAG) to identify predatory or illegal clauses, scores risk from 0–100, and translates complex legal jargon into plain English. Built with jurisdiction awareness for Indian Tenancy Laws.",
+        techStack: ["FastAPI", "Python", "LangChain", "Ollama", "ChromaDB", "Tesseract OCR", "Next.js", "TypeScript"],
+        features: ["Predatory clause identification", "0-100 risk scoring", "Plain English translations"],
+        image: "assets/images/projects/clause-guard.png",
+        githubUrl: "https://github.com/weblaze/clause-guard",
+        liveUrl: "https://clause-guard-pi.vercel.app/"
     }
 ];
 
@@ -372,7 +384,19 @@ function renderProjects() {
     const grid = document.getElementById('projects-grid');
     if (!grid) return;
 
-    grid.innerHTML = projectsData.map(project => `
+    grid.innerHTML = projectsData.map(project => {
+        let buttonsHtml = '';
+        if (project.liveUrl) {
+            buttonsHtml += `<a href="${project.liveUrl}" target="_blank" class="btn btn-primary project-action-btn">Live Demo</a>`;
+        }
+        if (project.downloadPaper) {
+            buttonsHtml += `<a href="${project.downloadPaper}" download class="btn btn-primary project-action-btn">Download Paper</a>`;
+        }
+        if (project.githubUrl) {
+            buttonsHtml += `<a href="${project.githubUrl}" target="_blank" class="btn btn-secondary project-action-btn">View Repository</a>`;
+        }
+
+        return `
         <div class="project-card" data-project-id="${project.id}">
             <img src="${project.image}" alt="${project.title}" class="project-image" 
                  onerror="this.src='https://via.placeholder.com/400x220/E8DCC4/1a1a1a?text=${encodeURIComponent(project.title)}'">
@@ -383,17 +407,36 @@ function renderProjects() {
                 <div class="project-tech">
                     ${project.techStack.slice(0, 4).map(tech => `<span>${tech}</span>`).join('')}
                 </div>
-                <button class="project-btn">View Details</button>
+                <div class="project-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+                    ${buttonsHtml}
+                </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 
     // Add click handlers for project cards
-    grid.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('click', () => {
+    grid.querySelectorAll('.project-card').forEach((card, index) => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.project-action-btn')) return;
             const projectId = parseInt(card.dataset.projectId);
             openProjectModal(projectId);
         });
+    });
+
+    // IntersectionObserver logic for staggered slide-in animation
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('slide-in');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    grid.querySelectorAll('.project-card').forEach((card, index) => {
+        card.style.transitionDelay = `${index * 100}ms`;
+        observer.observe(card);
     });
 
     // Refresh animations for newly added cards
@@ -833,63 +876,155 @@ function initMicroInteractions() {
         }
     }
     
-    // Draggable Polaroids
-    const polaroids = document.querySelectorAll('.polaroid');
-    let activePolaroid = null;
-    let startX, startY, initialX = 0, initialY = 0;
-    let zIndex = 10;
-    
-    polaroids.forEach(p => {
-        p.addEventListener('mousedown', dragStart);
-    });
-    
-    function dragStart(e) {
-        if (window.innerWidth <= 768) return;
+    // Flipbook Scrapbook Widget
+    const scrapbookWidget = document.getElementById('scrapbook-widget');
+    if (scrapbookWidget) {
+        const cover = scrapbookWidget.querySelector('.scrapbook-cover');
+        const closeBtn = scrapbookWidget.querySelector('.scrapbook-close');
+        const prevBtn = scrapbookWidget.querySelector('.control-prev');
+        const nextBtn = scrapbookWidget.querySelector('.control-next');
+        const pages = scrapbookWidget.querySelectorAll('.scrapbook-page');
+        const dragHandle = scrapbookWidget.querySelector('.drag-handle');
         
-        activePolaroid = this;
-        activePolaroid.style.zIndex = ++zIndex;
-        activePolaroid.style.transition = 'none';
+        let currentPage = 0;
+        let isDragging = false;
         
-        const style = window.getComputedStyle(activePolaroid);
-        const transform = style.transform;
+        // Open Book
+        cover.addEventListener('click', () => {
+            if (isDragging) return;
+            scrapbookWidget.classList.add('open');
+            // reset pages
+            pages.forEach(p => p.classList.remove('flipped'));
+            currentPage = 0;
+            updateZIndices();
+        });
         
-        if (transform && transform !== 'none') {
-            const matrix = new DOMMatrixReadOnly(transform);
-            initialX = matrix.m41;
-            initialY = matrix.m42;
-        } else {
-            initialX = 0;
-            initialY = 0;
+        // Close Book
+        closeBtn.addEventListener('click', () => {
+            scrapbookWidget.classList.remove('open');
+        });
+        
+        // Pagination logic
+        function updateZIndices() {
+            pages.forEach((page, index) => {
+                if (index < currentPage) {
+                    page.style.zIndex = index + 1;
+                } else {
+                    page.style.zIndex = pages.length - index;
+                }
+            });
+        }
+        updateZIndices();
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < pages.length) {
+                pages[currentPage].classList.add('flipped');
+                currentPage++;
+                updateZIndices();
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                pages[currentPage].classList.remove('flipped');
+                updateZIndices();
+            }
+        });
+        
+        // Global Drag Logic for Widget
+        let startX, startY;
+        let pInitialX, pInitialY;
+        
+        function dragStart(e) {
+            isDragging = false;
+            
+            if (window.getComputedStyle(scrapbookWidget).position !== 'fixed') {
+                const rect = scrapbookWidget.getBoundingClientRect();
+                scrapbookWidget.style.position = 'fixed';
+                scrapbookWidget.style.top = rect.top + 'px';
+                scrapbookWidget.style.left = rect.left + 'px';
+                scrapbookWidget.style.margin = '0';
+            }
+            
+            pInitialX = parseFloat(scrapbookWidget.style.left) || 0;
+            pInitialY = parseFloat(scrapbookWidget.style.top) || 0;
+            
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('touchend', dragEnd);
         }
         
-        startX = e.clientX - initialX;
-        startY = e.clientY - initialY;
+        function drag(e) {
+            isDragging = true;
+            scrapbookWidget.classList.add('dragging');
+            e.preventDefault();
+            
+            let currentX, currentY;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX - startX;
+                currentY = e.touches[0].clientY - startY;
+            } else {
+                currentX = e.clientX - startX;
+                currentY = e.clientY - startY;
+            }
+            
+            scrapbookWidget.style.left = `${pInitialX + currentX}px`;
+            scrapbookWidget.style.top = `${pInitialY + currentY}px`;
+        }
         
-        window.addEventListener('mousemove', drag);
-        window.addEventListener('mouseup', dragEnd);
-        activePolaroid.classList.add('dragging');
+        function dragEnd() {
+            scrapbookWidget.classList.remove('dragging');
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', dragEnd);
+            
+            setTimeout(() => { isDragging = false; }, 50);
+        }
+        
+        cover.addEventListener('mousedown', dragStart);
+        cover.addEventListener('touchstart', dragStart, {passive: true});
+        if(dragHandle) {
+            dragHandle.addEventListener('mousedown', dragStart);
+            dragHandle.addEventListener('touchstart', dragStart, {passive: true});
+        }
     }
     
-    function drag(e) {
-        if (!activePolaroid) return;
-        e.preventDefault();
-        
-        const currentX = e.clientX - startX;
-        const currentY = e.clientY - startY;
-        const rotate = activePolaroid.style.getPropertyValue('--rotate');
-        
-        activePolaroid.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotate})`;
-    }
+
     
-    function dragEnd() {
-        if (!activePolaroid) return;
-        activePolaroid.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        activePolaroid.classList.remove('dragging');
-        activePolaroid = null;
-        window.removeEventListener('mousemove', drag);
-        window.removeEventListener('mouseup', dragEnd);
+    // Filing Cabinet Widget
+    const cabinetWidget = document.getElementById('cabinet-widget');
+    if (cabinetWidget) {
+        const topDrawer = cabinetWidget.querySelector('.drawer-top');
+        const resumePaper = cabinetWidget.querySelector('.resume-paper');
+        
+        if (topDrawer) {
+            topDrawer.addEventListener('click', (e) => {
+                topDrawer.classList.toggle('open');
+            });
+        }
+        
+        if (resumePaper) {
+            resumePaper.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent toggling drawer when clicking paper
+                const link = document.createElement('a');
+                link.href = 'assets/SrishtiMukherjee-Resume.pdf';
+                link.download = 'SrishtiMukherjee-Resume.pdf';
+                link.click();
+            });
+        }
     }
-    
+
     // Easter Egg (S -> M)
     let keys = [];
     window.addEventListener('keydown', (e) => {
