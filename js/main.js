@@ -959,6 +959,29 @@ function initMicroInteractions() {
     
 
     
+    // Filing Cabinet Widget
+    const cabinetWidget = document.getElementById('cabinet-widget');
+    if (cabinetWidget) {
+        const topDrawer = cabinetWidget.querySelector('.drawer-top');
+        const resumePaper = cabinetWidget.querySelector('.resume-paper');
+        
+        if (topDrawer) {
+            topDrawer.addEventListener('click', (e) => {
+                topDrawer.classList.toggle('open');
+            });
+        }
+        
+        if (resumePaper) {
+            resumePaper.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent toggling drawer when clicking paper
+                const link = document.createElement('a');
+                link.href = 'assets/SrishtiMukherjee-Resume.pdf';
+                link.download = 'SrishtiMukherjee-Resume.pdf';
+                link.click();
+            });
+        }
+    }
+
     // Easter Egg (S -> M)
     let keys = [];
     window.addEventListener('keydown', (e) => {

@@ -2280,50 +2280,52 @@ body {
     transform: translateZ(-2px); /* keep it slightly behind the front face */
 }
 
-/* Top drawer hover: slide open */
-#cabinet-widget:hover .drawer-top {
+/* Top drawer click: slide open */
+.drawer-top.open {
     transform: translateZ(100px);
 }
 
-#cabinet-widget:hover .drawer-top .drawer-interior {
+.drawer-top.open .drawer-interior {
     opacity: 1;
 }
 
 /* Resume paper inside the drawer */
 .resume-paper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 28px;
-    background: #fff;
+    width: 80px;
+    height: 60px;
+    background: #faf8f4;
     border: 1px solid #e0d8c8;
     border-radius: 2px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    text-decoration: none;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
+    position: absolute;
+    top: -20px;
+    transform: rotateX(15deg);
 }
 
 .resume-paper:hover {
-    transform: translateY(-2px) rotate(-1deg);
+    transform: translateY(-2px) rotateX(15deg) rotateZ(-1deg);
     box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 
 .resume-text {
-    font-family: var(--font-serif, Georgia, serif);
-    font-style: italic;
-    font-size: 0.6rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
     color: #333;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .resume-icon {
-    font-size: 0.55rem;
+    font-size: 0.9rem;
     color: #D32F2F;
-    margin-top: 1px;
 }
 
 /* Easter Egg Plane */
