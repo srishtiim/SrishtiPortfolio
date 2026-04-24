@@ -18,7 +18,7 @@ const projectsData = [
         techStack: ["Python", "TensorFlow", "OpenCV", "Hugging Face", "Streamlit", "GNews API"],
         features: ["Interactive Streamlit web app for students", "Real-time news processing", "Automated MCQ generation"],
         image: "assets/images/projects/news_summarizer.png",
-        githubUrl: "",
+        githubUrl: "https://github.com/srishtiim/news-summarizer",
         liveUrl: ""
     },
     {
@@ -41,22 +41,12 @@ const projectsData = [
         features: ["Temporal and spatial pattern analysis", "Pollution zone identification", "Multiple ML models comparison"],
         image: "assets/images/projects/sustainability.png",
         githubUrl: "",
-        liveUrl: ""
-    },
-    {
-        id: 4,
-        title: "Testing Automation Tool",
-        category: "Software Testing",
-        description: "Testing-focused automation project developed during internship at Total Shift Left. Built using VSCode for efficient software system testing.",
-        techStack: ["Python", "VSCode", "Automation Frameworks"],
-        features: ["Automated testing workflows", "ERP/CRM integration", "System validation"],
-        image: "assets/images/projects/testing_automation.png",
-        githubUrl: "",
-        liveUrl: ""
+        liveUrl: "",
+        downloadPaper: "assets/neural-networks-sustainability.pdf"
     },
     {
         id: 5,
-        title: "Workflow Inefficiency Analyzer",
+        title: "Workflow Analyzer",
         category: "Data Analysis & Optimization",
         description: "Analyzes team workflows to identify bottlenecks and inefficiencies using data visualization and process mining techniques.",
         techStack: ["Python", "Data Analysis", "Visualization", "Process Mining"],
@@ -64,6 +54,28 @@ const projectsData = [
         image: "assets/images/projects/workflow-analyzer.jpg",
         githubUrl: "https://github.com/srishtiim/workflow-analyzer",
         liveUrl: "https://workflow-analyzer-beta.vercel.app/"
+    },
+    {
+        id: 6,
+        title: "Stock Data Intelligence Dashboard",
+        category: "Financial Technology",
+        description: "A mini fintech platform built during an internship that tracks real NSE stock data. Features a Python FastAPI backend, SQLite database, and a machine learning engine using Linear Regression to generate 7-day stock price forecasts. Includes a volatility score metric, top gainers/losers, and stock comparison tools.",
+        techStack: ["Python", "FastAPI", "SQLite", "scikit-learn", "yfinance", "Chart.js", "HTML/CSS"],
+        features: ["7-day stock price forecasts", "Volatility score metric", "Stock comparison tools"],
+        image: "assets/images/projects/stock-dashboard.png",
+        githubUrl: "https://github.com/srishtiim/stock-dashboard",
+        liveUrl: "https://finance-dashboard-two-mu.vercel.app/"
+    },
+    {
+        id: 7,
+        title: "Clause Guard",
+        category: "Legal Technology",
+        description: "An AI-powered legal technology platform that analyzes rental agreements and lease documents. Uses NLP and Retrieval-Augmented Generation (RAG) to identify predatory or illegal clauses, scores risk from 0–100, and translates complex legal jargon into plain English. Built with jurisdiction awareness for Indian Tenancy Laws.",
+        techStack: ["FastAPI", "Python", "LangChain", "Ollama", "ChromaDB", "Tesseract OCR", "Next.js", "TypeScript"],
+        features: ["Predatory clause identification", "0-100 risk scoring", "Plain English translations"],
+        image: "assets/images/projects/clause-guard.png",
+        githubUrl: "https://github.com/weblaze/clause-guard",
+        liveUrl: "https://clause-guard-pi.vercel.app/"
     }
 ];
 
@@ -372,7 +384,19 @@ function renderProjects() {
     const grid = document.getElementById('projects-grid');
     if (!grid) return;
 
-    grid.innerHTML = projectsData.map(project => `
+    grid.innerHTML = projectsData.map(project => {
+        let buttonsHtml = '';
+        if (project.liveUrl) {
+            buttonsHtml += `<a href="${project.liveUrl}" target="_blank" class="btn btn-primary project-action-btn">Live Demo</a>`;
+        }
+        if (project.downloadPaper) {
+            buttonsHtml += `<a href="${project.downloadPaper}" download class="btn btn-primary project-action-btn">Download Paper</a>`;
+        }
+        if (project.githubUrl) {
+            buttonsHtml += `<a href="${project.githubUrl}" target="_blank" class="btn btn-secondary project-action-btn">View Repository</a>`;
+        }
+
+        return `
         <div class="project-card" data-project-id="${project.id}">
             <img src="${project.image}" alt="${project.title}" class="project-image" 
                  onerror="this.src='https://via.placeholder.com/400x220/E8DCC4/1a1a1a?text=${encodeURIComponent(project.title)}'">
@@ -383,17 +407,36 @@ function renderProjects() {
                 <div class="project-tech">
                     ${project.techStack.slice(0, 4).map(tech => `<span>${tech}</span>`).join('')}
                 </div>
-                <button class="project-btn">View Details</button>
+                <div class="project-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+                    ${buttonsHtml}
+                </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 
     // Add click handlers for project cards
-    grid.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('click', () => {
+    grid.querySelectorAll('.project-card').forEach((card, index) => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.project-action-btn')) return;
             const projectId = parseInt(card.dataset.projectId);
             openProjectModal(projectId);
         });
+    });
+
+    // IntersectionObserver logic for staggered slide-in animation
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('slide-in');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    grid.querySelectorAll('.project-card').forEach((card, index) => {
+        card.style.transitionDelay = `${index * 100}ms`;
+        observer.observe(card);
     });
 
     // Refresh animations for newly added cards
