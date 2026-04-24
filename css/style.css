@@ -1930,46 +1930,218 @@ body {
     white-space: nowrap;
 }
 
-/* Scrapbook Area */
-.scrapbook-area {
-    position: relative;
-    height: 300px;
-    margin-top: 3rem;
-}
-.polaroid {
+/* Scrapbook Widget */
+#scrapbook-widget {
     position: absolute;
-    width: 140px;
-    background: var(--white);
-    padding: 10px 10px 30px 10px;
-    box-shadow: var(--shadow);
-    cursor: grab;
-    transform: rotate(var(--rotate));
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.polaroid:nth-child(1) { top: 10px; left: 10%; }
-.polaroid:nth-child(2) { top: 40px; left: 35%; z-index: 2; }
-.polaroid:nth-child(3) { top: 0px; left: 60%; }
-.polaroid:nth-child(4) { top: 60px; left: 80%; }
-
-.polaroid:active, .polaroid.dragging {
-    cursor: grabbing;
-    box-shadow: var(--shadow-lg);
-}
-.polaroid:hover {
-    transform: scale(1.05) rotate(calc(var(--rotate) * 0.5));
+    top: 2rem;
+    left: 2rem;
     z-index: 10;
+    cursor: grab;
+    width: 80px;
+    height: 100px;
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
-.polaroid-image {
-    width: 100%;
-    height: 120px;
-    background: var(--beige);
-    margin-bottom: 10px;
+
+#scrapbook-widget.open {
+    width: 280px;
+    height: 200px;
 }
-.polaroid-caption {
+
+#scrapbook-widget.dragging {
+    cursor: grabbing;
+}
+
+.drag-handle {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    color: var(--gray-light);
+    cursor: grab;
+    z-index: 20;
+}
+
+#scrapbook-widget.dragging .drag-handle {
+    cursor: grabbing;
+}
+
+.scrapbook-cover {
+    position: absolute;
+    inset: 0;
+    background: #1a1a1a;
+    background-image: linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111), 
+                      linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111);
+    background-size: 4px 4px;
+    background-position: 0 0, 2px 2px;
+    border-radius: 2px 8px 8px 2px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+    cursor: pointer;
+    z-index: 5;
+}
+
+#scrapbook-widget.open .scrapbook-cover {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scrapbook-cover .spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: var(--red);
+    border-radius: 2px 0 0 2px;
+}
+
+.cover-text {
+    color: var(--white);
     font-family: var(--font-serif);
-    font-size: 0.85rem;
-    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.cover-hint {
+    position: absolute;
+    bottom: 8px;
+    color: var(--gray-light);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+}
+
+.scrapbook-book {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    background: #faf8f4;
+    border-radius: 4px 8px 8px 4px;
+    box-shadow: inset 20px 0 20px -20px rgba(0,0,0,0.3), var(--shadow-lg);
+    display: flex;
+}
+
+#scrapbook-widget.open .scrapbook-book {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Base styles for decorative left page when open */
+.scrapbook-book::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: #faf8f4;
+    background-image: repeating-linear-gradient(transparent, transparent 19px, #e0d8c8 20px);
+    border-radius: 4px 0 0 4px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.2);
+    z-index: 0;
+}
+
+.scrapbook-page {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+}
+
+.scrapbook-page.flipped {
+    transform: rotateY(-180deg);
+}
+
+.page-front, .page-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    background: #faf8f4;
+    border-radius: 0 8px 8px 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 10px 0 10px -10px rgba(0,0,0,0.1);
+}
+
+.page-front {
+    transform: rotateY(0deg);
+    border-left: 1px solid rgba(0,0,0,0.05);
+}
+
+.page-back {
+    transform: rotateY(180deg);
+    background-image: repeating-linear-gradient(transparent, transparent 19px, #e0d8c8 20px);
+    border-radius: 8px 0 0 8px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.1);
+}
+
+.page-front img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    background: var(--beige);
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 8px;
+}
+
+.page-front p {
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
     color: var(--dark);
+    text-align: center;
+    margin: 0;
+}
+
+.scrapbook-close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--gray);
+    cursor: pointer;
+    z-index: 10;
+    display: none;
+}
+
+#scrapbook-widget.open .scrapbook-close {
+    display: block;
+}
+
+.scrapbook-controls {
+    position: absolute;
+    inset: 0;
+    display: none;
+    z-index: 5;
+}
+
+#scrapbook-widget.open .scrapbook-controls {
+    display: flex;
+}
+
+.control-prev, .control-next {
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
 }
 
 /* Easter Egg Plane */
@@ -1998,20 +2170,5 @@ body {
     }
     .envelope-widget {
         display: none;
-    }
-    .scrapbook-area {
-        height: auto;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-    .polaroid {
-        position: static;
-        width: 100%;
-        transform: rotate(0) !important;
-        cursor: auto;
-    }
-    .polaroid-image {
-        height: 100px;
     }
 }

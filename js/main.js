@@ -833,61 +833,128 @@ function initMicroInteractions() {
         }
     }
     
-    // Draggable Polaroids
-    const polaroids = document.querySelectorAll('.polaroid');
-    let activePolaroid = null;
-    let startX, startY, initialX = 0, initialY = 0;
-    let zIndex = 10;
-    
-    polaroids.forEach(p => {
-        p.addEventListener('mousedown', dragStart);
-    });
-    
-    function dragStart(e) {
-        if (window.innerWidth <= 768) return;
+    // Flipbook Scrapbook Widget
+    const scrapbookWidget = document.getElementById('scrapbook-widget');
+    if (scrapbookWidget) {
+        const cover = scrapbookWidget.querySelector('.scrapbook-cover');
+        const closeBtn = scrapbookWidget.querySelector('.scrapbook-close');
+        const prevBtn = scrapbookWidget.querySelector('.control-prev');
+        const nextBtn = scrapbookWidget.querySelector('.control-next');
+        const pages = scrapbookWidget.querySelectorAll('.scrapbook-page');
+        const dragHandle = scrapbookWidget.querySelector('.drag-handle');
         
-        activePolaroid = this;
-        activePolaroid.style.zIndex = ++zIndex;
-        activePolaroid.style.transition = 'none';
+        let currentPage = 0;
+        let isDragging = false;
         
-        const style = window.getComputedStyle(activePolaroid);
-        const transform = style.transform;
+        // Open Book
+        cover.addEventListener('click', () => {
+            if (isDragging) return;
+            scrapbookWidget.classList.add('open');
+            // reset pages
+            pages.forEach(p => p.classList.remove('flipped'));
+            currentPage = 0;
+            updateZIndices();
+        });
         
-        if (transform && transform !== 'none') {
-            const matrix = new DOMMatrixReadOnly(transform);
-            initialX = matrix.m41;
-            initialY = matrix.m42;
-        } else {
-            initialX = 0;
-            initialY = 0;
+        // Close Book
+        closeBtn.addEventListener('click', () => {
+            scrapbookWidget.classList.remove('open');
+        });
+        
+        // Pagination logic
+        function updateZIndices() {
+            pages.forEach((page, index) => {
+                if (index < currentPage) {
+                    page.style.zIndex = index + 1;
+                } else {
+                    page.style.zIndex = pages.length - index;
+                }
+            });
+        }
+        updateZIndices();
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < pages.length) {
+                pages[currentPage].classList.add('flipped');
+                currentPage++;
+                updateZIndices();
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                pages[currentPage].classList.remove('flipped');
+                updateZIndices();
+            }
+        });
+        
+        // Global Drag Logic for Widget
+        let startX, startY;
+        let pInitialX, pInitialY;
+        
+        function dragStart(e) {
+            isDragging = false;
+            
+            if (window.getComputedStyle(scrapbookWidget).position !== 'fixed') {
+                const rect = scrapbookWidget.getBoundingClientRect();
+                scrapbookWidget.style.position = 'fixed';
+                scrapbookWidget.style.top = rect.top + 'px';
+                scrapbookWidget.style.left = rect.left + 'px';
+                scrapbookWidget.style.margin = '0';
+            }
+            
+            pInitialX = parseFloat(scrapbookWidget.style.left) || 0;
+            pInitialY = parseFloat(scrapbookWidget.style.top) || 0;
+            
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('touchend', dragEnd);
         }
         
-        startX = e.clientX - initialX;
-        startY = e.clientY - initialY;
+        function drag(e) {
+            isDragging = true;
+            scrapbookWidget.classList.add('dragging');
+            e.preventDefault();
+            
+            let currentX, currentY;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX - startX;
+                currentY = e.touches[0].clientY - startY;
+            } else {
+                currentX = e.clientX - startX;
+                currentY = e.clientY - startY;
+            }
+            
+            scrapbookWidget.style.left = `${pInitialX + currentX}px`;
+            scrapbookWidget.style.top = `${pInitialY + currentY}px`;
+        }
         
-        window.addEventListener('mousemove', drag);
-        window.addEventListener('mouseup', dragEnd);
-        activePolaroid.classList.add('dragging');
-    }
-    
-    function drag(e) {
-        if (!activePolaroid) return;
-        e.preventDefault();
+        function dragEnd() {
+            scrapbookWidget.classList.remove('dragging');
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', dragEnd);
+            
+            setTimeout(() => { isDragging = false; }, 50);
+        }
         
-        const currentX = e.clientX - startX;
-        const currentY = e.clientY - startY;
-        const rotate = activePolaroid.style.getPropertyValue('--rotate');
-        
-        activePolaroid.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotate})`;
-    }
-    
-    function dragEnd() {
-        if (!activePolaroid) return;
-        activePolaroid.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        activePolaroid.classList.remove('dragging');
-        activePolaroid = null;
-        window.removeEventListener('mousemove', drag);
-        window.removeEventListener('mouseup', dragEnd);
+        cover.addEventListener('mousedown', dragStart);
+        cover.addEventListener('touchstart', dragStart, {passive: true});
+        if(dragHandle) {
+            dragHandle.addEventListener('mousedown', dragStart);
+            dragHandle.addEventListener('touchstart', dragStart, {passive: true});
+        }
     }
     
     // Easter Egg (S -> M)
