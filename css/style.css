@@ -2147,30 +2147,9 @@ body {
 /* Filing Cabinet Widget */
 #cabinet-widget {
     position: fixed;
-    bottom: 2rem;
-    left: 2rem;
+    top: 2rem;
+    right: 2rem;
     z-index: 100;
-    cursor: grab;
-}
-
-#cabinet-widget.dragging {
-    cursor: grabbing;
-}
-
-.cabinet-drag-handle {
-    position: absolute;
-    top: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.3);
-    cursor: grab;
-    z-index: 20;
-    user-select: none;
-}
-
-#cabinet-widget.dragging .cabinet-drag-handle {
-    cursor: grabbing;
 }
 
 .cabinet-scene {
@@ -2234,6 +2213,7 @@ body {
     width: 90px;
     height: 36px;
     transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .drawer-top {
@@ -2260,7 +2240,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     transform-style: preserve-3d;
     z-index: 2;
 }
@@ -2298,14 +2277,15 @@ body {
     z-index: 1;
     opacity: 0;
     transition: opacity 0.3s 0.15s;
+    transform: translateZ(-2px); /* keep it slightly behind the front face */
 }
 
 /* Top drawer hover: slide open */
-#cabinet-widget:not(.dragging) .drawer-top:hover .drawer-front {
-    transform: translateZ(35px);
+#cabinet-widget:hover .drawer-top {
+    transform: translateZ(100px);
 }
 
-#cabinet-widget:not(.dragging) .drawer-top:hover .drawer-interior {
+#cabinet-widget:hover .drawer-top .drawer-interior {
     opacity: 1;
 }
 

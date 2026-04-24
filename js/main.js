@@ -957,78 +957,7 @@ function initMicroInteractions() {
         }
     }
     
-    // Filing Cabinet Widget
-    const cabinetWidget = document.getElementById('cabinet-widget');
-    if (cabinetWidget) {
-        const cabinetHandle = cabinetWidget.querySelector('.cabinet-drag-handle');
-        let cabDragging = false;
-        let cabStartX, cabStartY, cabInitX, cabInitY;
-        
-        function cabDragStart(e) {
-            cabDragging = false;
-            
-            cabInitX = parseFloat(cabinetWidget.style.left) || cabinetWidget.getBoundingClientRect().left;
-            cabInitY = parseFloat(cabinetWidget.style.top) || cabinetWidget.getBoundingClientRect().top;
-            
-            // Convert to fixed positioning on first drag
-            if (window.getComputedStyle(cabinetWidget).position === 'fixed' && !cabinetWidget.style.top) {
-                const rect = cabinetWidget.getBoundingClientRect();
-                cabinetWidget.style.top = rect.top + 'px';
-                cabinetWidget.style.left = rect.left + 'px';
-                cabinetWidget.style.bottom = 'auto';
-                cabInitX = rect.left;
-                cabInitY = rect.top;
-            }
-            
-            if (e.type === 'touchstart') {
-                cabStartX = e.touches[0].clientX;
-                cabStartY = e.touches[0].clientY;
-            } else {
-                cabStartX = e.clientX;
-                cabStartY = e.clientY;
-            }
-            
-            document.addEventListener('mousemove', cabDrag);
-            document.addEventListener('mouseup', cabDragEnd);
-            document.addEventListener('touchmove', cabDrag, {passive: false});
-            document.addEventListener('touchend', cabDragEnd);
-        }
-        
-        function cabDrag(e) {
-            cabDragging = true;
-            cabinetWidget.classList.add('dragging');
-            e.preventDefault();
-            
-            let dx, dy;
-            if (e.type === 'touchmove') {
-                dx = e.touches[0].clientX - cabStartX;
-                dy = e.touches[0].clientY - cabStartY;
-            } else {
-                dx = e.clientX - cabStartX;
-                dy = e.clientY - cabStartY;
-            }
-            
-            cabinetWidget.style.left = `${cabInitX + dx}px`;
-            cabinetWidget.style.top = `${cabInitY + dy}px`;
-            cabinetWidget.style.bottom = 'auto';
-        }
-        
-        function cabDragEnd() {
-            cabinetWidget.classList.remove('dragging');
-            document.removeEventListener('mousemove', cabDrag);
-            document.removeEventListener('mouseup', cabDragEnd);
-            document.removeEventListener('touchmove', cabDrag);
-            document.removeEventListener('touchend', cabDragEnd);
-            setTimeout(() => { cabDragging = false; }, 50);
-        }
-        
-        cabinetWidget.addEventListener('mousedown', cabDragStart);
-        cabinetWidget.addEventListener('touchstart', cabDragStart, {passive: true});
-        if (cabinetHandle) {
-            cabinetHandle.addEventListener('mousedown', cabDragStart);
-            cabinetHandle.addEventListener('touchstart', cabDragStart, {passive: true});
-        }
-    }
+
     
     // Easter Egg (S -> M)
     let keys = [];
