@@ -285,6 +285,7 @@ const init = () => {
     initContactForm();
     initModal();
     initMicroInteractions();
+    initHeroSpotlight();
 };
 
 // Handle both cases: DOM still loading or already loaded
@@ -424,20 +425,23 @@ function renderProjects() {
         });
     });
 
-    // IntersectionObserver logic for staggered slide-in animation
+    // Effect 1: Horizontal Staggered Card Reveal on Projects Container
+    const cards = grid.querySelectorAll('.project-card');
+    cards.forEach((card, index) => {
+        card.classList.add('card-hidden');
+        card.style.transitionDelay = `${index * 120}ms`;
+    });
+
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('slide-in');
+                cards.forEach(card => card.classList.remove('card-hidden'));
                 obs.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
 
-    grid.querySelectorAll('.project-card').forEach((card, index) => {
-        card.style.transitionDelay = `${index * 100}ms`;
-        observer.observe(card);
-    });
+    observer.observe(grid);
 
     // Refresh animations for newly added cards
     if (window.refreshAnimations) {
@@ -803,8 +807,42 @@ function initParticleCanvas() {
         
         requestAnimationFrame(draw);
     }
+    
     draw();
 }
+
+// Effect 2: Cursor Spotlight / Torch Effect
+function initHeroSpotlight() {
+    const hero = document.querySelector('.welcome');
+    const spotlight = document.getElementById('hero-spotlight');
+    
+    if (!hero || !spotlight) return;
+    
+    // Disable on mobile
+    if (window.innerWidth < 768) return;
+
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spotlight.style.setProperty('--x', `${x}px`);
+        spotlight.style.setProperty('--y', `${y}px`);
+    });
+
+    hero.addEventListener('mouseenter', () => {
+        spotlight.style.opacity = '1';
+        // Fade to 1 over 0.3s (handled by JS overriding CSS transition if we wanted, 
+        // but CSS already handles the transition differences based on opacity values)
+        spotlight.style.transitionDuration = '0.3s';
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        spotlight.style.opacity = '0';
+        // Fade to 0 over 0.4s
+        spotlight.style.transitionDuration = '0.4s';
+    });
+}
+
 
 function initCustomCursor() {
     if (window.innerWidth <= 768) return;

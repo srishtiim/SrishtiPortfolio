@@ -704,6 +704,56 @@ body {
     color: #fff;
 }
 
+.cabinet-drawer.drawer-bottom .drawer-front {
+    background: #e6e0d5;
+}
+
+/* ========================================
+   SCROLL & CURSOR EFFECTS
+   ======================================== */
+
+/* Effect 2: Cursor Spotlight */
+.welcome {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 80px; /* Effect 3 */
+}
+
+#hero-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(circle 280px at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+@media (max-width: 767px) {
+    #hero-spotlight {
+        display: none !important;
+    }
+}
+
+/* Effect 3: Seamless Transition */
+.welcome::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+    pointer-events: none;
+    z-index: 5;
+}
+
+#about {
+    margin-top: -80px;
+    position: relative;
+    z-index: 10;
+}
+
 .btn-primary:hover {
     background: #b71c1c;
     transform: translateY(-1px);
@@ -720,23 +770,30 @@ body {
     transform: translateY(-1px);
 }
 
-/* Slide-in animation for project cards */
-#projects-grid .project-card {
+/* Effect 1: Horizontal Staggered Card Reveal */
+.card-hidden {
     opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
 }
 
-#projects-grid .project-card:nth-child(odd) {
-    transform: translateX(-60px);
+.card-hidden:nth-child(odd) {
+    transform: translateX(-80px);
 }
 
-#projects-grid .project-card:nth-child(even) {
-    transform: translateX(60px);
+.card-hidden:nth-child(even) {
+    transform: translateX(80px);
 }
 
-#projects-grid .project-card.slide-in {
+#projects-grid .project-card {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translate(0, 0);
     opacity: 1;
-    transform: translateX(0);
+}
+
+@media (max-width: 767px) {
+    .card-hidden:nth-child(odd),
+    .card-hidden:nth-child(even) {
+        transform: translateY(40px);
+    }
 }
 
 /* ========== MODAL ========== */

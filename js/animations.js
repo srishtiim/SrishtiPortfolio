@@ -59,7 +59,6 @@ function initScrollAnimations() {
     // Collect all elements that need reveal animation
     const elementsToReveal = [
         ...document.querySelectorAll('.section-header'),
-        ...document.querySelectorAll('.project-card'),
         ...document.querySelectorAll('.skill-category'),
         ...document.querySelectorAll('.experience-item'),
         ...document.querySelectorAll('.education-card'),
@@ -70,8 +69,7 @@ function initScrollAnimations() {
         el.classList.add('reveal');
         
         // Add staggered delay for item groups
-        if (el.classList.contains('project-card') || 
-            el.classList.contains('skill-category') || 
+        if (el.classList.contains('skill-category') || 
             el.classList.contains('education-card') ||
             el.classList.contains('certification-card')) {
             const groupIndex = Array.from(el.parentElement.children).indexOf(el);
@@ -125,13 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Re-initialize animations after dynamic content loads
 function refreshAnimations() {
-    // Re-observe newly added elements
-    document.querySelectorAll('.project-card:not(.reveal)').forEach((card) => {
-        const groupIndex = Array.from(card.parentElement.children).indexOf(card);
-        card.style.transitionDelay = `${groupIndex * 0.1}s`;
-        card.classList.add('reveal');
-        animateOnScroll.observe(card);
-    });
+    // Other elements can be re-observed here if needed
 }
 
 // Export for use in main.js
