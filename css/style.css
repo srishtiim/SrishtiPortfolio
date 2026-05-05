@@ -1023,15 +1023,8 @@ body {
     padding-left: 3rem;
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background: var(--red-light);
-}
+
+/* Red vertical line removed — timeline is now inside terminal frame */
 
 .timeline-item {
     position: relative;
@@ -1620,17 +1613,9 @@ a.contact-item:hover {
     padding: 2rem 0;
 }
 
-/* Vertical Red Line */
+/* Vertical Red Line removed — now using terminal frame layout */
 .timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50px;
-    /* As per spec */
-    width: 3px;
-    background: var(--red);
-    border-radius: 3px;
+    display: none;
 }
 
 /* Individual Experience Item */
@@ -2504,11 +2489,27 @@ body {
     }
 }
 
-/* EFFECT 2 — Liquid Text Morphing */
+/* EFFECT 2 — Developer Particle Dissolve (replaces liquid) */
 .developer-text {
-    filter: url(#liquid);
-    will-change: filter, transform;
+    /* filter removed — was liquid SVG */
+    will-change: transform;
     display: inline-block;
+    position: relative;
+    cursor: default;
+}
+.developer-text .letter {
+    display: inline-block;
+    transition: opacity 0.3s ease;
+    position: relative;
+}
+.developer-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: #faf8f4;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 1px;
 }
 
 /* EFFECT 3 — Conveyor Belt Projects */
