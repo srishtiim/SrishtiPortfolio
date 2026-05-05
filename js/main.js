@@ -487,18 +487,20 @@ function renderSkills() {
         }
     }));
     
-    // Nodes
+    // Nodes - positions will be corrected to zone bounds after resize()
     let nodes = allSkills.map(s => ({
         name: s.name,
         category: s.category,
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: 0,
+        y: 0,
         vx: (Math.random() - 0.5) * 0.6,
         vy: (Math.random() - 0.5) * 0.6,
         radius: 6,
         targetRadius: 6,
         hovered: false,
-        connectedHovered: false
+        connectedHovered: false,
+        _randX: Math.random(), // store random factors for zone placement
+        _randY: Math.random()
     }));
 
     // Random connections for demo
@@ -511,23 +513,6 @@ function renderSkills() {
         }
     }
 
-    function resize() {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = 500;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    let mouseX = -1000, mouseY = -1000;
-    canvas.addEventListener('mousemove', e => {
-        const rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
-    });
-    canvas.addEventListener('mouseleave', () => {
-        mouseX = -1000; mouseY = -1000;
-    });
-
     const zones = {};
     function updateZones() {
         const padding = 20;
@@ -539,6 +524,31 @@ function renderSkills() {
         zones['tools']       = { x: padding, y: padding * 2 + h, w, h, label: 'TOOLS & TECHNOLOGIES' };
         zones['experience']  = { x: padding * 2 + w, y: padding * 2 + h, w, h, label: 'EXPERIENCE & DOMAIN' };
     }
+
+    function resize() {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 500;
+        updateZones();
+        // Reposition nodes inside their zones after resize using stored random factors
+        nodes.forEach(n => {
+            const z = zones[n.category] || zones['programming'];
+            const margin = 20;
+            n.x = z.x + margin + n._randX * (z.w - margin * 2);
+            n.y = z.y + margin + n._randY * (z.h - margin * 2);
+        });
+    }
+    window.addEventListener('resize', resize);
+    resize(); // This now also calls updateZones() and positions all nodes
+
+    let mouseX = -1000, mouseY = -1000;
+    canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+    });
+    canvas.addEventListener('mouseleave', () => {
+        mouseX = -1000; mouseY = -1000;
+    });
 
     function loop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
