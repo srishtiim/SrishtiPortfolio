@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;700&family=Caveat:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;700&family=Caveat:wght@400;700&family=Fira+Code:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -29,7 +29,7 @@
     <!-- Welcome Section (Landing Page) -->
     <section class="welcome" id="welcome">
         <div id="hero-spotlight"></div>
-        <div class="grid-bg"></div>
+        <div class="layer-bg"><div class="grid-bg"></div></div>
         <div id="scrapbook-widget">
             <div class="drag-handle">⠿</div>
             <div class="scrapbook-cover">
@@ -73,12 +73,23 @@
                 <div class="control-next"></div>
             </div>
         </div>
+        <!-- Effect 2: Liquid Text SVG Filter -->
+        <svg style="display: none;">
+            <filter id="liquid">
+                <feTurbulence type="fractalNoise" baseFrequency="0" numOctaves="3" result="noise" id="liquid-turbulence"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="liquid-displacement"/>
+            </filter>
+        </svg>
         <div class="welcome-content">
-            <div class="hero-title"><span class="creative-text">Creative</span><span
-                    class="developer-text">DEVELOPER</span></div>
-            <h2 class="welcome-text">welcome to my portfolio</h2>
-            <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
-            <div class="hero-name">SRISHTI MUKHERJEE</div>
+            <div class="hero-title">
+                <div class="layer-creative"><span class="creative-text">Creative</span></div>
+                <div class="layer-developer"><span class="developer-text" style="display: inline-block;">DEVELOPER</span></div>
+            </div>
+            <div class="layer-name">
+                <h2 class="welcome-text">welcome to my portfolio</h2>
+                <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
+                <div class="hero-name">SRISHTI MUKHERJEE</div>
+            </div>
         </div>
     </section>
 
@@ -142,7 +153,12 @@
             <div class="section-header"><span class="section-number">02</span>
                 <h2 class="section-title">Selected Projects</h2>
             </div>
-            <div class="projects-grid" id="projects-grid"></div>
+            <div id="projects-track-wrapper">
+                <div id="projects-stage">
+                    <div id="projects-belt"></div>
+                    <div class="conveyor-dots" id="conveyor-dots"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -171,20 +187,7 @@
             <div class="section-header"><span class="section-number">03</span>
                 <h2 class="section-title">Skills & Technologies</h2>
             </div>
-            <div class="skills-grid" id="skills-grid">
-                <div class="skill-category">
-                    <h3 class="skill-category-title">Programming & Languages</h3>
-                    <div class="skill-list" id="programming-skills"></div>
-                </div>
-                <div class="skill-category">
-                    <h3 class="skill-category-title">AI & Machine Learning</h3>
-                    <div class="skill-list" id="ai-skills"></div>
-                </div>
-                <div class="skill-category">
-                    <h3 class="skill-category-title">Tools & Technologies</h3>
-                    <div class="skill-list" id="tools-skills"></div>
-                </div>
-            </div>
+            <canvas id="skills-constellation"></canvas>
         </div>
     </section>
 
@@ -194,7 +197,21 @@
             <div class="section-header"><span class="section-number">04</span>
                 <h2 class="section-title">Professional Experience</h2>
             </div>
-            <div class="timeline" id="timeline"></div>
+            <div class="terminal-frame">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span class="dot red-dot"></span>
+                        <span class="dot yellow-dot"></span>
+                        <span class="dot green-dot"></span>
+                    </div>
+                    <div class="terminal-title">srishti@portfolio:~/experience</div>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-prompt" id="terminal-prompt"></div>
+                    <div class="timeline" id="timeline"></div>
+                    <div class="terminal-cursor" id="terminal-cursor">█</div>
+                </div>
+            </div>
         </div>
     </section>
 
