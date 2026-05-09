@@ -2,6 +2,17 @@
    MAIN JavaScript - Portfolio Functionality
    ======================================== */
 
+// Nuclear loader kill — runs before anything else
+function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.classList.add('force-hide');
+    }
+}
+window.addEventListener('load', hideLoader);
+document.addEventListener('DOMContentLoaded', hideLoader);
+setTimeout(hideLoader, 2000);
+
 // ============ DATA ============
 import { db } from "./firebase-config.js";
 import {
@@ -95,14 +106,28 @@ const skillsData = {
         { name: "OpenCV", level: 4 },
         { name: "NLTK", level: 4 }
     ],
-    tools: [
-        { name: "NumPy", level: 5 },
-        { name: "Pandas", level: 5 },
+    creative_tools: [
+        { name: "Canva", level: 4 },
+        { name: "Adobe Creative Suite", level: 4 },
+        { name: "Visual Design", level: 4 },
+        { name: "Template Design", level: 4 },
+        { name: "Presentation Design", level: 4 }
+    ],
+    dev_tools: [
+        { name: "VSCode", level: 5 },
         { name: "Git", level: 4 },
         { name: "Docker", level: 3 },
-        { name: "Flask", level: 4 },
         { name: "Streamlit", level: 4 },
+        { name: "Flask", level: 4 },
         { name: "Hugging Face", level: 4 }
+    ],
+    data_tools: [
+        { name: "Pandas", level: 5 },
+        { name: "NumPy", level: 5 },
+        { name: "MATLAB", level: 3 },
+        { name: "SQL", level: 4 },
+        { name: "Data Preprocessing", level: 4 },
+        { name: "Data Accuracy", level: 4 }
     ]
 };
 
@@ -259,7 +284,7 @@ const certificationsData = [
 ];
 
 // ============ DOM ELEMENTS ============
-const loader = document.getElementById('loader');
+// loader is now handled by nuclear hideLoader at top of file
 const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
@@ -271,7 +296,7 @@ const contactForm = document.getElementById('contact-form');
 // ============ INITIALIZATION ============
 // Initialize the application
 const init = () => {
-    initLoader();
+    // Loader is now handled by nuclear hideLoader at top of file
     initNavigation();
     initThemeToggle();
     initParticleCanvas();
@@ -302,29 +327,7 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// Loader - Optimized for fast loading
-function initLoader() {
-    const loader = document.getElementById('loader');
-    if (!loader) return;
-    
-    let loaderHidden = false;
-
-    const hideLoader = () => {
-        if (!loaderHidden) {
-            loaderHidden = true;
-            loader.style.transition = 'opacity 0.4s ease';
-            loader.style.opacity = '0';
-            document.body.style.overflow = 'auto';
-            setTimeout(() => {
-                loader.style.display = 'none';
-                loader.remove();
-            }, 400);
-        }
-    };
-
-    window.addEventListener('load', hideLoader);
-    setTimeout(hideLoader, 4000); // Hard fallback
-}
+// Loader is now handled by nuclear hideLoader at top of file
 
 // Navigation
 function initNavigation() {
@@ -473,6 +476,12 @@ function renderSkills() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
+    const expGroups = {
+        'business': { label: 'Business & Operations', items: ['CRM Systems', 'ERP Systems', 'Process Optimization', 'Database Management', 'File Organization', 'Record Keeping'] },
+        'marketing': { label: 'Marketing & Comms', items: ['Social Media Marketing', 'Digital Marketing', 'Sales Outreach', 'Customer Engagement', 'Content Creation', 'Technical Writing'] },
+        'quality': { label: 'Quality & Testing', items: ['Software Testing', 'Bug Tracking', 'Quality Assurance', 'Automation', 'Data Analysis', 'Model Optimization'] }
+    };
+    
     let allSkills = [];
     Object.keys(skillsData).forEach(catKey => {
         skillsData[catKey].forEach(s => {
@@ -521,7 +530,11 @@ function renderSkills() {
         
         zones['programming'] = { x: padding, y: padding, w, h, label: 'PROGRAMMING & LANGUAGES' };
         zones['ai']          = { x: padding * 2 + w, y: padding, w, h, label: 'AI & MACHINE LEARNING' };
-        zones['tools']       = { x: padding, y: padding * 2 + h, w, h, label: 'TOOLS & TECHNOLOGIES' };
+        const gap = 10;
+        const w3 = (w - gap * 2) / 3;
+        zones['creative_tools'] = { x: padding, y: padding * 2 + h, w: w3, h, label: 'CREATIVE TOOLS' };
+        zones['dev_tools']      = { x: padding + w3 + gap, y: padding * 2 + h, w: w3, h, label: 'DEV TOOLS' };
+        zones['data_tools']     = { x: padding + (w3 + gap) * 2, y: padding * 2 + h, w: w3, h, label: 'DATA TOOLS' };
         zones['experience']  = { x: padding * 2 + w, y: padding * 2 + h, w, h, label: 'EXPERIENCE & DOMAIN' };
     }
 
@@ -531,10 +544,49 @@ function renderSkills() {
         updateZones();
         // Reposition nodes inside their zones after resize using stored random factors
         nodes.forEach(n => {
-            const z = zones[n.category] || zones['programming'];
-            const margin = 20;
-            n.x = z.x + margin + n._randX * (z.w - margin * 2);
-            n.y = z.y + margin + n._randY * (z.h - margin * 2);
+            if (n.category === 'experience') {
+                const z = zones['experience'];
+                let groupIdx = -1;
+                let itemIdx = -1;
+                const groupKeys = Object.keys(expGroups);
+                for (let i = 0; i < groupKeys.length; i++) {
+                    const idx = expGroups[groupKeys[i]].items.indexOf(n.name);
+                    if (idx !== -1) {
+                        groupIdx = i;
+                        itemIdx = idx;
+                        break;
+                    }
+                }
+                
+                if (groupIdx !== -1) {
+                    const rowH = z.h / 3;
+                    const rowY = z.y + groupIdx * rowH;
+                    const totalItems = expGroups[groupKeys[groupIdx]].items.length;
+                    const itemsPerRow = Math.ceil(totalItems / 2);
+                    const row = Math.floor(itemIdx / itemsPerRow);
+                    const col = itemIdx % itemsPerRow;
+                    const cellW = (z.w - 10) / itemsPerRow;
+                    
+                    const startY = groupIdx === 0 ? rowY + 45 : rowY + 20;
+                    const availH = rowY + rowH - startY;
+                    const cellH = availH / 2;
+                    
+                    n.x = z.x + 5 + col * cellW + cellW / 2;
+                    n.y = startY + row * cellH + cellH / 2;
+                    n.vx = 0;
+                    n.vy = 0;
+                } else {
+                    n.x = z.x + n._randX * z.w;
+                    n.y = z.y + n._randY * z.h;
+                    n.vx = 0;
+                    n.vy = 0;
+                }
+            } else {
+                const z = zones[n.category] || zones['programming'];
+                const margin = 20;
+                n.x = z.x + margin + n._randX * (z.w - margin * 2);
+                n.y = z.y + margin + n._randY * (z.h - margin * 2);
+            }
         });
     }
     window.addEventListener('resize', resize);
@@ -556,13 +608,11 @@ function renderSkills() {
         updateZones();
         
         // Draw zones
-        ctx.strokeStyle = 'rgba(211,47,47,0.15)';
-        ctx.lineWidth = 1;
-        ctx.fillStyle = 'rgba(100,100,100,0.5)';
-        ctx.font = '10px sans-serif';
         ctx.textAlign = 'left';
         
         Object.values(zones).forEach(z => {
+            ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+            ctx.lineWidth = 2;
             ctx.beginPath();
             if (ctx.roundRect) {
                 ctx.roundRect(z.x, z.y, z.w, z.h, 12);
@@ -570,20 +620,45 @@ function renderSkills() {
                 ctx.rect(z.x, z.y, z.w, z.h); // fallback for older browsers
             }
             ctx.stroke();
-            ctx.fillText(z.label, z.x + 10, z.y + 20);
+            
+            ctx.fillStyle = '#1a1a1a';
+            ctx.font = '600 13px sans-serif';
+            ctx.fillText(z.label.toUpperCase(), z.x + 10, z.y + 20);
+            
+            if (z.label === 'EXPERIENCE & DOMAIN') {
+                const rowH = z.h / 3;
+                const groupKeys = Object.keys(expGroups);
+                for (let i = 0; i < 3; i++) {
+                    const rowY = z.y + i * rowH;
+                    if (i > 0) {
+                        ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(z.x + 10, rowY);
+                        ctx.lineTo(z.x + z.w - 10, rowY);
+                        ctx.stroke();
+                    }
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.font = 'italic 11px sans-serif';
+                    const textY = i === 0 ? rowY + 38 : rowY + 18;
+                    ctx.fillText(expGroups[groupKeys[i]].label, z.x + 10, textY);
+                }
+            }
         });
         
         // Repulsion & bounds
         nodes.forEach((n, i) => {
-            n.x += n.vx;
-            n.y += n.vy;
-            
-            const z = zones[n.category] || zones['programming'];
-            
-            if (n.x - n.radius < z.x) { n.x = z.x + n.radius; n.vx *= -1; }
-            if (n.x + n.radius > z.x + z.w) { n.x = z.x + z.w - n.radius; n.vx *= -1; }
-            if (n.y - n.radius < z.y) { n.y = z.y + n.radius; n.vy *= -1; }
-            if (n.y + n.radius > z.y + z.h) { n.y = z.y + z.h - n.radius; n.vy *= -1; }
+            if (n.category !== 'experience') {
+                n.x += n.vx;
+                n.y += n.vy;
+                
+                const z = zones[n.category] || zones['programming'];
+                
+                if (n.x - n.radius < z.x) { n.x = z.x + n.radius; n.vx *= -1; }
+                if (n.x + n.radius > z.x + z.w) { n.x = z.x + z.w - n.radius; n.vx *= -1; }
+                if (n.y - n.radius < z.y) { n.y = z.y + n.radius; n.vy *= -1; }
+                if (n.y + n.radius > z.y + z.h) { n.y = z.y + z.h - n.radius; n.vy *= -1; }
+            }
 
             // Hover check
             const distToMouse = Math.hypot(n.x - mouseX, n.y - mouseY);
@@ -1364,7 +1439,7 @@ function initDeveloperDissolve() {
                     item.dissolved = true;
                     item.el.style.opacity = '0';
                     
-                    for (let i = 0; i < 8; i++) {
+                    for (let i = 0; i < 16; i++) {
                         const p = document.createElement('div');
                         p.className = 'developer-particle';
                         p.style.left = `${centerX - 2}px`;
