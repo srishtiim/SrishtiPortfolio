@@ -2504,12 +2504,19 @@ body {
 }
 .developer-particle {
     position: fixed;
-    width: 4px;
-    height: 4px;
+    width: 1.5px;
+    height: 1.5px;
     background: #faf8f4;
     pointer-events: none;
     z-index: 9999;
     border-radius: 1px;
+}
+
+/* Nuclear loader kill switch */
+#page-loader.force-hide {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    display: none !important;
 }
 
 /* EFFECT 3 — Conveyor Belt Projects */
