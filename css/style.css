@@ -704,6 +704,56 @@ body {
     color: #fff;
 }
 
+.cabinet-drawer.drawer-bottom .drawer-front {
+    background: #e6e0d5;
+}
+
+/* ========================================
+   SCROLL & CURSOR EFFECTS
+   ======================================== */
+
+/* Effect 2: Cursor Spotlight */
+.welcome {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 80px; /* Effect 3 */
+}
+
+#hero-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(circle 280px at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+@media (max-width: 767px) {
+    #hero-spotlight {
+        display: none !important;
+    }
+}
+
+/* Effect 3: Seamless Transition */
+.welcome::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+    pointer-events: none;
+    z-index: 5;
+}
+
+#about {
+    margin-top: -80px;
+    position: relative;
+    z-index: 10;
+}
+
 .btn-primary:hover {
     background: #b71c1c;
     transform: translateY(-1px);
@@ -720,23 +770,30 @@ body {
     transform: translateY(-1px);
 }
 
-/* Slide-in animation for project cards */
-#projects-grid .project-card {
+/* Effect 1: Horizontal Staggered Card Reveal */
+.card-hidden {
     opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
 }
 
-#projects-grid .project-card:nth-child(odd) {
-    transform: translateX(-60px);
+.card-hidden:nth-child(odd) {
+    transform: translateX(-80px);
 }
 
-#projects-grid .project-card:nth-child(even) {
-    transform: translateX(60px);
+.card-hidden:nth-child(even) {
+    transform: translateX(80px);
 }
 
-#projects-grid .project-card.slide-in {
+#projects-grid .project-card {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translate(0, 0);
     opacity: 1;
-    transform: translateX(0);
+}
+
+@media (max-width: 767px) {
+    .card-hidden:nth-child(odd),
+    .card-hidden:nth-child(even) {
+        transform: translateY(40px);
+    }
 }
 
 /* ========== MODAL ========== */
@@ -966,15 +1023,8 @@ body {
     padding-left: 3rem;
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background: var(--red-light);
-}
+
+/* Red vertical line removed — timeline is now inside terminal frame */
 
 .timeline-item {
     position: relative;
@@ -1563,17 +1613,9 @@ a.contact-item:hover {
     padding: 2rem 0;
 }
 
-/* Vertical Red Line */
+/* Vertical Red Line removed — now using terminal frame layout */
 .timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50px;
-    /* As per spec */
-    width: 3px;
-    background: var(--red);
-    border-radius: 3px;
+    display: none;
 }
 
 /* Individual Experience Item */
@@ -2412,4 +2454,304 @@ body {
     #cabinet-widget {
         display: none;
     }
+}
+
+/* ========================================
+   BOLD EFFECTS - NEW IMPLEMENTATIONS
+   ======================================== */
+
+/* EFFECT 1 — 3D Tilt Hero with Depth Layers */
+.welcome {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+}
+.layer-bg, .layer-creative, .layer-developer, .layer-name {
+    will-change: transform;
+    transition: transform 1s ease-out; /* Fallback/return transition */
+}
+/* Ensure the layers don't block pointers if not needed, except they wrap content */
+.layer-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+.layer-creative, .layer-developer, .layer-name {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome {
+        perspective: none;
+    }
+    .layer-bg, .layer-creative, .layer-developer, .layer-name {
+        transform: none !important;
+    }
+}
+
+/* EFFECT 2 — Developer Particle Dissolve (replaces liquid) */
+.developer-text {
+    /* filter removed — was liquid SVG */
+    will-change: transform;
+    display: inline-block;
+    position: relative;
+    cursor: default;
+}
+.developer-text .letter {
+    display: inline-block;
+    transition: opacity 0.3s ease;
+    position: relative;
+}
+.developer-particle {
+    position: fixed;
+    width: 1.5px;
+    height: 1.5px;
+    background: #faf8f4;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 1px;
+}
+
+/* Nuclear loader kill switch */
+#page-loader.force-hide {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    display: none !important;
+}
+
+/* EFFECT 3 — Conveyor Belt Projects */
+#projects-track-wrapper {
+    position: relative;
+    /* Height will be set dynamically via JS */
+}
+
+#projects-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#projects-belt {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    height: 100%;
+    will-change: transform;
+}
+
+/* 3D Card Design */
+.project-card {
+    width: 380px;
+    height: 520px;
+    flex-shrink: 0;
+    margin: 0 24px;
+    position: relative;
+    perspective: 1500px;
+    background: transparent;
+    box-shadow: none;
+}
+.project-card:hover {
+    transform: none; /* override old hover */
+    box-shadow: none;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
+}
+
+.project-card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    padding: 2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: var(--dark);
+    color: var(--cream);
+}
+
+.card-back .project-tech span {
+    background: rgba(255,255,255,0.1);
+    color: var(--cream);
+}
+
+.card-back .project-description {
+    color: var(--cream);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.conveyor-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.conveyor-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--cream);
+    background: transparent;
+    transition: var(--transition);
+}
+
+.conveyor-dot.active {
+    background: var(--red);
+    border-color: var(--red);
+}
+
+@media (max-width: 768px) {
+    #projects-track-wrapper {
+        height: auto !important;
+    }
+    #projects-stage {
+        position: relative;
+        height: auto;
+        overflow: visible;
+    }
+    #projects-belt {
+        flex-direction: column;
+        width: 100%;
+        transform: none !important;
+    }
+    .project-card {
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto 2rem;
+    }
+    .conveyor-dots {
+        display: none;
+    }
+}
+
+/* EFFECT 4 — Constellation Skills Network */
+#skills-constellation {
+    width: 100%;
+    height: 500px;
+    display: block;
+    background: transparent;
+    cursor: crosshair;
+}
+
+/* EFFECT 5 — Terminal Experience Section */
+.experience {
+    background: #0d0d0d;
+}
+.terminal-frame {
+    background: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    max-width: 900px;
+    margin: 0 auto;
+}
+.terminal-header {
+    background: #2d2d2d;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #111;
+}
+.terminal-dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 1.5rem;
+}
+.terminal-dots .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.dot.red-dot { background: #ff5f56; }
+.dot.yellow-dot { background: #ffbd2e; }
+.dot.green-dot { background: #27c93f; }
+.terminal-title {
+    color: #888;
+    font-size: 0.85rem;
+}
+.terminal-body {
+    padding: 2rem;
+    color: #fff;
+}
+.terminal-prompt {
+    color: #00ff88;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+.terminal-line {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+.terminal-line.company { color: #fff; font-weight: bold; }
+.terminal-line.role { color: #00ff88; }
+.terminal-line.duration { color: #888; }
+.terminal-line.bullet { color: #ccc; margin-left: 1rem; }
+.terminal-line.empty { height: 1.5rem; }
+
+.terminal-cursor {
+    display: inline-block;
+    color: #00ff88;
+    animation: terminal-blink 1.2s step-end infinite;
+    margin-top: 1rem;
+}
+
+@keyframes terminal-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .terminal-frame {
+        font-size: 13px;
+    }
+    .terminal-body {
+        padding: 1rem;
+    }
+}
+
+/* EFFECT 6 — Magnetic Contact Elements */
+.contact-item, .social-link, #submit-btn {
+    will-change: transform;
+    display: inline-flex; /* Ensure transforms work */
+}
+
+.magnetic-glow {
+    filter: drop-shadow(0 0 8px rgba(211,47,47,0.4));
 }

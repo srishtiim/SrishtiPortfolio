@@ -2,12 +2,24 @@
    MAIN JavaScript - Portfolio Functionality
    ======================================== */
 
-// ============ DATA ============
 import { db } from "./firebase-config.js";
 import {
     collection,
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Nuclear loader kill — runs before anything else
+function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.classList.add('force-hide');
+    }
+}
+window.addEventListener('load', hideLoader);
+document.addEventListener('DOMContentLoaded', hideLoader);
+setTimeout(hideLoader, 2000);
+
+// ============ DATA ============
 
 const projectsData = [
     {
@@ -95,14 +107,28 @@ const skillsData = {
         { name: "OpenCV", level: 4 },
         { name: "NLTK", level: 4 }
     ],
-    tools: [
-        { name: "NumPy", level: 5 },
-        { name: "Pandas", level: 5 },
+    creative_tools: [
+        { name: "Canva", level: 4 },
+        { name: "Adobe Creative Suite", level: 4 },
+        { name: "Visual Design", level: 4 },
+        { name: "Template Design", level: 4 },
+        { name: "Presentation Design", level: 4 }
+    ],
+    dev_tools: [
+        { name: "VSCode", level: 5 },
         { name: "Git", level: 4 },
         { name: "Docker", level: 3 },
-        { name: "Flask", level: 4 },
         { name: "Streamlit", level: 4 },
+        { name: "Flask", level: 4 },
         { name: "Hugging Face", level: 4 }
+    ],
+    data_tools: [
+        { name: "Pandas", level: 5 },
+        { name: "NumPy", level: 5 },
+        { name: "MATLAB", level: 3 },
+        { name: "SQL", level: 4 },
+        { name: "Data Preprocessing", level: 4 },
+        { name: "Data Accuracy", level: 4 }
     ]
 };
 
@@ -259,7 +285,7 @@ const certificationsData = [
 ];
 
 // ============ DOM ELEMENTS ============
-const loader = document.getElementById('loader');
+// loader is now handled by nuclear hideLoader at top of file
 const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
@@ -271,7 +297,7 @@ const contactForm = document.getElementById('contact-form');
 // ============ INITIALIZATION ============
 // Initialize the application
 const init = () => {
-    initLoader();
+    // Loader is now handled by nuclear hideLoader at top of file
     initNavigation();
     initThemeToggle();
     initParticleCanvas();
@@ -279,12 +305,18 @@ const init = () => {
     renderProjects();
     renderSkills();
     renderTimeline();
-    initExperienceInteractivity();
+    // initExperienceInteractivity(); // replaced by terminal
     renderEducation();
     renderCertifications();
     initContactForm();
     initModal();
     initMicroInteractions();
+    initHeroSpotlight();
+    
+    // Bold Effects
+    init3DTiltHero();
+    initDeveloperDissolve();
+    initMagneticContacts();
 };
 
 // Handle both cases: DOM still loading or already loaded
@@ -296,31 +328,7 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// Loader - Optimized for fast loading
-function initLoader() {
-    let loaderHidden = false;
-
-    const hideLoader = () => {
-        if (!loaderHidden) {
-            loaderHidden = true;
-            loader.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-    };
-
-    // Hide loader after a short delay once DOM is ready (much faster than waiting for all resources)
-    // This ensures the page content is visible quickly
-    setTimeout(() => {
-        hideLoader();
-    }, 800);
-
-    // Also hide on window load as a fallback (in case DOM loads very slowly)
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            hideLoader();
-        }, 500);
-    });
-}
+// Loader is now handled by nuclear hideLoader at top of file
 
 // Navigation
 function initNavigation() {
@@ -380,214 +388,434 @@ function initThemeToggle() {
 }
 
 // Render Projects
+// Render Projects (Effect 3: Conveyor Belt)
 function renderProjects() {
-    const grid = document.getElementById('projects-grid');
-    if (!grid) return;
+    const belt = document.getElementById('projects-belt');
+    const dotsContainer = document.getElementById('conveyor-dots');
+    if (!belt) return;
 
-    grid.innerHTML = projectsData.map(project => {
+    belt.innerHTML = projectsData.map((project, index) => {
         let buttonsHtml = '';
-        if (project.liveUrl) {
-            buttonsHtml += `<a href="${project.liveUrl}" target="_blank" class="btn btn-primary project-action-btn">Live Demo</a>`;
-        }
-        if (project.downloadPaper) {
-            buttonsHtml += `<a href="${project.downloadPaper}" download class="btn btn-primary project-action-btn">Download Paper</a>`;
-        }
-        if (project.githubUrl) {
-            buttonsHtml += `<a href="${project.githubUrl}" target="_blank" class="btn btn-secondary project-action-btn">View Repository</a>`;
-        }
+        if (project.liveUrl) buttonsHtml += `<a href="${project.liveUrl}" target="_blank" class="btn btn-primary project-action-btn">Live Demo</a>`;
+        if (project.downloadPaper) buttonsHtml += `<a href="${project.downloadPaper}" download class="btn btn-primary project-action-btn">Download Paper</a>`;
+        if (project.githubUrl) buttonsHtml += `<a href="${project.githubUrl}" target="_blank" class="btn btn-secondary project-action-btn">View Repository</a>`;
 
         return `
         <div class="project-card" data-project-id="${project.id}">
-            <img src="${project.image}" alt="${project.title}" class="project-image" 
-                 onerror="this.src='https://via.placeholder.com/400x220/E8DCC4/1a1a1a?text=${encodeURIComponent(project.title)}'">
-            <div class="project-content">
-                <span class="project-category">${project.category}</span>
-                <h3 class="project-title">${project.title}</h3>
-                <p class="project-description">${project.description}</p>
-                <div class="project-tech">
-                    ${project.techStack.slice(0, 4).map(tech => `<span>${tech}</span>`).join('')}
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="${project.image}" alt="${project.title}" class="project-image" onerror="this.src='https://via.placeholder.com/400x220/E8DCC4/1a1a1a?text=${encodeURIComponent(project.title)}'">
+                    <div class="project-content">
+                        <span class="project-category">${project.category}</span>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description.split('.')[0] + '.'}</p>
+                    </div>
                 </div>
-                <div class="project-actions" style="display: flex; gap: 10px; margin-top: 15px;">
-                    ${buttonsHtml}
+                <div class="card-back">
+                    <div class="project-tech">
+                        ${project.techStack.map(tech => `<span>${tech}</span>`).join('')}
+                    </div>
+                    <p class="project-description">${project.description}</p>
+                    <div class="project-actions" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        ${buttonsHtml}
+                    </div>
                 </div>
             </div>
-        </div>
-        `;
+        </div>`;
     }).join('');
 
-    // Add click handlers for project cards
-    grid.querySelectorAll('.project-card').forEach((card, index) => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.project-action-btn')) return;
-            const projectId = parseInt(card.dataset.projectId);
-            openProjectModal(projectId);
-        });
-    });
-
-    // IntersectionObserver logic for staggered slide-in animation
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('slide-in');
-                obs.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    grid.querySelectorAll('.project-card').forEach((card, index) => {
-        card.style.transitionDelay = `${index * 100}ms`;
-        observer.observe(card);
-    });
-
-    // Refresh animations for newly added cards
-    if (window.refreshAnimations) {
-        window.refreshAnimations();
+    if (dotsContainer) {
+        dotsContainer.innerHTML = projectsData.map((_, i) => `<div class="conveyor-dot ${i === 0 ? 'active' : ''}"></div>`).join('');
     }
+
+    const wrapper = document.getElementById('projects-track-wrapper');
+    if (window.innerWidth < 768) return;
+
+    wrapper.style.height = `calc(100vh + ${projectsData.length * 80}vh)`;
+    let currentTranslate = 0;
+    let targetTranslate = 0;
+    let isActive = false;
+
+    const observer = new IntersectionObserver(entries => {
+        isActive = entries[0].isIntersecting;
+    });
+    observer.observe(wrapper);
+
+    const dots = dotsContainer ? dotsContainer.querySelectorAll('.conveyor-dot') : [];
+
+    function renderLoop() {
+        if (isActive) {
+            currentTranslate += (targetTranslate - currentTranslate) * 0.1;
+            belt.style.transform = `translate3d(${-currentTranslate}px, 0, 0)`;
+
+            if (dots.length > 0) {
+                const totalScroll = belt.scrollWidth - window.innerWidth;
+                const progress = totalScroll > 0 ? currentTranslate / totalScroll : 0;
+                const activeIndex = Math.min(Math.max(Math.floor(progress * projectsData.length), 0), projectsData.length - 1);
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+            }
+        }
+        requestAnimationFrame(renderLoop);
+    }
+    renderLoop();
+
+    window.addEventListener('scroll', () => {
+        if (!isActive) return;
+        const rect = wrapper.getBoundingClientRect();
+        const maxScroll = rect.height - window.innerHeight;
+        let progress = Math.abs(rect.top) / maxScroll;
+        if (rect.top > 0) progress = 0;
+        if (rect.top < -maxScroll) progress = 1;
+        targetTranslate = progress * (belt.scrollWidth - window.innerWidth + 48); // 48px margin padding
+    });
 }
 
 // Render Skills with Star Ratings
+// Render Skills (Effect 4: Constellation Canvas)
 function renderSkills() {
-    const renderStars = (level) => {
-        let stars = '';
-        for (let i = 1; i <= 5; i++) {
-            stars += i <= level ? '★' : '<span class="empty">★</span>';
+    const canvas = document.getElementById('skills-constellation');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    const expGroups = {
+        'business': { label: 'Business & Operations', items: ['CRM Systems', 'ERP Systems', 'Process Optimization', 'Database Management', 'File Organization', 'Record Keeping'] },
+        'marketing': { label: 'Marketing & Comms', items: ['Social Media Marketing', 'Digital Marketing', 'Sales Outreach', 'Customer Engagement', 'Content Creation', 'Technical Writing'] },
+        'quality': { label: 'Quality & Testing', items: ['Software Testing', 'Bug Tracking', 'Quality Assurance', 'Automation', 'Data Analysis', 'Model Optimization'] }
+    };
+    
+    let allSkills = [];
+    Object.keys(skillsData).forEach(catKey => {
+        skillsData[catKey].forEach(s => {
+            if (!allSkills.find(sk => sk.name === s.name)) {
+                allSkills.push({ name: s.name, category: catKey });
+            }
+        });
+    });
+    experienceData.forEach(exp => exp.skills.forEach(s => {
+        if (!allSkills.find(sk => sk.name === s.name)) {
+            allSkills.push({ name: s.name, category: 'experience' });
         }
-        return stars;
-    };
+    }));
+    
+    // Nodes - positions will be corrected to zone bounds after resize()
+    let nodes = allSkills.map(s => ({
+        name: s.name,
+        category: s.category,
+        x: 0,
+        y: 0,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        radius: 6,
+        targetRadius: 6,
+        hovered: false,
+        connectedHovered: false,
+        _randX: Math.random(), // store random factors for zone placement
+        _randY: Math.random()
+    }));
 
-    const renderSkillList = (skills, containerId) => {
-        const container = document.getElementById(containerId);
-        if (!container) return;
+    // Random connections for demo
+    let edges = [];
+    for (let i = 0; i < nodes.length; i++) {
+        const numEdges = Math.floor(Math.random() * 2) + 1;
+        for(let j = 0; j < numEdges; j++) {
+            const target = Math.floor(Math.random() * nodes.length);
+            if (i !== target) edges.push([i, target]);
+        }
+    }
 
-        container.innerHTML = skills.map(skill => `
-            <div class="skill-item">
-                <span class="skill-name">${skill.name}</span>
-                <span class="skill-stars">${renderStars(skill.level)}</span>
-            </div>
-        `).join('');
-    };
+    const zones = {};
+    function updateZones() {
+        const padding = 20;
+        const w = Math.max(0, (canvas.width - padding * 3) / 2);
+        const h = Math.max(0, (canvas.height - padding * 3) / 2);
+        
+        zones['programming'] = { x: padding, y: padding, w, h, label: 'PROGRAMMING & LANGUAGES' };
+        zones['ai']          = { x: padding * 2 + w, y: padding, w, h, label: 'AI & MACHINE LEARNING' };
+        const gap = 10;
+        const w3 = Math.max(0, (w - gap * 2) / 3);
+        zones['creative_tools'] = { x: padding, y: padding * 2 + h, w: w3, h, label: 'CREATIVE TOOLS' };
+        zones['dev_tools']      = { x: padding + w3 + gap, y: padding * 2 + h, w: w3, h, label: 'DEV TOOLS' };
+        zones['data_tools']     = { x: padding + (w3 + gap) * 2, y: padding * 2 + h, w: w3, h, label: 'DATA TOOLS' };
+        zones['experience']  = { x: padding * 2 + w, y: padding * 2 + h, w, h, label: 'EXPERIENCE & DOMAIN' };
+    }
 
-    renderSkillList(skillsData.programming, 'programming-skills');
-    renderSkillList(skillsData.ai, 'ai-skills');
-    renderSkillList(skillsData.tools, 'tools-skills');
+    function resize() {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 500;
+        updateZones();
+        // Reposition nodes inside their zones after resize using stored random factors
+        nodes.forEach(n => {
+            if (n.category === 'experience') {
+                const z = zones['experience'];
+                let groupIdx = -1;
+                let itemIdx = -1;
+                const groupKeys = Object.keys(expGroups);
+                for (let i = 0; i < groupKeys.length; i++) {
+                    const idx = expGroups[groupKeys[i]].items.indexOf(n.name);
+                    if (idx !== -1) {
+                        groupIdx = i;
+                        itemIdx = idx;
+                        break;
+                    }
+                }
+                
+                if (groupIdx !== -1) {
+                    const rowH = z.h / 3;
+                    const rowY = z.y + groupIdx * rowH;
+                    const totalItems = expGroups[groupKeys[groupIdx]].items.length;
+                    const itemsPerRow = Math.ceil(totalItems / 2);
+                    const row = Math.floor(itemIdx / itemsPerRow);
+                    const col = itemIdx % itemsPerRow;
+                    const cellW = (z.w - 10) / itemsPerRow;
+                    
+                    const startY = groupIdx === 0 ? rowY + 45 : rowY + 20;
+                    const availH = rowY + rowH - startY;
+                    const cellH = availH / 2;
+                    
+                    n.x = z.x + 5 + col * cellW + cellW / 2;
+                    n.y = startY + row * cellH + cellH / 2;
+                    n.vx = 0;
+                    n.vy = 0;
+                } else {
+                    n.x = z.x + n._randX * z.w;
+                    n.y = z.y + n._randY * z.h;
+                    n.vx = 0;
+                    n.vy = 0;
+                }
+            } else {
+                const z = zones[n.category] || zones['programming'];
+                const margin = 20;
+                n.x = z.x + margin + n._randX * (z.w - margin * 2);
+                n.y = z.y + margin + n._randY * (z.h - margin * 2);
+            }
+        });
+    }
+    window.addEventListener('resize', resize);
+    resize(); // This now also calls updateZones() and positions all nodes
+
+    let mouseX = -1000, mouseY = -1000;
+    canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+    });
+    canvas.addEventListener('mouseleave', () => {
+        mouseX = -1000; mouseY = -1000;
+    });
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        updateZones();
+        
+        // Draw zones
+        ctx.textAlign = 'left';
+        
+        Object.values(zones).forEach(z => {
+            ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            // Ensure width and height are non-negative to prevent DOMException
+            const safeW = Math.max(0, z.w);
+            const safeH = Math.max(0, z.h);
+            
+            if (ctx.roundRect) {
+                ctx.roundRect(z.x, z.y, safeW, safeH, 12);
+            } else {
+                ctx.rect(z.x, z.y, safeW, safeH); // fallback for older browsers
+            }
+            ctx.stroke();
+            
+            ctx.fillStyle = '#1a1a1a';
+            ctx.font = '600 13px sans-serif';
+            ctx.fillText(z.label.toUpperCase(), z.x + 10, z.y + 20);
+            
+            if (z.label === 'EXPERIENCE & DOMAIN') {
+                const rowH = z.h / 3;
+                const groupKeys = Object.keys(expGroups);
+                for (let i = 0; i < 3; i++) {
+                    const rowY = z.y + i * rowH;
+                    if (i > 0) {
+                        ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(z.x + 10, rowY);
+                        ctx.lineTo(z.x + z.w - 10, rowY);
+                        ctx.stroke();
+                    }
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.font = 'italic 11px sans-serif';
+                    const textY = i === 0 ? rowY + 38 : rowY + 18;
+                    ctx.fillText(expGroups[groupKeys[i]].label, z.x + 10, textY);
+                }
+            }
+        });
+        
+        // Repulsion & bounds
+        nodes.forEach((n, i) => {
+            if (n.category !== 'experience') {
+                n.x += n.vx;
+                n.y += n.vy;
+                
+                const z = zones[n.category] || zones['programming'];
+                
+                if (n.x - n.radius < z.x) { n.x = z.x + n.radius; n.vx *= -1; }
+                if (n.x + n.radius > z.x + z.w) { n.x = z.x + z.w - n.radius; n.vx *= -1; }
+                if (n.y - n.radius < z.y) { n.y = z.y + n.radius; n.vy *= -1; }
+                if (n.y + n.radius > z.y + z.h) { n.y = z.y + z.h - n.radius; n.vy *= -1; }
+            }
+
+            // Hover check
+            const distToMouse = Math.hypot(n.x - mouseX, n.y - mouseY);
+            if (distToMouse < 40) {
+                n.hovered = true;
+                n.targetRadius = 10;
+            } else {
+                n.hovered = false;
+                n.targetRadius = 6;
+            }
+            n.connectedHovered = false;
+        });
+
+        // Edges
+        ctx.lineWidth = 1;
+        edges.forEach(([i, j]) => {
+            const n1 = nodes[i];
+            const n2 = nodes[j];
+            if (n1.hovered || n2.hovered) {
+                if(n1.hovered) n2.connectedHovered = true;
+                if(n2.hovered) n1.connectedHovered = true;
+                ctx.strokeStyle = `rgba(211, 47, 47, 0.8)`;
+                ctx.lineWidth = 2;
+            } else {
+                ctx.strokeStyle = `rgba(211, 47, 47, 0.15)`;
+                ctx.lineWidth = 1;
+            }
+            ctx.beginPath();
+            ctx.moveTo(n1.x, n1.y);
+            ctx.lineTo(n2.x, n2.y);
+            ctx.stroke();
+        });
+
+        // Draw nodes
+        const anyHovered = nodes.some(n => n.hovered);
+        nodes.forEach(n => {
+            n.radius += (n.targetRadius - n.radius) * 0.2;
+            
+            let currentRadius = n.radius;
+            if (n.connectedHovered) {
+                currentRadius = 6 + Math.sin(Date.now() / 100) * 2;
+            }
+
+            ctx.globalAlpha = (anyHovered && !n.hovered && !n.connectedHovered) ? 0.3 : 1;
+            
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, currentRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#D32F2F';
+            ctx.fill();
+            
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--dark').trim() || '#1a1a1a';
+            ctx.font = n.hovered ? 'bold 16px sans-serif' : '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(n.name, n.x, n.y + currentRadius + 12);
+        });
+        
+        ctx.globalAlpha = 1;
+
+        requestAnimationFrame(loop);
+    }
+    
+    // Entry animation
+    nodes.forEach(n => {
+        const targetX = n.x;
+        const targetY = n.y;
+        const z = zones[n.category] || zones['programming'];
+        n.x = z.x + z.w / 2;
+        n.y = z.y + z.h / 2;
+        
+        let t = 0;
+        function entry() {
+            t += 0.02;
+            if (t > 1) t = 1;
+            const easeOutElastic = (x) => x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1;
+            const startX = z.x + z.w / 2;
+            const startY = z.y + z.h / 2;
+            n.x = startX + (targetX - startX) * easeOutElastic(t);
+            n.y = startY + (targetY - startY) * easeOutElastic(t);
+            if (t < 1) requestAnimationFrame(entry);
+        }
+        
+        const obs = new IntersectionObserver(e => {
+            if(e[0].isIntersecting) {
+                updateZones(); // ensure zones are ready
+                entry();
+                obs.disconnect();
+            }
+        });
+        obs.observe(canvas);
+    });
+
+    loop();
 }
 
 // Render Timeline
+// Render Experience (Effect 5: Terminal Experience)
 function renderTimeline() {
     const timeline = document.getElementById('timeline');
-    if (!timeline) return;
+    const prompt = document.getElementById('terminal-prompt');
+    if (!timeline || !prompt) return;
 
-    timeline.innerHTML = experienceData.map(exp => `
-        <div class="experience-item" data-experience="${exp.id}">
-            <div class="timeline-marker"></div>
-            <div class="experience-card">
-                <div class="card-header">
-                    <div class="company-logo">
-                        <div class="company-initials">${exp.company.slice(0, 2).toUpperCase()}</div>
-                    </div>
-                    <div class="header-content">
-                        <h3 class="company-name">${exp.company}</h3>
-                        <p class="position-title">${exp.position}</p>
-                        <div class="meta-info">
-                            <span class="duration">
-                                <i class="fas fa-calendar-alt"></i>
-                                ${exp.duration}
-                            </span>
-                            <span class="location">
-                                <i class="fas fa-map-marker-alt"></i>
-                                ${exp.location}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-body">
-                    <p class="short-description">
-                       ${exp.shortDescription}
-                    </p>
-                    <button class="read-more">Read more <i class="fas fa-arrow-right"></i></button>
-                    
-                    <div class="full-details" style="display: none;">
-                        <p class="full-description">
-                           ${exp.fullDescription}
-                        </p>
-                        
-                        <h4>Key Responsibilities:</h4>
-                        <ul class="responsibilities-list">
-                           ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
-                        </ul>
-                        
-                        <h4>Skills & Technologies:</h4>
-                        <div class="skills-tags">
-                            ${exp.skills.map(s => `<span class="tag ${s.type}">${s.name}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `).join('');
+    let html = '';
+    experienceData.forEach(exp => {
+        html += `<div class="terminal-line empty"></div>`;
+        html += `<div class="terminal-line company">▸ ${exp.company}</div>`;
+        html += `<div class="terminal-line role">${exp.position}</div>`;
+        html += `<div class="terminal-line duration">${exp.duration} | ${exp.location}</div>`;
+        exp.responsibilities.forEach(r => {
+            html += `<div class="terminal-line bullet">  → ${r}</div>`;
+        });
+    });
+    
+    timeline.innerHTML = html;
+    const lines = timeline.querySelectorAll('.terminal-line');
+    lines.forEach(l => l.style.display = 'none');
+    
+    const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            observer.disconnect();
+            
+            // Type prompt
+            const promptText = "$ cat experience.log";
+            let i = 0;
+            function typePrompt() {
+                if (i < promptText.length) {
+                    prompt.textContent += promptText.charAt(i);
+                    i++;
+                    setTimeout(typePrompt, 40);
+                } else {
+                    setTimeout(showLines, 300);
+                }
+            }
+            
+            let lineIdx = 0;
+            function showLines() {
+                if (lineIdx < lines.length) {
+                    lines[lineIdx].style.display = 'block';
+                    lineIdx++;
+                    setTimeout(showLines, 80);
+                }
+            }
+            
+            typePrompt();
+        }
+    }, { threshold: 0.2 });
+    
+    observer.observe(document.querySelector('.terminal-frame'));
 }
 
-// Initialize Experience Interactivity
 function initExperienceInteractivity() {
-    // Expand/Collapse Experience Cards
-    document.querySelectorAll('.experience-card').forEach(card => {
-        const readMoreBtn = card.querySelector('.read-more');
-        const fullDetails = card.querySelector('.full-details');
-
-        if (!readMoreBtn || !fullDetails) return;
-
-        readMoreBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            if (fullDetails.style.display === 'none') {
-                fullDetails.style.display = 'block';
-                // Small timeout to allow display:block to apply before animating height if we were using CSS transitions on height
-                // For now, simple display toggle is fine, but we can animate opacity/transform
-                requestAnimationFrame(() => {
-                    fullDetails.style.opacity = '1';
-                });
-
-                readMoreBtn.innerHTML = 'Read less <i class="fas fa-arrow-up"></i>';
-                card.classList.add('expanded');
-            } else {
-                fullDetails.style.opacity = '0';
-                setTimeout(() => {
-                    fullDetails.style.display = 'none';
-                }, 300); // Match transition time
-
-                readMoreBtn.innerHTML = 'Read more <i class="fas fa-arrow-right"></i>';
-                card.classList.remove('expanded');
-            }
-        });
-
-        // Click anywhere on card (except inside full details to allow text selection) to expand
-        card.addEventListener('click', (e) => {
-            // Don't collapse if clicking inside the details or on the button itself (since button has its own handler)
-            if (e.target.closest('.full-details') || e.target.closest('.read-more')) return;
-            readMoreBtn.click();
-        });
-    });
-
-    // Scroll Animation - Fade in cards as they enter viewport
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // Only animate once
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.experience-item').forEach(item => {
-        item.classList.add('fade-in'); // Start hidden
-        observer.observe(item);
-    });
+    // Replaced by terminal logic, kept empty to satisfy existing calls if any
 }
 
 // Render Education
@@ -803,8 +1031,42 @@ function initParticleCanvas() {
         
         requestAnimationFrame(draw);
     }
+    
     draw();
 }
+
+// Effect 2: Cursor Spotlight / Torch Effect
+function initHeroSpotlight() {
+    const hero = document.querySelector('.welcome');
+    const spotlight = document.getElementById('hero-spotlight');
+    
+    if (!hero || !spotlight) return;
+    
+    // Disable on mobile
+    if (window.innerWidth < 768) return;
+
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spotlight.style.setProperty('--x', `${x}px`);
+        spotlight.style.setProperty('--y', `${y}px`);
+    });
+
+    hero.addEventListener('mouseenter', () => {
+        spotlight.style.opacity = '1';
+        // Fade to 1 over 0.3s (handled by JS overriding CSS transition if we wanted, 
+        // but CSS already handles the transition differences based on opacity values)
+        spotlight.style.transitionDuration = '0.3s';
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        spotlight.style.opacity = '0';
+        // Fade to 0 over 0.4s
+        spotlight.style.transitionDuration = '0.4s';
+    });
+}
+
 
 function initCustomCursor() {
     if (window.innerWidth <= 768) return;
@@ -1091,4 +1353,209 @@ async function loadSkills() {
 }
 
 loadSkills();
+
+// ========================================
+// BOLD EFFECTS IMPLEMENTATIONS
+// ========================================
+
+// Effect 1: 3D Tilt Hero
+function init3DTiltHero() {
+    const hero = document.querySelector('.welcome');
+    const layers = {
+        bg: document.querySelector('.layer-bg'),
+        creative: document.querySelector('.layer-creative'),
+        developer: document.querySelector('.layer-developer'),
+        name: document.querySelector('.layer-name')
+    };
+    
+    if (!hero || !layers.bg) return;
+
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let currRotX = 0;
+    let currRotY = 0;
+
+    hero.addEventListener('mousemove', (e) => {
+        if (window.innerWidth < 768) return;
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        targetRotX = (y / rect.height) * 30; // -15 to 15
+        targetRotY = (x / rect.width) * 30;
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        targetRotX = 0;
+        targetRotY = 0;
+    });
+
+    function renderParallax() {
+        if (window.innerWidth >= 768) {
+            currRotX += (targetRotX - currRotX) * 0.08;
+            currRotY += (targetRotY - currRotY) * 0.08;
+            
+            if (layers.bg) layers.bg.style.transform = `translate(${currRotY * 0.5}px, ${currRotX * 0.5}px)`;
+            if (layers.creative) layers.creative.style.transform = `translate(${currRotY * 1.2}px, ${currRotX * 1.2}px)`;
+            if (layers.developer) layers.developer.style.transform = `translate(${currRotY * 2}px, ${currRotX * 2}px)`;
+            if (layers.name) layers.name.style.transform = `translate(${currRotY * 3}px, ${currRotX * 3}px)`;
+        }
+        requestAnimationFrame(renderParallax);
+    }
+    renderParallax();
+}
+
+// Effect 2 (Updated): Particle Dissolve Hover
+function initDeveloperDissolve() {
+    const devText = document.querySelector('.developer-text');
+    if (!devText) return;
+
+    const text = devText.textContent;
+    devText.innerHTML = '';
+    const letterSpans = [];
+    
+    for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        span.className = 'letter';
+        devText.appendChild(span);
+        letterSpans.push({
+            el: span,
+            dissolved: false,
+            particles: []
+        });
+    }
+
+    let mouseX = -1000, mouseY = -1000;
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function renderParticles() {
+        letterSpans.forEach(item => {
+            const rect = item.el.getBoundingClientRect();
+            // Letters are attached to viewport scrolling so rect updates naturally
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
+
+            if (dist < 150) {
+                if (!item.dissolved) {
+                    item.dissolved = true;
+                    item.el.style.opacity = '0';
+                    
+                    for (let i = 0; i < 16; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'developer-particle';
+                        p.style.left = `${centerX - 2}px`;
+                        p.style.top = `${centerY - 2}px`;
+                        document.body.appendChild(p);
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const speed = 1 + Math.random() * 2;
+                        item.particles.push({
+                            el: p,
+                            x: centerX - 2,
+                            y: centerY - 2,
+                            originX: centerX - 2, // will be dynamic based on scroll, handled below
+                            originY: centerY - 2,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            life: 1.0
+                        });
+                    }
+                }
+            } else {
+                if (item.dissolved) {
+                    item.dissolved = false;
+                    item.el.style.opacity = '1';
+                }
+            }
+
+            for (let i = item.particles.length - 1; i >= 0; i--) {
+                const p = item.particles[i];
+                if (item.dissolved) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life -= 0.03;
+                    if (p.life <= 0) {
+                        p.el.style.opacity = '0';
+                    } else {
+                        p.el.style.opacity = p.life;
+                        p.el.style.left = `${p.x}px`;
+                        p.el.style.top = `${p.y}px`;
+                    }
+                } else {
+                    // Update origin continuously to track the element (in case of scroll)
+                    p.originX = rect.left + rect.width / 2 - 2;
+                    p.originY = rect.top + rect.height / 2 - 2;
+
+                    p.x += (p.originX - p.x) * 0.2;
+                    p.y += (p.originY - p.y) * 0.2;
+                    p.life += 0.05;
+                    p.el.style.opacity = Math.min(p.life, 1);
+                    p.el.style.left = `${p.x}px`;
+                    p.el.style.top = `${p.y}px`;
+                    
+                    if (Math.hypot(p.x - p.originX, p.y - p.originY) < 1) {
+                        p.el.remove();
+                        item.particles.splice(i, 1);
+                    }
+                }
+            }
+        });
+        
+        requestAnimationFrame(renderParticles);
+    }
+    renderParticles();
+}
+
+// Effect 6: Magnetic Elements
+function initMagneticContacts() {
+    const contactSection = document.getElementById('contact');
+    const elements = document.querySelectorAll('.contact-item, .social-link, #submit-btn');
+    
+    if (!contactSection || elements.length === 0) return;
+
+    contactSection.addEventListener('mousemove', (e) => {
+        if (window.innerWidth < 768) return;
+        
+        elements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+            
+            if (dist < 80) {
+                const strength = 12 * (1 - dist / 80);
+                const dx = ((e.clientX - centerX) / dist) * strength;
+                const dy = ((e.clientY - centerY) / dist) * strength;
+                
+                el.style.transform = `translate(${dx}px, ${dy}px)`;
+                el.style.transition = `transform 0.15s ease-out`;
+                
+                if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+                    el.classList.add('magnetic-glow');
+                } else {
+                    el.classList.remove('magnetic-glow');
+                }
+            } else {
+                el.style.transform = `translate(0, 0)`;
+                el.style.transition = `transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)`;
+                el.classList.remove('magnetic-glow');
+            }
+        });
+    });
+
+    contactSection.addEventListener('mouseleave', () => {
+        elements.forEach(el => {
+            el.style.transform = `translate(0, 0)`;
+            el.style.transition = `transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)`;
+            el.classList.remove('magnetic-glow');
+        });
+    });
+}
+
 
