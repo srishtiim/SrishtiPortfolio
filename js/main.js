@@ -2,6 +2,12 @@
    MAIN JavaScript - Portfolio Functionality
    ======================================== */
 
+import { db } from "./firebase-config.js";
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 // Nuclear loader kill — runs before anything else
 function hideLoader() {
     const loader = document.getElementById('page-loader');
@@ -14,11 +20,6 @@ document.addEventListener('DOMContentLoaded', hideLoader);
 setTimeout(hideLoader, 2000);
 
 // ============ DATA ============
-import { db } from "./firebase-config.js";
-import {
-    collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const projectsData = [
     {
@@ -525,13 +526,13 @@ function renderSkills() {
     const zones = {};
     function updateZones() {
         const padding = 20;
-        const w = (canvas.width - padding * 3) / 2;
-        const h = (canvas.height - padding * 3) / 2;
+        const w = Math.max(0, (canvas.width - padding * 3) / 2);
+        const h = Math.max(0, (canvas.height - padding * 3) / 2);
         
         zones['programming'] = { x: padding, y: padding, w, h, label: 'PROGRAMMING & LANGUAGES' };
         zones['ai']          = { x: padding * 2 + w, y: padding, w, h, label: 'AI & MACHINE LEARNING' };
         const gap = 10;
-        const w3 = (w - gap * 2) / 3;
+        const w3 = Math.max(0, (w - gap * 2) / 3);
         zones['creative_tools'] = { x: padding, y: padding * 2 + h, w: w3, h, label: 'CREATIVE TOOLS' };
         zones['dev_tools']      = { x: padding + w3 + gap, y: padding * 2 + h, w: w3, h, label: 'DEV TOOLS' };
         zones['data_tools']     = { x: padding + (w3 + gap) * 2, y: padding * 2 + h, w: w3, h, label: 'DATA TOOLS' };
@@ -614,10 +615,15 @@ function renderSkills() {
             ctx.strokeStyle = 'rgba(0,0,0,0.7)';
             ctx.lineWidth = 2;
             ctx.beginPath();
+            
+            // Ensure width and height are non-negative to prevent DOMException
+            const safeW = Math.max(0, z.w);
+            const safeH = Math.max(0, z.h);
+            
             if (ctx.roundRect) {
-                ctx.roundRect(z.x, z.y, z.w, z.h, 12);
+                ctx.roundRect(z.x, z.y, safeW, safeH, 12);
             } else {
-                ctx.rect(z.x, z.y, z.w, z.h); // fallback for older browsers
+                ctx.rect(z.x, z.y, safeW, safeH); // fallback for older browsers
             }
             ctx.stroke();
             
