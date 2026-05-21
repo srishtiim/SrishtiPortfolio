@@ -242,13 +242,14 @@
         </div>
     </div>
 
-    <!-- Skills Section -->
+    <!-- Skills & Education — Notebook Spread -->
     <section class="section skills" id="skills">
         <div class="container">
             <div class="section-header"><span class="section-number">03</span>
                 <h2 class="section-title">Skills & Technologies</h2>
             </div>
-            <canvas id="skills-constellation"></canvas>
+            <!-- Hidden original canvas – replaced by notebook spread below -->
+            <canvas id="skills-constellation" style="display:none;"></canvas>
         </div>
     </section>
 
@@ -276,16 +277,36 @@
         </div>
     </section>
 
-    <!-- Education Section -->
+    <!-- Education + Certifications + Skills — Notebook Spread -->
     <section class="section education" id="education">
         <div class="container">
             <div class="section-header"><span class="section-number">05</span>
                 <h2 class="section-title">Education</h2>
             </div>
-            <div class="education-grid" id="education-grid"></div>
-            <div class="certifications">
-                <h3 class="certifications-title">Certifications</h3>
-                <div class="certifications-grid" id="certifications-grid"></div>
+
+            <div class="notebook-spread" id="notebook-spread">
+                <!-- Binder clip bars -->
+                <div class="binder-clip binder-clip-left"></div>
+                <div class="binder-clip binder-clip-right"></div>
+
+                <!-- LEFT PAGE: Education + Certifications -->
+                <div class="notebook-page notebook-page-left" id="notebook-page-left">
+                    <div class="nb-section-header">EDUCATION</div>
+                    <div id="nb-education-entries"></div>
+
+                    <div id="nb-certifications-block"></div>
+                </div>
+
+                <!-- RIGHT PAGE: Skills Badges -->
+                <div class="notebook-page notebook-page-right" id="notebook-page-right">
+                    <!-- Tab labels -->
+                    <div class="nb-tab-label" style="top: 60px;">SKILLS</div>
+                    <div class="nb-tab-label" style="top: 120px;">TOOLS</div>
+                    <div class="nb-tab-label" style="top: 180px;">CERTS</div>
+
+                    <div class="nb-section-header">SKILLS</div>
+                    <div class="nb-badges-wrap" id="nb-badges-wrap"></div>
+                </div>
             </div>
         </div>
     </section>
