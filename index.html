@@ -73,15 +73,83 @@
                 <div class="control-next"></div>
             </div>
         </div>
-        <div class="welcome-content">
-            <div class="hero-title">
-                <div class="layer-creative"><span class="creative-text">Creative</span></div>
-                <div class="layer-developer"><span class="developer-text" style="display: inline-block;">DEVELOPER</span></div>
+        <div class="welcome-content" id="bento-hero-content">
+            <!-- Decorative floating elements -->
+            <div class="bento-decor bento-circle decor-1"></div>
+            <div class="bento-decor bento-circle decor-2"></div>
+            <div class="bento-decor bento-circle decor-3"></div>
+            <div class="bento-decor bento-line decor-4"></div>
+            <div class="bento-decor bento-line decor-5"></div>
+
+            <!-- Scattered Bento Cards -->
+            <div class="bento-card" id="bento-card-1">
+                <div class="bento-label">LATEST PROJECT</div>
+                <div class="bento-project-title" id="bento-featured-title"></div>
+                <div class="bento-project-desc" id="bento-featured-desc"></div>
+                <div class="bento-project-tag">
+                    <span class="bento-dot"></span>
+                    <span id="bento-featured-category"></span>
+                </div>
             </div>
-            <div class="layer-name">
-                <h2 class="welcome-text">welcome to my portfolio</h2>
-                <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
-                <div class="hero-name">SRISHTI MUKHERJEE</div>
+
+            <div class="bento-card" id="bento-card-2">
+                <div class="bento-label">TOP SKILLS</div>
+                <div class="bento-skills">
+                    <span class="bento-skill-pill">Python</span>
+                    <span class="bento-skill-pill">TensorFlow</span>
+                    <span class="bento-skill-pill">ML</span>
+                    <span class="bento-skill-pill">Data Science</span>
+                </div>
+            </div>
+
+            <div class="bento-card" id="bento-card-3">
+                <div class="bento-status-pill bento-status-red">3rd Year @ MUJ</div>
+                <div class="bento-status-pill bento-status-dark">Open to Internships</div>
+            </div>
+
+            <div class="bento-card" id="bento-card-4">
+                <div class="bento-label">EXPERIENCE</div>
+                <div class="bento-exp-company" id="bento-exp-company"></div>
+                <div class="bento-exp-role" id="bento-exp-role"></div>
+                <div class="bento-exp-duration" id="bento-exp-duration"></div>
+            </div>
+
+            <div class="bento-card" id="bento-card-5">
+                <div class="bento-stat">
+                    <span class="bento-stat-num">5+</span>
+                    <span class="bento-stat-label">Projects</span>
+                </div>
+                <div class="bento-stat">
+                    <span class="bento-stat-num">4+</span>
+                    <span class="bento-stat-label">Internships</span>
+                </div>
+                <div class="bento-stat">
+                    <span class="bento-stat-num">3rd Year</span>
+                </div>
+            </div>
+
+            <div class="bento-card" id="bento-card-6">
+                <div class="bento-contact-header">
+                    <span class="bento-label">GET IN TOUCH</span>
+                    <span class="bento-arrow">→</span>
+                </div>
+                <div class="bento-contact-email">srishtii.mukherjee@gmail.com</div>
+            </div>
+
+            <!-- Central Text Block -->
+            <div class="hero-center-text" id="bento-center-text">
+                <div class="hero-title">
+                    <div class="layer-creative"><span class="creative-text">Creative</span></div>
+                    <div class="layer-developer"><span class="developer-text" style="display: inline-block;">DEVELOPER</span></div>
+                </div>
+                <div class="layer-name">
+                    <div class="marker-wrapper">
+                        <div class="marker-highlight"></div>
+                        <h2 class="welcome-text">welcome to my portfolio</h2>
+                    </div>
+                    <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
+                    <div class="hero-name">SRISHTI MUKHERJEE</div>
+                </div>
             </div>
         </div>
     </section>
