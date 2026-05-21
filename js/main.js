@@ -308,6 +308,7 @@ const init = () => {
     // initExperienceInteractivity(); // replaced by terminal
     renderEducation();
     renderCertifications();
+    initNotebookSpread();
     initContactForm();
     initModal();
     initMicroInteractions();
@@ -1632,3 +1633,98 @@ function initBentoHero() {
 }
 
 
+
+/* ========================================
+   Notebook Spread Layout
+   ======================================== */
+function initNotebookSpread() {
+    const spread = document.getElementById('notebook-spread');
+    if (!spread) return;
+
+    // ---- LEFT PAGE: Education entries ----
+    const eduContainer = document.getElementById('nb-education-entries');
+    if (eduContainer) {
+        eduContainer.innerHTML = educationData.map(edu => `
+            <div class="nb-edu-entry">
+                <div class="nb-edu-left">
+                    <div class="nb-edu-institution">${edu.institution}</div>
+                    <div class="nb-edu-degree">${edu.degree}</div>
+                    <div class="nb-edu-spec">${edu.specialization}</div>
+                </div>
+                <div class="nb-edu-right">
+                    <div class="nb-edu-duration">${edu.duration}</div>
+                    <div class="nb-edu-status">${edu.status}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ---- LEFT PAGE: Certifications (only if data exists) ----
+    const certBlock = document.getElementById('nb-certifications-block');
+    if (certBlock && typeof certificationsData !== 'undefined' && certificationsData.length > 0) {
+        let certHTML = '<div class="nb-section-header" style="margin-top:32px;">CERTIFICATIONS</div>';
+        certHTML += certificationsData.map(cert => `
+            <div class="nb-cert-entry">
+                <div>
+                    <div class="nb-cert-name">${cert.name}</div>
+                    <div class="nb-cert-provider">${cert.provider}</div>
+                </div>
+                ${cert.link ? '<a href="' + cert.link + '" target="_blank" class="nb-cert-link">View ↗</a>' : ''}
+            </div>
+        `).join('');
+        certBlock.innerHTML = certHTML;
+    }
+
+    // ---- RIGHT PAGE: Skills badges ----
+    const badgesWrap = document.getElementById('nb-badges-wrap');
+    if (!badgesWrap) return;
+
+    // Curated skill lists by category
+    const aiSkills = ['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'OpenCV', 'NLTK', 'Caffe', 'Hugging Face', 'Data Preprocessing', 'Data Analysis', 'Model Optimization'];
+    const devSkills = ['VSCode', 'Git', 'Docker', 'Flask', 'Streamlit', 'Canva', 'Adobe Creative Suite', 'Visual Design'];
+    const domainSkills = ['Agile/Scrum', 'Documentation', 'Technical Writing', 'Data Accuracy', 'Quality Assurance', 'Software Testing'];
+
+    const shapes = ['capsule', 'rounded', 'starburst', 'stamp'];
+
+    function makeBadge(name, category) {
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const rotation = (Math.random() * 6 - 3).toFixed(1);
+        const colorClass = category === 'ai' ? 'nb-badge-ai' : category === 'dev' ? 'nb-badge-dev' : 'nb-badge-domain';
+        const shapeClass = 'nb-badge-' + shape;
+        return '<span class="nb-badge ' + shapeClass + ' ' + colorClass + '" style="transform: rotate(' + rotation + 'deg)" data-rotation="' + rotation + '">' + name + '</span>';
+    }
+
+    let badgesHTML = '';
+    aiSkills.forEach(s => { badgesHTML += makeBadge(s, 'ai'); });
+    devSkills.forEach(s => { badgesHTML += makeBadge(s, 'dev'); });
+    domainSkills.forEach(s => { badgesHTML += makeBadge(s, 'domain'); });
+    badgesWrap.innerHTML = badgesHTML;
+
+    // ---- ANIMATIONS via IntersectionObserver ----
+    const leftPage = document.getElementById('notebook-page-left');
+    const rightPage = document.getElementById('notebook-page-right');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Animate pages
+                if (leftPage) leftPage.classList.add('nb-visible');
+                if (rightPage) rightPage.classList.add('nb-visible');
+
+                // Stagger badges
+                const badges = badgesWrap.querySelectorAll('.nb-badge');
+                badges.forEach((badge, i) => {
+                    setTimeout(() => {
+                        const rot = badge.getAttribute('data-rotation') || '0';
+                        badge.style.transform = 'rotate(' + rot + 'deg) translateY(0)';
+                        badge.classList.add('nb-badge-visible');
+                    }, 700 + i * 40);
+                });
+
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    observer.observe(spread);
+}

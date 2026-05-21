@@ -3038,3 +3038,284 @@ body {
         transform: none;
     }
 }
+
+/* ========================================
+   NOTEBOOK SPREAD LAYOUT
+   ======================================== */
+.notebook-spread {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+/* Binder clip bars */
+.binder-clip {
+    position: absolute;
+    width: 4px;
+    height: 80px;
+    background: #D32F2F;
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+.binder-clip-left {
+    left: -2px;
+}
+.binder-clip-right {
+    right: -2px;
+}
+
+/* Pages */
+.notebook-page {
+    background: #faf8f4;
+    padding: 48px 40px;
+    min-height: 600px;
+    position: relative;
+}
+.notebook-page-left {
+    border-radius: 16px 0 0 16px;
+    box-shadow: inset -4px 0 8px rgba(0,0,0,0.08);
+}
+.notebook-page-right {
+    border-radius: 0 16px 16px 0;
+}
+
+/* Tab labels on right page */
+.nb-tab-label {
+    position: absolute;
+    right: -18px;
+    background: #D32F2F;
+    color: #faf8f4;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    transform: rotate(90deg);
+    transform-origin: center;
+    z-index: 4;
+    white-space: nowrap;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Section headers */
+.nb-section-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #D32F2F;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Education entries – dual column */
+.nb-edu-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 0;
+}
+.nb-edu-entry + .nb-edu-entry {
+    border-top: 1px solid rgba(211, 47, 47, 0.2);
+}
+.nb-edu-left {
+    flex: 1;
+    min-width: 0;
+}
+.nb-edu-institution {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.3;
+}
+.nb-edu-degree {
+    font-size: 13px;
+    color: #666;
+    margin-top: 3px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-edu-spec {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+    margin-top: 2px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-edu-right {
+    text-align: right;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+.nb-edu-duration {
+    font-size: 12px;
+    color: #888;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-edu-status {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Certifications block */
+.nb-cert-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+.nb-cert-entry + .nb-cert-entry {
+    border-top: 1px solid rgba(211, 47, 47, 0.2);
+}
+.nb-cert-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-cert-provider {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-cert-link {
+    flex-shrink: 0;
+    margin-left: 12px;
+    color: #D32F2F;
+    font-size: 12px;
+    text-decoration: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+.nb-cert-link:hover {
+    opacity: 0.7;
+}
+
+/* Skills badges wrapper */
+.nb-badges-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Badge base */
+.nb-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Space Grotesk', sans-serif;
+}
+.nb-badge:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Badge shapes */
+.nb-badge-capsule {
+    border-radius: 999px;
+    padding: 6px 14px;
+}
+.nb-badge-rounded {
+    border-radius: 10px;
+    padding: 6px 12px;
+}
+.nb-badge-starburst {
+    padding: 8px;
+    clip-path: polygon(
+        50% 0%, 65% 25%, 100% 25%, 75% 50%,
+        100% 75%, 65% 75%, 50% 100%, 35% 75%,
+        0% 75%, 25% 50%, 0% 25%, 35% 25%
+    );
+    min-width: 56px;
+    min-height: 56px;
+    text-align: center;
+}
+.nb-badge-stamp {
+    border: 2px dashed currentColor;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+/* Badge colors by category */
+.nb-badge-ai {
+    background: #D32F2F;
+    color: #faf8f4;
+}
+.nb-badge-dev {
+    background: #1a1a1a;
+    color: #faf8f4;
+}
+.nb-badge-domain {
+    background: transparent;
+    border: 1.5px solid #D32F2F;
+    color: #1a1a1a;
+}
+
+/* Entry animations */
+.notebook-page-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.notebook-page-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: 0.1s;
+}
+.notebook-page-left.nb-visible,
+.notebook-page-right.nb-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Badge stagger animation */
+.nb-badge {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.nb-badge.nb-badge-visible {
+    opacity: 1;
+    /* transform is set via inline style for rotation, so we handle via JS */
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .notebook-spread {
+        grid-template-columns: 1fr;
+    }
+    .notebook-page-left {
+        border-radius: 16px 16px 0 0;
+        box-shadow: none;
+    }
+    .notebook-page-right {
+        border-radius: 0 0 16px 16px;
+    }
+    .nb-tab-label {
+        display: none;
+    }
+    .binder-clip {
+        display: none;
+    }
+    .notebook-page {
+        padding: 32px 24px;
+        min-height: auto;
+    }
+}
