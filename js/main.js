@@ -317,6 +317,7 @@ const init = () => {
     init3DTiltHero();
     initDeveloperDissolve();
     initMagneticContacts();
+    initBentoHero();
 };
 
 // Handle both cases: DOM still loading or already loaded
@@ -1556,6 +1557,78 @@ function initMagneticContacts() {
             el.classList.remove('magnetic-glow');
         });
     });
+}
+
+/* ========================================
+   Bento Hero Animations
+   ======================================== */
+function initBentoHero() {
+    const welcomeSection = document.getElementById('welcome');
+    if (!welcomeSection) return;
+
+    // Only run on desktop
+    if (window.innerWidth >= 768) {
+        // Bind Data
+        const featuredProject = projectsData[0];
+        const latestExp = experienceData[0];
+
+        const titleEl = document.getElementById('bento-featured-title');
+        const descEl = document.getElementById('bento-featured-desc');
+        const catEl = document.getElementById('bento-featured-category');
+        const compEl = document.getElementById('bento-exp-company');
+        const roleEl = document.getElementById('bento-exp-role');
+        const durEl = document.getElementById('bento-exp-duration');
+
+        if (titleEl) titleEl.innerText = featuredProject.title;
+        if (descEl) descEl.innerText = featuredProject.description;
+        if (catEl) catEl.innerText = featuredProject.category;
+        
+        if (compEl) compEl.innerText = latestExp.company;
+        if (roleEl) roleEl.innerText = latestExp.position;
+        if (durEl) durEl.innerText = latestExp.duration;
+
+        // Entry Animations via timeouts to match CSS transitions
+        const centerText = document.getElementById('bento-center-text');
+        if (centerText) {
+            setTimeout(() => {
+                centerText.classList.add('bento-animate-center');
+            }, 300);
+        }
+
+        const delays = {
+            'bento-card-1': 500,
+            'bento-card-2': 650,
+            'bento-card-3': 800,
+            'bento-card-4': 950,
+            'bento-card-5': 1100,
+            'bento-card-6': 1250
+        };
+
+        for (const [id, delay] of Object.entries(delays)) {
+            const el = document.getElementById(id);
+            if (el) {
+                setTimeout(() => {
+                    el.classList.add(`bento-animate-card-${id.replace('bento-card-', '')}`);
+                }, delay);
+            }
+        }
+
+        const decors = document.querySelectorAll('.bento-decor');
+        decors.forEach(decor => {
+            setTimeout(() => {
+                decor.classList.add('bento-animate-decor');
+            }, 1400);
+        });
+    } else {
+        // On mobile, just fade in center text
+        const centerText = document.getElementById('bento-center-text');
+        if (centerText) {
+            setTimeout(() => {
+                centerText.style.opacity = '1';
+                centerText.style.transition = 'opacity 0.6s ease';
+            }, 300);
+        }
+    }
 }
 
 
