@@ -2668,81 +2668,325 @@ body {
     cursor: crosshair;
 }
 
-/* EFFECT 5 — Terminal Experience Section */
+/* Experience Bento Grid */
 .experience {
-    background: #0d0d0d;
+    background: #f5f0e8 !important;
 }
-.terminal-frame {
-    background: #1a1a1a;
-    border-radius: 8px;
-    border: 1px solid #333;
-    overflow: hidden;
-    font-family: 'Fira Code', 'Courier New', monospace;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    max-width: 900px;
+
+/* Grid layout */
+.experience-bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    max-width: 1100px;
     margin: 0 auto;
 }
-.terminal-header {
-    background: #2d2d2d;
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #111;
-}
-.terminal-dots {
-    display: flex;
-    gap: 8px;
-    margin-right: 1.5rem;
-}
-.terminal-dots .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-.dot.red-dot { background: #ff5f56; }
-.dot.yellow-dot { background: #ffbd2e; }
-.dot.green-dot { background: #27c93f; }
-.terminal-title {
-    color: #888;
-    font-size: 0.85rem;
-}
-.terminal-body {
-    padding: 2rem;
-    color: #fff;
-}
-.terminal-prompt {
-    color: #00ff88;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
-.terminal-line {
-    margin-bottom: 0.5rem;
-    line-height: 1.5;
-}
-.terminal-line.company { color: #fff; font-weight: bold; }
-.terminal-line.role { color: #00ff88; }
-.terminal-line.duration { color: #888; }
-.terminal-line.bullet { color: #ccc; margin-left: 1rem; }
-.terminal-line.empty { height: 1.5rem; }
 
-.terminal-cursor {
-    display: inline-block;
-    color: #00ff88;
-    animation: terminal-blink 1.2s step-end infinite;
-    margin-top: 1rem;
+/* Card perspective and transition properties */
+.exp-card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+    border-radius: 20px;
+    height: 100%;
+    min-height: 200px;
 }
 
-@keyframes terminal-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+/* Card 1 (most recent): span 7 */
+.exp-card:nth-child(1) {
+    grid-column: span 7;
+}
+/* Card 2: span 5 */
+.exp-card:nth-child(2) {
+    grid-column: span 5;
+}
+/* Card 3: span 5 */
+.exp-card:nth-child(3) {
+    grid-column: span 5;
+}
+/* Card 4: span 7 */
+.exp-card:nth-child(4) {
+    grid-column: span 7;
+}
+/* Additional cards: span 6 */
+.exp-card:nth-child(n+5) {
+    grid-column: span 6;
 }
 
-@media (max-width: 768px) {
-    .terminal-frame {
-        font-size: 13px;
+/* Scroll Reveal animation states */
+.exp-card.exp-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.exp-card.exp-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Desktop Expanded/Flipped State */
+@media (min-width: 768px) {
+    .exp-card.flipped {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) rotateY(180deg) !important;
+        width: min(600px, 90vw) !important;
+        height: auto !important;
+        min-height: auto !important;
+        z-index: 1000 !important;
     }
-    .terminal-body {
-        padding: 1rem;
+
+    .exp-front, .exp-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+    }
+
+    .exp-back {
+        transform: rotateY(180deg);
+    }
+    
+    /* When flipped, the parent card's height is determined by .exp-back height */
+    .exp-card.flipped .exp-back {
+        position: relative;
+        height: auto;
+        transform: rotateY(180deg);
+        overflow-y: visible;
+    }
+
+    .exp-card.flipped .exp-front {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+}
+
+/* Card Face Styling */
+.exp-front {
+    border-radius: 20px;
+    padding: 28px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Background Alternation */
+/* Card 1: dark, text cream */
+.exp-card:nth-child(1) .exp-front {
+    background: #1a1a1a;
+    color: #f5f0e8;
+}
+/* Card 2: cream, text dark, border */
+.exp-card:nth-child(2) .exp-front {
+    background: #faf8f4;
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+/* Card 3: red, text cream */
+.exp-card:nth-child(3) .exp-front {
+    background: #D32F2F;
+    color: #f5f0e8;
+}
+/* Card 4: cream, text dark, border */
+.exp-card:nth-child(4) .exp-front {
+    background: #faf8f4;
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+/* Additional starting from 5: alternate dark and cream */
+.exp-card:nth-child(n+5):nth-child(odd) .exp-front {
+    background: #1a1a1a;
+    color: #f5f0e8;
+}
+.exp-card:nth-child(n+5):nth-child(even) .exp-front {
+    background: #faf8f4;
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Front Face Typography */
+.exp-front .company-name {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    margin-bottom: 4px;
+}
+.exp-front .role-title {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+.exp-front .duration {
+    font-size: 11px;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 24px;
+    left: 28px;
+}
+.exp-front .tap-label {
+    font-size: 10px;
+    opacity: 0.4;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+}
+
+/* Back Face Styling */
+.exp-back {
+    border-radius: 20px;
+    padding: 32px;
+    background: #faf8f4;
+    color: #1a1a1a;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.exp-back .company-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #D32F2F;
+    margin-bottom: 4px;
+}
+.exp-back .role-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+.exp-back .meta-info {
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 12px;
+}
+.exp-back .divider {
+    border: none;
+    border-top: 1px solid #D32F2F;
+    margin: 8px 0 16px 0;
+    width: 100%;
+}
+.exp-back ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.exp-back li {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+}
+.exp-back li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #D32F2F;
+    font-weight: bold;
+}
+
+/* Close Button */
+.exp-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    font-size: 18px;
+    color: #D32F2F;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 4px;
+    line-height: 1;
+    z-index: 10;
+    transition: transform 0.2s ease;
+}
+.exp-close:hover {
+    transform: scale(1.2);
+}
+
+/* Dark Overlay */
+#exp-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+}
+
+/* Mobile Styling */
+@media (max-width: 767px) {
+    .experience-bento {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+    .exp-card {
+        grid-column: span 1 !important;
+        min-height: auto !important;
+        transform: none !important;
+        transform-style: flat !important;
+        display: flex;
+        flex-direction: column;
+        height: auto !important;
+    }
+    .exp-front {
+        position: relative !important;
+        height: auto !important;
+        min-height: 200px;
+        padding-bottom: 70px !important; /* space for duration and tap label */
+        backface-visibility: visible !important;
+    }
+    .exp-back {
+        position: relative !important;
+        transform: none !important;
+        backface-visibility: visible !important;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        padding: 0 32px !important;
+        margin-top: 0;
+        transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, padding 0.5s ease, margin-top 0.5s ease;
+        box-shadow: none;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-top: none;
+        border-radius: 0 0 20px 20px;
+    }
+    /* When expanded/flipped on mobile */
+    .exp-card.flipped {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        z-index: 1 !important;
+    }
+    /* Round top corners of front and bottom corners of back when expanded */
+    .exp-card.flipped .exp-front {
+        border-radius: 20px 20px 0 0 !important;
+    }
+    .exp-card.flipped .exp-back {
+        max-height: 1000px !important;
+        opacity: 1 !important;
+        padding: 32px !important;
+        margin-top: 0 !important;
+    }
+    /* Hide the close button on mobile back face since we click the front to toggle */
+    .exp-close {
+        display: none !important;
     }
 }
 

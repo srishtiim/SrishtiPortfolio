@@ -134,6 +134,27 @@ const skillsData = {
 
 const experienceData = [
     {
+        id: 5,
+        company: "Scalable Analytics Research Lab, SUNY Buffalo",
+        position: "Research Intern",
+        duration: "May 2026 – Ongoing",
+        location: "Remote",
+        type: "Internship",
+        shortDescription: "Conducting clinical outcome prediction using multimodal Electronic Health Records (EHR) data under Dr. Haimonti Dutta.",
+        fullDescription: "Conducting clinical outcome prediction using multimodal Electronic Health Records (EHR) data under Dr. Haimonti Dutta. Generating synthetic EHR datasets using the Synthea data generator; preprocessing and structuring data for downstream ML pipelines. Applying NLP techniques including LLMs for clinical note processing and EHR analysis.",
+        responsibilities: [
+            "Conducting clinical outcome prediction using multimodal Electronic Health Records (EHR) data under Dr. Haimonti Dutta",
+            "Generating synthetic EHR datasets using the Synthea data generator; preprocessing and structuring data for downstream ML pipelines",
+            "Applying NLP techniques including LLMs for clinical note processing and EHR analysis"
+        ],
+        skills: [
+            { name: "Machine Learning", type: "tech" },
+            { name: "NLP", type: "tech" },
+            { name: "LLMs", type: "tech" },
+            { name: "Data Preprocessing", type: "tech" }
+        ]
+    },
+    {
         id: 1,
         company: "Total Shift Left",
         position: "Software Intern",
@@ -761,63 +782,127 @@ function renderSkills() {
     loop();
 }
 
-// Render Timeline
-// Render Experience (Effect 5: Terminal Experience)
+/* Experience Bento Grid */
 function renderTimeline() {
-    const timeline = document.getElementById('timeline');
-    const prompt = document.getElementById('terminal-prompt');
-    if (!timeline || !prompt) return;
+    const bentoContainer = document.getElementById('experience-bento');
+    if (!bentoContainer) return;
 
-    let html = '';
-    experienceData.forEach(exp => {
-        html += `<div class="terminal-line empty"></div>`;
-        html += `<div class="terminal-line company">▸ ${exp.company}</div>`;
-        html += `<div class="terminal-line role">${exp.position}</div>`;
-        html += `<div class="terminal-line duration">${exp.duration} | ${exp.location}</div>`;
-        exp.responsibilities.forEach(r => {
-            html += `<div class="terminal-line bullet">  → ${r}</div>`;
+    bentoContainer.innerHTML = experienceData.map(exp => `
+        <div class="exp-card exp-reveal" data-id="${exp.id}">
+            <div class="exp-front">
+                <div class="company-name">${exp.company}</div>
+                <div class="role-title">${exp.position}</div>
+                <div class="duration">${exp.duration}</div>
+                <div class="tap-label">tap to read →</div>
+            </div>
+            <div class="exp-back">
+                <button class="exp-close" aria-label="Close">✕</button>
+                <div class="company-name">${exp.company}</div>
+                <div class="role-title">${exp.position}</div>
+                <div class="meta-info">${exp.duration} | ${exp.location}</div>
+                <div class="divider"></div>
+                <ul>
+                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+    `).join('');
+
+    initExperienceBentoInteractivity();
+}
+
+function initExperienceBentoInteractivity() {
+    const cards = document.querySelectorAll('.exp-card');
+    
+    // JS logic click handler
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const isMobile = window.innerWidth < 768;
+            const isFlipped = card.classList.contains('flipped');
+
+            // Handle close button click
+            if (e.target.classList.contains('exp-close') || e.target.closest('.exp-close')) {
+                e.stopPropagation();
+                closeCard(card, isMobile);
+                return;
+            }
+
+            if (isFlipped) {
+                // On mobile, clicking the card front collapses it, but clicking inside the back shouldn't collapse
+                if (isMobile) {
+                    if (e.target.closest('.exp-back')) {
+                        return;
+                    }
+                    closeCard(card, isMobile);
+                }
+                return;
+            }
+
+            // Open card
+            openCard(card, isMobile);
         });
     });
-    
-    timeline.innerHTML = html;
-    const lines = timeline.querySelectorAll('.terminal-line');
-    lines.forEach(l => l.style.display = 'none');
-    
-    const observer = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting) {
-            observer.disconnect();
-            
-            // Type prompt
-            const promptText = "$ cat experience.log";
-            let i = 0;
-            function typePrompt() {
-                if (i < promptText.length) {
-                    prompt.textContent += promptText.charAt(i);
-                    i++;
-                    setTimeout(typePrompt, 40);
-                } else {
-                    setTimeout(showLines, 300);
+
+    // Scroll reveal stagger animation
+    const revealObserver = new IntersectionObserver((entries) => {
+        let delay = 0;
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                if (!card.classList.contains('visible')) {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, delay);
+                    delay += 100;
                 }
+                revealObserver.unobserve(card);
             }
-            
-            let lineIdx = 0;
-            function showLines() {
-                if (lineIdx < lines.length) {
-                    lines[lineIdx].style.display = 'block';
-                    lineIdx++;
-                    setTimeout(showLines, 80);
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => revealObserver.observe(card));
+}
+
+function openCard(card, isMobile) {
+    // Only one card can be open at a time
+    const openCardEl = document.querySelector('.exp-card.flipped');
+    if (openCardEl && openCardEl !== card) {
+        closeCard(openCardEl, isMobile);
+    }
+
+    card.classList.add('flipped');
+
+    if (!isMobile) {
+        // Inject dark overlay behind the expanded card
+        let overlay = document.getElementById('exp-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'exp-overlay';
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', () => {
+                const currentOpen = document.querySelector('.exp-card.flipped');
+                if (currentOpen) {
+                    closeCard(currentOpen, false);
                 }
-            }
-            
-            typePrompt();
+            });
         }
-    }, { threshold: 0.2 });
-    
-    observer.observe(document.querySelector('.terminal-frame'));
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCard(card, isMobile) {
+    card.classList.remove('flipped');
+    if (!isMobile) {
+        const overlay = document.getElementById('exp-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+        document.body.style.overflow = '';
+    }
 }
 
 function initExperienceInteractivity() {
-    // Replaced by terminal logic, kept empty to satisfy existing calls if any
+    // Replaced by bento logic
 }
 
 // Render Education
