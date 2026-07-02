@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import { Chip } from "@/components/ui/Chip";
 import { projects } from "@/lib/data";
-import { cn } from "@/lib/utils";
+import { cn, prefixPath } from "@/lib/utils";
 
 export function ProjectGallery() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -102,7 +102,7 @@ export function ProjectGallery() {
                     )}
                   >
                     <ImageWithFallback
-                      src={project.image ?? ""}
+                      src={prefixPath(project.image ?? "")}
                       alt={`Preview of ${project.title}`}
                       fill
                       priority={i < 2}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { prefixPath } from "@/lib/utils";
 
 const PHOTOS = [
   { src: "/photo1.jpg", word: "WHO", alt: "Srishti Mukherjee — photo 1" },
@@ -108,7 +109,7 @@ export function WhoIAm() {
             {/* Perfectly horizontal, zero rotation/skew slant */}
             <div className="relative overflow-hidden rounded-xl shadow-xl w-[180px] h-[240px] md:w-[220px] md:h-[290px]">
               <Image
-                src={p.src}
+                src={prefixPath(p.src)}
                 alt={p.alt}
                 fill
                 unoptimized
