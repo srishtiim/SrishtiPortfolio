@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-space-cadet:   #25344F;
+  --color-slate-gray:    #617891;
+  --color-tan:           #D5B893;
+  /* Deeper Coffee tone for WCAG AA 4.5+:1 contrast against Tan */
+  --color-coffee:        #4A2E1B;
+  --color-caput-mortuum: #632024;
+
+  /* Primary UI: Helvetica system stack */
+  --font-family-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Accent signature: Pinyon Script – hero name + footer only */
+  --font-family-script: var(--font-pinyon), cursive;
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #D5B893; /* Tan */
+  color: #25344F;            /* Space Cadet */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ── Typographic scale ──────────────────────────────────── */
+/* Editorial: tight headings */
+h1, h2, h3, h4 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  color: #25344F;
+}
+
+/* Pinyon Script — signature utility class */
+.font-script {
+  font-family: var(--font-pinyon), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+}
+
+/* Uppercase meta labels — consistent across all eyebrows/tags/dates */
+.label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.6875rem;   /* 11px */
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #4A2E1B;         /* Coffee for legibility on Tan */
+}
+
+/* ── Focus ring ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #25344F;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Skeleton loader ────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(37, 52, 79, 0.08) 25%,
+    rgba(37, 52, 79, 0.18) 50%,
+    rgba(37, 52, 79, 0.08) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-wave 1.6s linear infinite;
+}
+
+@keyframes skeleton-wave {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Custom scrollbars for project gallery ──────────────── */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

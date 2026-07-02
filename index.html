@@ -26,312 +26,173 @@
         </div>
     </div>
 
-    <!-- Welcome Section (Landing Page) -->
-    <section class="welcome" id="welcome">
-        <div id="hero-spotlight"></div>
-        <div class="layer-bg"><div class="grid-bg"></div></div>
-        <div id="scrapbook-widget">
-            <div class="drag-handle">⠿</div>
-            <div class="scrapbook-cover">
-                <div class="spine"></div>
-                <div class="cover-text">SM</div>
-                <div class="cover-hint">open ↗</div>
-            </div>
-            <div class="scrapbook-book">
-                <div class="scrapbook-page">
-                    <div class="page-front">
-                        <img src="assets/scrapbook/photo1.jpg" alt="Hackathon 2024" onerror="this.style.display='none'; this.nextElementSibling.style.marginTop='60px';">
-                        <p>Hackathon 2024</p>
-                    </div>
-                    <div class="page-back"></div>
-                </div>
-                <div class="scrapbook-page">
-                    <div class="page-front">
-                        <img src="assets/scrapbook/photo2.jpg" alt="MUJ Campus" onerror="this.style.display='none'; this.nextElementSibling.style.marginTop='60px';">
-                        <p>MUJ Campus</p>
-                    </div>
-                    <div class="page-back"></div>
-                </div>
-                <div class="scrapbook-page">
-                    <div class="page-front">
-                        <img src="assets/scrapbook/photo3.jpg" alt="Project Launch" onerror="this.style.display='none'; this.nextElementSibling.style.marginTop='60px';">
-                        <p>Project Launch</p>
-                    </div>
-                    <div class="page-back"></div>
-                </div>
-                <div class="scrapbook-page">
-                    <div class="page-front">
-                        <img src="assets/scrapbook/photo4.jpg" alt="Late Night Debug" onerror="this.style.display='none'; this.nextElementSibling.style.marginTop='60px';">
-                        <p>Late Night Debug</p>
-                    </div>
-                    <div class="page-back"></div>
-                </div>
-            </div>
-            <button class="scrapbook-close">&times;</button>
-            <div class="scrapbook-controls">
-                <div class="control-prev"></div>
-                <div class="control-next"></div>
-            </div>
-        </div>
-        <div class="welcome-content" id="bento-hero-content">
-            <!-- Decorative floating elements -->
-            <div class="bento-decor bento-circle decor-1"></div>
-            <div class="bento-decor bento-circle decor-2"></div>
-            <div class="bento-decor bento-circle decor-3"></div>
-            <div class="bento-decor bento-line decor-4"></div>
-            <div class="bento-decor bento-line decor-5"></div>
+    
 
-            <!-- Scattered Bento Cards -->
-            <div class="bento-card" id="bento-card-1">
-                <div class="bento-label">LATEST PROJECT</div>
-                <div class="bento-project-title" id="bento-featured-title"></div>
-                <div class="bento-project-desc" id="bento-featured-desc"></div>
-                <div class="bento-project-tag">
-                    <span class="bento-dot"></span>
-                    <span id="bento-featured-category"></span>
-                </div>
-            </div>
+    <!-- Site-wide grain overlay -->
+    <div class="grain-overlay"></div>
 
-            <div class="bento-card" id="bento-card-2">
-                <div class="bento-label">TOP SKILLS</div>
-                <div class="bento-skills">
-                    <span class="bento-skill-pill">Python</span>
-                    <span class="bento-skill-pill">TensorFlow</span>
-                    <span class="bento-skill-pill">ML</span>
-                    <span class="bento-skill-pill">Data Science</span>
-                </div>
-            </div>
-
-            <div class="bento-card" id="bento-card-3">
-                <div class="bento-status-pill bento-status-red">3rd Year @ MUJ</div>
-                <div class="bento-status-pill bento-status-dark">Open to Internships</div>
-            </div>
-
-            <div class="bento-card" id="bento-card-4">
-                <div class="bento-label">EXPERIENCE</div>
-                <div class="bento-exp-company" id="bento-exp-company"></div>
-                <div class="bento-exp-role" id="bento-exp-role"></div>
-                <div class="bento-exp-duration" id="bento-exp-duration"></div>
-            </div>
-
-            <div class="bento-card" id="bento-card-5">
-                <div class="bento-stat">
-                    <span class="bento-stat-num">5+</span>
-                    <span class="bento-stat-label">Projects</span>
-                </div>
-                <div class="bento-stat">
-                    <span class="bento-stat-num">4+</span>
-                    <span class="bento-stat-label">Internships</span>
-                </div>
-                <div class="bento-stat">
-                    <span class="bento-stat-num">3rd Year</span>
-                </div>
-            </div>
-
-            <div class="bento-card" id="bento-card-6">
-                <div class="bento-contact-header">
-                    <span class="bento-label">GET IN TOUCH</span>
-                    <span class="bento-arrow">→</span>
-                </div>
-                <div class="bento-contact-email">srishtii.mukherjee@gmail.com</div>
-            </div>
-
-            <!-- Central Text Block -->
-            <div class="hero-center-text" id="bento-center-text">
-                <div class="hero-title">
-                    <div class="layer-creative"><span class="creative-text">Creative</span></div>
-                    <div class="layer-developer"><span class="developer-text" style="display: inline-block;">DEVELOPER</span></div>
-                </div>
-                <div class="layer-name">
-                    <div class="marker-wrapper">
-                        <div class="marker-highlight"></div>
-                        <h2 class="welcome-text">welcome to my portfolio</h2>
-                    </div>
-                    <div class="hero-subtitle">DATA SCIENCE STUDENT HOPING TO MAKE A CHANGE</div>
-                    <div class="hero-name">SRISHTI MUKHERJEE</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Navigation -->
+    <!-- Navigation Header -->
     <nav class="navbar" id="navbar">
+        <div class="nav-grain-overlay"></div>
+        <div class="nav-streaks-overlay"></div>
         <div class="nav-container">
-            <div class="nav-logo">SM</div>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about">01 | About</a></li>
-                <li><a href="#projects">02 | Projects</a></li>
-                <li><a href="#skills">03 | Skills</a></li>
-                <li><a href="#experience">04 | Experience</a></li>
-                <li><a href="#education">05 | Education</a></li>
-                <li><a href="#contact">06 | Contact</a></li>
-            </ul>
+            <a href="#hero" class="nav-wordmark">SM</a>
+            
+            <div class="nav-cluster">
+                <ul class="nav-capsule-links" id="nav-links">
+                    <li><a href="#about-hub" data-sticker="radial-projects">Work</a></li>
+                    <li><a href="#about-hub">About</a></li>
+                    <li><a href="#about-hub" data-sticker="radial-work">Process</a></li>
+                    <li><a href="#about-hub" data-sticker="radial-education">Pricing</a></li>
+                    <li><a href="#about-hub" data-sticker="radial-tech">Overtime</a></li>
+                </ul>
+                <a href="#contact" class="btn-lets-chat">Let's Chat</a>
+            </div>
+            
             <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
         </div>
     </nav>
 
-    <!-- About Section -->
-    <section class="section about" id="about">
-        <div class="container">
-            <div class="section-header"><span class="section-number">01</span>
-                <h2 class="section-title">About Me</h2>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="about-intro">I'm <strong>Srishti Mukherjee</strong>, a motivated B.Tech Computer Science
-                        student specializing in Data Science at Manipal University Jaipur. I'm passionate about
-                        leveraging AI, deep learning, and emerging technologies to build innovative solutions that make
-                        a real impact.</p>
-                    <p>Currently in my 3rd year, I've worked on projects ranging from news summarization systems to
-                        sustainability-focused neural networks. I'm always eager to learn new technologies and
-                        contribute to meaningful technical projects.</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-item"><span class="stat-number" data-target="3">0</span><span
-                            class="stat-label">Projects</span></div>
-                    <div class="stat-item"><span class="stat-number" data-target="4">0</span><span
-                            class="stat-label">Internships</span></div>
-                    <div class="stat-item"><span class="stat-number" data-target="3">0</span><span
-                            class="stat-label">Year Student</span></div>
-                </div>
-            </div>
-            <div class="about-contact">
-                <a href="mailto:srishtii.mukherjee@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>
-                    srishtii.mukherjee@gmail.com</a>
-                <a href="tel:+918527956330" class="contact-link"><i class="fas fa-phone"></i> +91 8527956330</a>
-                <a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank" class="contact-link"><i
-                        class="fab fa-linkedin"></i> LinkedIn</a>
-                <a href="https://github.com/srishtiim" target="_blank" class="contact-link"><i
-                        class="fab fa-github"></i> GitHub</a>
-            </div>
-
+    <!-- Viewport Hero Section -->
+    <section class="hero-section" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-primary-heading">
+                <span class="hero-subtext">Creative Developer</span>
+                <span class="hero-name">Srishti Mukherjee</span>
+            </h1>
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section class="section projects" id="projects">
-        <div class="container">
-            <div class="section-header"><span class="section-number">02</span>
-                <h2 class="section-title">Selected Projects</h2>
-            </div>
-            <div id="projects-track-wrapper">
-                <div id="projects-stage">
-                    <div id="projects-belt"></div>
-                    <div class="conveyor-dots" id="conveyor-dots"></div>
-                </div>
+    <!-- Scroll-Driven Intro Paragraph Section -->
+    <section class="intro-section" id="intro-section">
+        <div class="intro-sticky-container">
+            <div class="intro-content-wrapper">
+                <p class="intro-paragraph">
+                    <span class="reveal-group">I am a third-year Computer Science student specializing in Data Science at Manipal University Jaipur.</span>
+                    <span class="reveal-group">Passionate about building intelligent systems and deep learning models that solve complex, real-world problems.</span>
+                    <span class="reveal-group">Combining analytical thinking with aesthetic, high-fidelity development to bridge data and design.</span>
+                    <span class="reveal-group">Constantly exploring neural networks, natural language processing, and advanced frontend interaction models.</span>
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Project Modal -->
-    <div class="modal" id="project-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">&times;</button>
-            <div class="modal-image"><img id="modal-img" src="" alt="Project"></div>
-            <div class="modal-body">
-                <span class="modal-category" id="modal-category"></span>
-                <h3 class="modal-title" id="modal-title"></h3>
-                <p class="modal-description" id="modal-description"></p>
-                <div class="modal-features" id="modal-features">
-                    <h4>Key Features</h4>
-                    <ul id="modal-features-list"></ul>
+    <!-- About Me Hub Section -->
+    <section class="about-hub-section" id="about-hub">
+        <div class="hub-container">
+            <div class="sticker-hub">
+                <!-- Center card -->
+                <div class="sticker-center" id="sticker-center">
+                    <svg class="curved-text-svg" viewBox="0 0 200 200">
+                        <path id="curve" d="M 30,100 A 70,70 0 0,1 170,100" fill="transparent" />
+                        <text fill="#D5B893" font-family="'Caveat', cursive, sans-serif" font-size="22">
+                            <textPath href="#curve" startOffset="50%" text-anchor="middle">About Me</textPath>
+                        </text>
+                    </svg>
+                    <div class="sticker-center-inner">
+                        <span class="center-initials">SM</span>
+                    </div>
                 </div>
-                <div class="modal-tech" id="modal-tech"></div>
-                <div class="modal-links" id="modal-links"></div>
+
+                <!-- Hidden radial stickers -->
+                <div class="sticker-radial" id="radial-work" data-target="modal-work">
+                    <img src="assets/images/stickers/sticker_work.png" alt="Work Experience">
+                    <span class="sticker-label">Work</span>
+                </div>
+                <div class="sticker-radial" id="radial-certs" data-target="modal-certs">
+                    <img src="assets/images/stickers/sticker_certs.png" alt="Certifications">
+                    <span class="sticker-label">Certs</span>
+                </div>
+                <div class="sticker-radial" id="radial-tech" data-target="modal-tech">
+                    <img src="assets/images/stickers/sticker_tech.png" alt="Tech Stack">
+                    <span class="sticker-label">Skills</span>
+                </div>
+                <div class="sticker-radial" id="radial-education" data-target="modal-education">
+                    <img src="assets/images/stickers/sticker_education.png" alt="Education">
+                    <span class="sticker-label">Education</span>
+                </div>
+                <div class="sticker-radial" id="radial-projects" data-target="modal-projects">
+                    <img src="assets/images/stickers/sticker_projects.png" alt="Projects">
+                    <span class="sticker-label">Projects</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL OVERLAYS -->
+    <!-- Work Experience Modal -->
+    <div class="hub-modal" id="modal-work">
+        <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-inner">
+            <h2 class="modal-title">Work Experience</h2>
+            <div class="experience-bento-grid" id="modal-experience-content">
+                <!-- Bento box folder cards populated dynamically -->
             </div>
         </div>
     </div>
 
-    <!-- Skills & Education — Notebook Spread -->
-    <section class="section skills" id="skills">
-        <div class="container">
-            <div class="section-header"><span class="section-number">03</span>
-                <h2 class="section-title">Skills & Technologies</h2>
-            </div>
-            <!-- Hidden original canvas – replaced by notebook spread below -->
-            <canvas id="skills-constellation" style="display:none;"></canvas>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="section experience" id="experience">
-        <div class="container">
-            <div class="section-header"><span class="section-number">04</span>
-                <h2 class="section-title">Professional Experience</h2>
-            </div>
-            <div id="experience-bento" class="experience-bento"></div>
-        </div>
-    </section>
-
-    <!-- Education + Certifications + Skills — Notebook Spread -->
-    <section class="section education" id="education">
-        <div class="container">
-            <div class="section-header"><span class="section-number">05</span>
-                <h2 class="section-title">Education</h2>
-            </div>
-
-            <div class="notebook-spread" id="notebook-spread">
-                <!-- Binder clip bars -->
-                <div class="binder-clip binder-clip-left"></div>
-                <div class="binder-clip binder-clip-right"></div>
-
-                <!-- LEFT PAGE: Education + Certifications -->
-                <div class="notebook-page notebook-page-left" id="notebook-page-left">
-                    <div class="nb-section-header">EDUCATION</div>
-                    <div id="nb-education-entries"></div>
-
-                    <div id="nb-certifications-block"></div>
-                </div>
-
-                <!-- RIGHT PAGE: Skills Badges -->
-                <div class="notebook-page notebook-page-right" id="notebook-page-right">
-                    <!-- Tab labels -->
-                    <div class="nb-tab-label" style="top: 60px;">SKILLS</div>
-                    <div class="nb-tab-label" style="top: 120px;">TOOLS</div>
-                    <div class="nb-tab-label" style="top: 180px;">CERTS</div>
-
-                    <div class="nb-section-header">SKILLS</div>
-                    <div class="nb-badges-wrap" id="nb-badges-wrap"></div>
-                </div>
+    <!-- Certifications Modal -->
+    <div class="hub-modal" id="modal-certs">
+        <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-inner">
+            <h2 class="modal-title">Certifications</h2>
+            <div class="certs-grid" id="modal-certs-content">
+                <!-- Certifications populated dynamically -->
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Tech Stack Modal -->
+    <div class="hub-modal" id="modal-tech">
+        <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-inner">
+            <h2 class="modal-title">Tech Stack & Skills</h2>
+            <div class="tech-stack-container" id="modal-tech-content">
+                <!-- Skills layout populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div class="hub-modal" id="modal-education">
+        <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-inner">
+            <h2 class="modal-title">Education</h2>
+            <div class="education-grid" id="modal-education-content">
+                <!-- Education entries populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Modal -->
+    <div class="hub-modal" id="modal-projects">
+        <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        <div class="modal-inner">
+            <h2 class="modal-title">Selected Projects</h2>
+            <div class="projects-modal-grid" id="modal-projects-content">
+                <!-- Projects populated dynamically -->
+            </div>
+        </div>
+    </div>
 
     <!-- Contact Section -->
     <section class="section contact" id="contact">
         <div class="container">
-            <div class="section-header"><span class="section-number">06</span>
+            <div class="contact-header">
                 <h2 class="section-title">Get In Touch</h2>
             </div>
             <div class="contact-content">
-                <div class="contact-info">
-                    <h3 class="contact-heading">Let's build something amazing together.</h3>
-                    <div class="contact-details">
-                        <a href="mailto:srishtii.mukherjee@gmail.com" class="contact-item"><i
-                                class="fas fa-envelope"></i><span>srishtii.mukherjee@gmail.com</span></a>
-                        <a href="tel:+918527956330" class="contact-item"><i class="fas fa-phone"></i><span>+91
-                                8527956330</span></a>
-                        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>Jaipur, Rajasthan,
-                                India</span></div>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank" class="social-link"><i
-                                class="fab fa-linkedin-in"></i><span>LinkedIn</span></a>
-                        <a href="https://github.com/srishtiim" target="_blank" class="social-link"><i
-                                class="fab fa-github"></i><span>GitHub</span></a>
-                    </div>
-                </div>
                 <form class="contact-form" id="contact-form">
-                    <div class="form-group"><input type="text" id="name" name="name" placeholder="Your Name"
-                            required><label for="name">Name</label></div>
-                    <div class="form-group"><input type="email" id="email" name="email" placeholder="Your Email"
-                            required><label for="email">Email</label></div>
-                    <div class="form-group"><input type="text" id="subject" name="subject" placeholder="Subject"
-                            required><label for="subject">Subject</label></div>
-                    <div class="form-group"><textarea id="message" name="message" rows="5" placeholder="Your Message"
-                            required></textarea><label for="message">Message</label></div>
-                    <button type="submit" class="btn btn-primary" id="submit-btn"><span>Send Message</span><i
-                            class="fas fa-paper-plane"></i></button>
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submit-btn">Send Message</button>
                     <div class="form-status" id="form-status"></div>
                 </form>
             </div>
@@ -342,103 +203,17 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p class="footer-copyright">© 2025 Srishti Mukherjee. All rights reserved.</p>
-                <div class="footer-links"><a href="#about">About</a><a href="#projects">Projects</a><a
-                        href="#skills">Skills</a><a href="#experience">Experience</a><a
-                        href="#education">Education</a><a href="#contact">Contact</a></div>
-                <div class="footer-social"><a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank"><i
-                            class="fab fa-linkedin-in"></i></a><a href="https://github.com/srishtiim" target="_blank"><i
-                            class="fab fa-github"></i></a></div>
-            </div>
-            <div class="footer-bottom">
-                <p>Designed & Developed by Srishti Mukherjee</p>
-                <p>Built with HTML, CSS, JavaScript & Firebase</p>
+                <p class="footer-copyright">© 2026 Srishti Mukherjee. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="https://www.linkedin.com/in/srishti-mukherjee/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/srishtiim" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Chat Widget -->
-    <div class="chat-widget-container" id="chat-widget">
-        <div class="chat-panel hidden" id="chat-panel">
-            <div class="chat-header">
-                <h3>Ask me anything</h3>
-                <button class="chat-close" id="chat-close">&times;</button>
-            </div>
-            <div class="chat-body" id="chat-body">
-                <div class="chat-welcome">Your answer will appear here…</div>
-            </div>
-            <div class="chat-footer">
-                <input type="text" id="chat-input" placeholder="Type your question…" aria-label="Type your question">
-                <button class="chat-send" id="chat-send" aria-label="Send message">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-        <button class="chat-toggle" id="chat-toggle" aria-label="Toggle chat">
-            <i class="fas fa-envelope"></i>
-        </button>
-    </div>
-
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
-
-    <!-- Envelope Widget -->
-    <div class="envelope-widget" id="envelope-widget">
-        <div class="envelope-flap"></div>
-        <div class="envelope-body">
-            <div class="envelope-card">
-                <span class="envelope-text">Let's connect! &rarr;</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Filing Cabinet Widget -->
-    <div id="cabinet-widget">
-        <div class="cabinet-scene">
-            <div class="cabinet-body">
-                <!-- Top face -->
-                <div class="cabinet-top"></div>
-                <!-- Left side face -->
-                <div class="cabinet-side-left"></div>
-                <!-- Right side face -->
-                <div class="cabinet-side-right"></div>
-
-                <!-- Drawer 1 (interactive) -->
-                <div class="cabinet-drawer drawer-top">
-                    <div class="drawer-front">
-                        <div class="drawer-handle"></div>
-                        <div class="drawer-label">01</div>
-                    </div>
-                    <div class="drawer-interior">
-                        <div class="resume-paper">
-                            <span class="resume-text">Resume <span class="resume-icon">↓</span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Drawer 2 (decorative) -->
-                <div class="cabinet-drawer drawer-mid">
-                    <div class="drawer-front">
-                        <div class="drawer-handle"></div>
-                        <div class="drawer-label">02</div>
-                    </div>
-                </div>
-
-                <!-- Drawer 3 (decorative) -->
-                <div class="cabinet-drawer drawer-bottom">
-                    <div class="drawer-front">
-                        <div class="drawer-handle"></div>
-                        <div class="drawer-label">03</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script src="js/animations.js"></script>
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/chat-widget.js"></script>
 
 </body>
 

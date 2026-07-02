@@ -2,17 +2,11 @@
    MAIN JavaScript - Portfolio Functionality
    ======================================== */
 
-import { db } from "./firebase-config.js";
-import {
-    collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
 // Nuclear loader kill — runs before anything else
 function hideLoader() {
     const loader = document.getElementById('page-loader');
     if (loader) {
-        loader.classList.add('force-hide');
+        loader.classList.add('hidden');
     }
 }
 window.addEventListener('load', hideLoader);
@@ -318,28 +312,19 @@ const contactForm = document.getElementById('contact-form');
 // ============ INITIALIZATION ============
 // Initialize the application
 const init = () => {
-    // Loader is now handled by nuclear hideLoader at top of file
+    hideLoader();
     initNavigation();
-    initThemeToggle();
-    initParticleCanvas();
     initCustomCursor();
     renderProjects();
     renderSkills();
     renderTimeline();
-    // initExperienceInteractivity(); // replaced by terminal
     renderEducation();
     renderCertifications();
-    initNotebookSpread();
     initContactForm();
-    initModal();
     initMicroInteractions();
-    initHeroSpotlight();
-    
-    // Bold Effects
-    init3DTiltHero();
-    initDeveloperDissolve();
-    initMagneticContacts();
-    initBentoHero();
+    initStickerHub();
+    initScrollReveal();
+    initWorkExperienceModal();
 };
 
 // Handle both cases: DOM still loading or already loaded
@@ -357,7 +342,7 @@ if (document.readyState === 'loading') {
 function initNavigation() {
     // Frosted Nav on scroll
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        if (window.scrollY > 30) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
@@ -367,6 +352,7 @@ function initNavigation() {
     // Hamburger menu toggle
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
+        navbar.classList.toggle('active');
         navLinks.classList.toggle('active');
     });
 
@@ -374,6 +360,7 @@ function initNavigation() {
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
+            navbar.classList.remove('active');
             navLinks.classList.remove('active');
         });
     });
@@ -395,20 +382,7 @@ function initNavigation() {
     });
 }
 
-// Theme Toggle
-function initThemeToggle() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
-}
+// Theme Toggle (removed — no theme toggle element in current HTML)
 
 // Render Projects
 // Render Projects (Effect 3: Conveyor Belt)
@@ -942,8 +916,9 @@ function renderCertifications() {
     `).join('');
 }
 
-// Modal Functions
+// Legacy project modal (element removed from HTML — no-op guard)
 function initModal() {
+    if (!projectModal || !modalClose) return;
     modalClose.addEventListener('click', closeProjectModal);
     projectModal.addEventListener('click', (e) => {
         if (e.target === projectModal) closeProjectModal();
@@ -1406,40 +1381,7 @@ function initMicroInteractions() {
     }
 }
 
-async function loadSkills() {
-    const skillsRef = collection(db, "skills");
-    const snapshot = await getDocs(skillsRef);
-
-    const programming = document.getElementById("programming-skills");
-    const ai = document.getElementById("ai-skills");
-    const tools = document.getElementById("tools-skills");
-
-    programming.innerHTML = "";
-    ai.innerHTML = "";
-    tools.innerHTML = "";
-
-    snapshot.forEach(doc => {
-        const skill = doc.data();
-
-        let stars = "";
-        for (let i = 1; i <= 5; i++) {
-            stars += i <= skill.rating ? "★" : "<span class='empty'>★</span>";
-        }
-
-        const html = `
-      <div class="skill-item">
-        <span class="skill-name">${skill.name}</span>
-        <span class="skill-stars">${stars}</span>
-      </div>
-    `;
-
-        if (skill.category === "Programming") programming.innerHTML += html;
-        if (skill.category === "AI") ai.innerHTML += html;
-        if (skill.category === "Tools") tools.innerHTML += html;
-    });
-}
-
-loadSkills();
+// loadSkills() removed — Firebase dependency removed. Skills rendered from local data via renderSkills().
 
 // ========================================
 // BOLD EFFECTS IMPLEMENTATIONS
@@ -1812,4 +1754,878 @@ function initNotebookSpread() {
     }, { threshold: 0.15 });
 
     observer.observe(spread);
+}
+
+// ==========================================================================
+// THREE.JS 3D LANDING PAGE & MACOS DOCK MAGNIFICATION ENGINE
+// ==========================================================================
+
+// Helper to create code terminal textures
+function createCodeTexture(textColor) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = '#0a0a0c';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = textColor || '#00ff66';
+    ctx.font = 'bold 20px "Courier New", monospace';
+    
+    const lines = [
+        'import * as THREE from "three";',
+        'const sceneBg = new THREE.Scene();',
+        'const sceneFg = new THREE.Scene();',
+        '// strange pixels engine v1.0.3',
+        'function animate() {',
+        '  requestAnimationFrame(animate);',
+        '  mesh.rotation.x += 0.01;',
+        '  mesh.rotation.y += 0.02;',
+        '  renderer.render(scene, camera);',
+        '}',
+        '// compiling neural net constraints',
+        'const model = tf.sequential();',
+        'model.add(tf.layers.dense({units: 32}));',
+        'model.compile({optimizer: "adam"});',
+        '// data science mode active',
+        'df = pd.read_csv("sustainability.csv")',
+        'X = df[["co2", "temp"]].values',
+        'y = df["risk_factor"].values',
+        '// let\'s make a change...',
+        'console.log("Strange Pixels Initialized");',
+        '// srishti portfolio load system'
+    ];
+    
+    for (let i = 0; i < 24; i++) {
+        const line = lines[i % lines.length];
+        ctx.fillText(line, 20, 35 + i * 20);
+    }
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+}
+
+// Procedural Mesh Builders
+function createPadlock() {
+    const group = new THREE.Group();
+    const brassMaterial = new THREE.MeshStandardMaterial({
+        color: 0xcca353, // warm brass yellow
+        metalness: 0.9,
+        roughness: 0.15
+    });
+    
+    // Body (box shape)
+    const bodyGeom = new THREE.BoxGeometry(3, 2.5, 1.2);
+    const body = new THREE.Mesh(bodyGeom, brassMaterial);
+    group.add(body);
+    
+    // Shackle (curved torus)
+    const shackleGeom = new THREE.TorusGeometry(0.9, 0.22, 16, 64, Math.PI);
+    const shackle = new THREE.Mesh(shackleGeom, brassMaterial);
+    shackle.position.y = 1.25;
+    shackle.rotation.z = Math.PI; // invert curve upwards
+    shackle.scale.set(1, 1.3, 1);
+    group.add(shackle);
+    
+    // Shackle insertion base
+    const legGeom = new THREE.CylinderGeometry(0.22, 0.22, 0.4, 16);
+    const leg1 = new THREE.Mesh(legGeom, brassMaterial);
+    leg1.position.set(-0.9, 1.1, 0);
+    const leg2 = leg1.clone();
+    leg2.position.x = 0.9;
+    group.add(leg1, leg2);
+    
+    // Keyhole shape
+    const darkMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
+    const keyholeTopGeom = new THREE.CylinderGeometry(0.18, 0.18, 0.1, 16);
+    const keyholeTop = new THREE.Mesh(keyholeTopGeom, darkMat);
+    keyholeTop.rotation.x = Math.PI / 2;
+    keyholeTop.position.set(0, -0.3, 0.61);
+    group.add(keyholeTop);
+    
+    const keyholeBottomGeom = new THREE.BoxGeometry(0.12, 0.3, 0.1);
+    const keyholeBottom = new THREE.Mesh(keyholeBottomGeom, darkMat);
+    keyholeBottom.position.set(0, -0.45, 0.61);
+    group.add(keyholeBottom);
+    
+    return group;
+}
+
+function createCRTMonitor() {
+    const group = new THREE.Group();
+    const shellMat = new THREE.MeshStandardMaterial({
+        color: 0x3d3e42, // vintage charcoal grey
+        metalness: 0.15,
+        roughness: 0.75
+    });
+    
+    const screenText = createCodeTexture('#00ffff');
+    const screenMat = new THREE.MeshStandardMaterial({
+        color: 0x001a1a,
+        emissive: 0x00dddd,
+        emissiveMap: screenText,
+        emissiveIntensity: 0.7,
+        metalness: 0.2,
+        roughness: 0.2
+    });
+    
+    // Main tube case
+    const caseGeom = new THREE.BoxGeometry(3.6, 3.2, 3);
+    const caseMesh = new THREE.Mesh(caseGeom, shellMat);
+    group.add(caseMesh);
+    
+    // Screen bezel plane
+    const screenGeom = new THREE.BoxGeometry(3.1, 2.6, 0.15);
+    const screen = new THREE.Mesh(screenGeom, screenMat);
+    screen.position.set(0, 0, 1.45);
+    group.add(screen);
+    
+    // Screen framing bezels
+    const bezelGeom1 = new THREE.BoxGeometry(3.3, 0.2, 0.25);
+    const bezelTop = new THREE.Mesh(bezelGeom1, shellMat);
+    bezelTop.position.set(0, 1.4, 1.45);
+    const bezelBottom = bezelTop.clone();
+    bezelBottom.position.y = -1.4;
+    
+    const bezelGeom2 = new THREE.BoxGeometry(0.2, 2.8, 0.25);
+    const bezelLeft = new THREE.Mesh(bezelGeom2, shellMat);
+    bezelLeft.position.set(-1.65, 0, 1.45);
+    const bezelRight = bezelLeft.clone();
+    bezelRight.position.x = 1.65;
+    
+    group.add(bezelTop, bezelBottom, bezelLeft, bezelRight);
+    
+    // Stand support neck
+    const neckGeom = new THREE.CylinderGeometry(0.4, 0.5, 0.5, 16);
+    const neck = new THREE.Mesh(neckGeom, shellMat);
+    neck.position.set(0, -1.85, 0);
+    group.add(neck);
+    
+    // Foot base plate
+    const baseGeom = new THREE.BoxGeometry(2.2, 0.15, 2.2);
+    const base = new THREE.Mesh(baseGeom, shellMat);
+    base.position.set(0, -2.1, 0);
+    group.add(base);
+    
+    return { group, texture: screenText };
+}
+
+function createCardboardBox() {
+    const group = new THREE.Group();
+    const cardboardMat = new THREE.MeshStandardMaterial({
+        color: 0xad8255, // packing brown cardboard
+        metalness: 0.05,
+        roughness: 0.95
+    });
+    const tapeMat = new THREE.MeshStandardMaterial({
+        color: 0x5a3f28, // brown shipping tape
+        metalness: 0.15,
+        roughness: 0.55
+    });
+    
+    // Main cargo box
+    const boxGeom = new THREE.BoxGeometry(3.1, 3.1, 3.1);
+    const mainBox = new THREE.Mesh(boxGeom, cardboardMat);
+    group.add(mainBox);
+    
+    // Packaging tape down the seams
+    const tapeSeam = new THREE.BoxGeometry(0.5, 3.15, 3.15);
+    const tape1 = new THREE.Mesh(tapeSeam, tapeMat);
+    tape1.position.set(0, 0.02, 0);
+    group.add(tape1);
+    
+    const tapeAcross = new THREE.BoxGeometry(3.15, 0.35, 3.15);
+    const tape2 = new THREE.Mesh(tapeAcross, tapeMat);
+    tape2.position.set(0, 0, 0);
+    group.add(tape2);
+    
+    return group;
+}
+
+function createMonsterTruck() {
+    const group = new THREE.Group();
+    const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0xd32f2f, // fire engine red
+        metalness: 0.6,
+        roughness: 0.3
+    });
+    const tireMat = new THREE.MeshStandardMaterial({
+        color: 0x222222, // rubber carbon grey
+        metalness: 0.08,
+        roughness: 0.95
+    });
+    const metalMat = new THREE.MeshStandardMaterial({
+        color: 0x888888, // chrome metal axles
+        metalness: 0.85,
+        roughness: 0.2
+    });
+    
+    // Truck body chassis
+    const bodyGeom = new THREE.BoxGeometry(3.3, 1.1, 1.6);
+    const body = new THREE.Mesh(bodyGeom, bodyMat);
+    body.position.y = 0.5;
+    group.add(body);
+    
+    // Driver cabin
+    const cabinGeom = new THREE.BoxGeometry(1.6, 0.8, 1.4);
+    const cabin = new THREE.Mesh(cabinGeom, bodyMat);
+    cabin.position.set(-0.2, 1.4, 0);
+    group.add(cabin);
+    
+    // Windows overlay
+    const glassMat = new THREE.MeshBasicMaterial({ color: 0x050505 });
+    const windGeom = new THREE.BoxGeometry(1.1, 0.55, 1.42);
+    const wind = new THREE.Mesh(windGeom, glassMat);
+    wind.position.set(-0.2, 1.4, 0);
+    group.add(wind);
+    
+    // Heavy suspension axles
+    const axleGeom = new THREE.CylinderGeometry(0.12, 0.12, 2.2, 12);
+    const axle1 = new THREE.Mesh(axleGeom, metalMat);
+    axle1.rotation.x = Math.PI / 2;
+    axle1.position.set(-0.9, -0.2, 0);
+    
+    const axle2 = axle1.clone();
+    axle2.position.x = 0.9;
+    
+    group.add(axle1, axle2);
+    
+    // 4 oversized wheels
+    const wheelGeom = new THREE.CylinderGeometry(0.85, 0.85, 0.7, 24);
+    const wheelOffsets = [
+        [-0.9, -0.2, 1.1],
+        [-0.9, -0.2, -1.1],
+        [0.9, -0.2, 1.1],
+        [0.9, -0.2, -1.1]
+    ];
+    
+    wheelOffsets.forEach(pos => {
+        const wheel = new THREE.Mesh(wheelGeom, tireMat);
+        wheel.rotation.x = Math.PI / 2;
+        wheel.position.set(pos[0], pos[1], pos[2]);
+        group.add(wheel);
+    });
+    
+    return group;
+}
+
+function createDigitalCoin() {
+    const group = new THREE.Group();
+    const goldMat = new THREE.MeshStandardMaterial({
+        color: 0xecb813, // shiny gold
+        metalness: 0.95,
+        roughness: 0.1
+    });
+    
+    // Gold disc
+    const discGeom = new THREE.CylinderGeometry(1.6, 1.6, 0.2, 32);
+    const disc = new THREE.Mesh(discGeom, goldMat);
+    disc.rotation.x = Math.PI / 2; // layout flat facing camera
+    group.add(disc);
+    
+    // Raised circular border rim
+    const rimGeom = new THREE.TorusGeometry(1.4, 0.08, 8, 32);
+    const rim1 = new THREE.Mesh(rimGeom, goldMat);
+    rim1.position.z = 0.11;
+    const rim2 = rim1.clone();
+    rim2.position.z = -0.11;
+    group.add(rim1, rim2);
+    
+    // Pixel star/icon details on face
+    const symbolGeom = new THREE.BoxGeometry(0.65, 0.65, 0.05);
+    const symbol = new THREE.Mesh(symbolGeom, goldMat);
+    symbol.rotation.z = Math.PI / 4;
+    symbol.position.z = 0.11;
+    group.add(symbol);
+    
+    const symbolBack = symbol.clone();
+    symbolBack.position.z = -0.11;
+    group.add(symbolBack);
+    
+    return group;
+}
+
+function createLaptop() {
+    const group = new THREE.Group();
+    const aluminumMat = new THREE.MeshStandardMaterial({
+        color: 0x9fa1a6, // sleek silver space grey
+        metalness: 0.85,
+        roughness: 0.25
+    });
+    const keyboardMat = new THREE.MeshStandardMaterial({
+        color: 0x1d1d1f, // keyboard block
+        metalness: 0.15,
+        roughness: 0.8
+    });
+    
+    const screenText = createCodeTexture('#00ff66');
+    const screenMat = new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        emissive: 0x00ee55,
+        emissiveMap: screenText,
+        emissiveIntensity: 0.65,
+        metalness: 0.1,
+        roughness: 0.1
+    });
+    
+    // Bottom chassis base
+    const baseGeom = new THREE.BoxGeometry(4, 0.1, 2.7);
+    const base = new THREE.Mesh(baseGeom, aluminumMat);
+    group.add(base);
+    
+    // Keyboard inset layout
+    const kbGeom = new THREE.BoxGeometry(3.5, 0.02, 1.7);
+    const keyboard = new THREE.Mesh(kbGeom, keyboardMat);
+    keyboard.position.set(0, 0.06, 0.2);
+    group.add(keyboard);
+    
+    // Screen Pivot hinge
+    const screenPivot = new THREE.Group();
+    screenPivot.position.set(0, 0.05, -1.3);
+    
+    // Laptop lid back
+    const lidGeom = new THREE.BoxGeometry(4, 2.6, 0.08);
+    const lid = new THREE.Mesh(lidGeom, aluminumMat);
+    lid.position.set(0, 1.3, -0.04);
+    screenPivot.add(lid);
+    
+    // Matrix console screen display
+    const screenGeom = new THREE.BoxGeometry(3.7, 2.3, 0.02);
+    const screen = new THREE.Mesh(screenGeom, screenMat);
+    screen.position.set(0, 1.3, 0.015);
+    screenPivot.add(screen);
+    
+    // Standard tilted screen angle (110 degrees)
+    screenPivot.rotation.x = THREE.MathUtils.degToRad(110);
+    group.add(screenPivot);
+    
+    return { group, texture: screenText };
+}
+
+// Three.js Engine Setup
+function init3DScene() {
+    const welcome = document.getElementById('welcome');
+    const canvasBg = document.getElementById('canvas-bg');
+    const canvasFg = document.getElementById('canvas-fg');
+    
+    if (!welcome || !canvasBg || !canvasFg) return;
+    
+    let width = welcome.offsetWidth;
+    let height = welcome.offsetHeight;
+    
+    // Setup background and foreground transparent WebGL renderers
+    const rendererBg = new THREE.WebGLRenderer({ canvas: canvasBg, alpha: true, antialias: true });
+    rendererBg.setSize(width, height);
+    rendererBg.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    rendererBg.setClearColor(0x000000, 0);
+    
+    const rendererFg = new THREE.WebGLRenderer({ canvas: canvasFg, alpha: true, antialias: true });
+    rendererFg.setSize(width, height);
+    rendererFg.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    rendererFg.setClearColor(0x000000, 0);
+    
+    // Set up parallel Scenes
+    const sceneBg = new THREE.Scene();
+    const sceneFg = new THREE.Scene();
+    
+    // Set up shared projection camera
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+    camera.position.z = 28;
+    
+    // Add lighting sets to both background/foreground layers
+    const configureLights = (scene) => {
+        const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+        scene.add(ambient);
+        
+        const keyLight = new THREE.DirectionalLight(0xffffff, 0.95);
+        keyLight.position.set(15, 25, 20);
+        scene.add(keyLight);
+        
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.35);
+        fillLight.position.set(-15, -15, -10);
+        scene.add(fillLight);
+        
+        const spotLight = new THREE.PointLight(0xff00a0, 0.6, 35);
+        spotLight.position.set(0, 0, 8);
+        scene.add(spotLight);
+    };
+    
+    configureLights(sceneBg);
+    configureLights(sceneFg);
+    
+    // Instantiate 3D meshes
+    const padlock = createPadlock();
+    const monitorObj = createCRTMonitor();
+    const box = createCardboardBox();
+    const truck = createMonsterTruck();
+    const coin = createDigitalCoin();
+    const laptopObj = createLaptop();
+    
+    // Object Configurations: Base positions, drift variables, rotations
+    const activeObjects = [
+        {
+            mesh: padlock,
+            baseX: -8.0, baseY: 3.5, baseZ: -2.0,
+            driftX: 0.5, driftY: 0.6, driftZ: 0.4,
+            ampX: 1.0, ampY: 1.2, ampZ: 5.0, // large Z amplitude to cross threshold
+            rotX: 0.15, rotY: 0.25, rotZ: 0.08,
+            pIntensity: 3.0
+        },
+        {
+            mesh: monitorObj.group,
+            texture: monitorObj.texture,
+            baseX: 8.0, baseY: 4.2, baseZ: 2.5,
+            driftX: 0.4, driftY: 0.5, driftZ: 0.6,
+            ampX: 0.8, ampY: 1.0, ampZ: 5.5,
+            rotX: 0.08, rotY: 0.18, rotZ: 0.05,
+            pIntensity: 2.8
+        },
+        {
+            mesh: box,
+            baseX: -8.5, baseY: -3.8, baseZ: 3.0,
+            driftX: 0.6, driftY: 0.4, driftZ: 0.5,
+            ampX: 1.1, ampY: 0.9, ampZ: 6.0,
+            rotX: 0.2, rotY: 0.12, rotZ: 0.15,
+            pIntensity: 3.2
+        },
+        {
+            mesh: truck,
+            baseX: 8.5, baseY: -4.2, baseZ: -1.5,
+            driftX: 0.5, driftY: 0.5, driftZ: 0.4,
+            ampX: 1.2, ampY: 1.1, ampZ: 5.2,
+            rotX: 0.12, rotY: 0.2, rotZ: 0.1,
+            pIntensity: 3.0
+        },
+        {
+            mesh: coin,
+            baseX: -3.0, baseY: 5.5, baseZ: 4.0,
+            driftX: 0.7, driftY: 0.6, driftZ: 0.5,
+            ampX: 0.9, ampY: 1.3, ampZ: 5.8,
+            rotX: 0.3, rotY: 0.3, rotZ: 0.2,
+            pIntensity: 2.5
+        },
+        {
+            mesh: laptopObj.group,
+            texture: laptopObj.texture,
+            baseX: 3.5, baseY: -5.5, baseZ: -3.0,
+            driftX: 0.4, driftY: 0.4, driftZ: 0.6,
+            ampX: 0.7, ampY: 0.8, ampZ: 5.4,
+            rotX: 0.1, rotY: 0.15, rotZ: 0.05,
+            pIntensity: 2.7
+        }
+    ];
+    
+    // Add all meshes to background initially
+    activeObjects.forEach(obj => {
+        sceneBg.add(obj.mesh);
+    });
+    
+    // Mouse Interaction Parallax tracking
+    let rawMouseX = 0;
+    let rawMouseY = 0;
+    
+    window.addEventListener('mousemove', (e) => {
+        rawMouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2); // -1 to +1
+        rawMouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2); // -1 to +1
+    });
+    
+    // Smooth interpolations
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    
+    const startTime = Date.now();
+    
+    // Main Render Loop
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const time = (Date.now() - startTime) * 0.001;
+        
+        // Lerp mouse variables for smooth lag parallax effect
+        targetMouseX += (rawMouseX - targetMouseX) * 0.07;
+        targetMouseY += (rawMouseY - targetMouseY) * 0.07;
+        
+        activeObjects.forEach(obj => {
+            // 1. Calculate base floating drift using sine/cosine waves
+            const driftX = Math.sin(time * obj.driftX) * obj.ampX;
+            const driftY = Math.cos(time * obj.driftY) * obj.ampY;
+            const driftZ = Math.sin(time * obj.driftZ) * obj.ampZ;
+            
+            // 2. Add mouse tracking parallax
+            const targetX = obj.baseX + driftX + targetMouseX * obj.pIntensity;
+            const targetY = obj.baseY + driftY - targetMouseY * obj.pIntensity;
+            const targetZ = obj.baseZ + driftZ;
+            
+            // Apply coordinates with smooth interpolation
+            obj.mesh.position.x += (targetX - obj.mesh.position.x) * 0.08;
+            obj.mesh.position.y += (targetY - obj.mesh.position.y) * 0.08;
+            obj.mesh.position.z += (targetZ - obj.mesh.position.z) * 0.08;
+            
+            // Update rotations dynamically
+            const targetRotX = time * obj.rotX + targetMouseY * 0.4;
+            const targetRotY = time * obj.rotY + targetMouseX * 0.4;
+            const targetRotZ = time * obj.rotZ;
+            
+            obj.mesh.rotation.x += (targetRotX - obj.mesh.rotation.x) * 0.08;
+            obj.mesh.rotation.y += (targetRotY - obj.mesh.rotation.y) * 0.08;
+            obj.mesh.rotation.z += (targetRotZ - obj.mesh.rotation.z) * 0.08;
+            
+            // 3. Dynamic Z-Index depth sorting relative to typography plane (Z = 0)
+            if (obj.mesh.position.z > 0) {
+                // Should pass in front of text (belongs in foreground scene)
+                if (obj.mesh.parent !== sceneFg) {
+                    sceneBg.remove(obj.mesh);
+                    sceneFg.add(obj.mesh);
+                }
+            } else {
+                // Should pass behind text (belongs in background scene)
+                if (obj.mesh.parent !== sceneBg) {
+                    sceneFg.remove(obj.mesh);
+                    sceneBg.add(obj.mesh);
+                }
+            }
+            
+            // 4. Scroll terminal code lines on computer screens
+            if (obj.texture) {
+                obj.texture.offset.y -= 0.003;
+            }
+        });
+        
+        // Render layers in alignment
+        rendererBg.render(sceneBg, camera);
+        rendererFg.render(sceneFg, camera);
+    }
+    
+    // Responsive Resize Handler
+    window.addEventListener('resize', () => {
+        width = welcome.offsetWidth;
+        height = welcome.offsetHeight;
+        
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        
+        rendererBg.setSize(width, height);
+        rendererBg.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        rendererFg.setSize(width, height);
+        rendererFg.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+    
+    // Start loop
+    animate();
+}
+
+// macOS Dock Magnification interaction
+function initMacosDock() {
+    const dock = document.querySelector('.macos-dock');
+    const items = document.querySelectorAll('.dock-item');
+    
+    if (!dock || items.length === 0) return;
+    
+    dock.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        items.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            const itemCenterX = rect.left + rect.width / 2;
+            const itemCenterY = rect.top + rect.height / 2;
+            
+            // Distance from mouse to center of the icon
+            const distance = Math.hypot(mouseX - itemCenterX, mouseY - itemCenterY);
+            const maxDistance = 140; // threshold for magnification scale
+            
+            if (distance < maxDistance) {
+                // Magnify scale up to 1.7x depending on proximity
+                const scale = 1 + (0.7 * (1 - distance / maxDistance));
+                item.style.transform = `scale(${scale})`;
+                // Add spacing dynamically so icons spread out organically
+                item.style.margin = `0 ${8 * (scale - 1)}px`;
+            } else {
+                item.style.transform = 'scale(1)';
+                item.style.margin = '0 0px';
+            }
+        });
+    });
+    
+    dock.addEventListener('mouseleave', () => {
+        items.forEach(item => {
+            item.style.transform = 'scale(1)';
+            item.style.margin = '0 0px';
+        });
+    });
+}
+
+
+// ============================================================
+//  STICKER HUB – radial pop + modal open/close
+// ============================================================
+
+function initStickerHub() {
+    const center = document.getElementById('sticker-center');
+    const radials = document.querySelectorAll('.sticker-radial');
+    const modals = document.querySelectorAll('.hub-modal');
+    const closeBtns = document.querySelectorAll('.modal-close-btn');
+
+    if (!center) return;
+
+    let popped = false;
+
+    // Toggle radial stickers on center click
+    center.addEventListener('click', () => {
+        popped = !popped;
+        radials.forEach((sticker, i) => {
+            if (popped) {
+                setTimeout(() => {
+                    sticker.classList.add('popped');
+                }, i * 80);
+            } else {
+                sticker.classList.remove('popped');
+            }
+        });
+    });
+
+    // Open modal on radial sticker click
+    radials.forEach(sticker => {
+        sticker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!sticker.classList.contains('popped')) return;
+            const targetId = sticker.dataset.target;
+            const modal = document.getElementById(targetId);
+            if (modal) openModal(modal);
+        });
+    });
+
+    // Close buttons
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.hub-modal');
+            if (modal) closeModal(modal);
+        });
+    });
+
+    // Click outside modal inner to close
+    modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal(modal);
+        });
+    });
+
+    // ESC key closes any open modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.hub-modal.active').forEach(m => closeModal(m));
+        }
+    });
+
+    // Render content into modals that need it
+    renderWorkExperienceCards();
+    renderCertsModal();
+    renderTechModal();
+    renderEducationModal();
+    renderProjectsModal();
+}
+
+function openModal(modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Focus the close button for accessibility
+    const closeBtn = modal.querySelector('.modal-close-btn');
+    if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
+}
+
+function closeModal(modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ============================================================
+//  WORK EXPERIENCE BENTO GRID inside modal
+// ============================================================
+
+function renderWorkExperienceCards() {
+    const grid = document.getElementById('modal-experience-content');
+    if (!grid) return;
+
+    // Map experience IDs to bento grid area names
+    const areaMap = {
+        5: 'current',  // SUNY (featured large)
+        1: 'tsl',
+        2: 'wedd',
+        3: 'smollan',
+        4: 'vatika'
+    };
+
+    grid.innerHTML = experienceData.map(exp => {
+        const area = areaMap[exp.id];
+        const isSlate = (exp.id === 1 || exp.id === 4);
+        return `
+            <div class="folder-card ${isSlate ? 'bg-slate' : ''}" id="card-${area}" style="grid-area:${area}">
+                <div class="folder-tab"></div>
+                <div class="folder-role">${exp.position}</div>
+                <div class="folder-company">${exp.company}</div>
+                <span class="folder-duration">${exp.duration} · ${exp.location}</span>
+                <div class="folder-details" id="details-${area}">
+                    <ul class="folder-bullets">
+                        ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                    </ul>
+                </div>
+                <button class="btn-read-more" data-target="details-${area}">Read more ↓</button>
+            </div>
+        `;
+    }).join('');
+
+    // Read-more toggle
+    grid.querySelectorAll('.btn-read-more').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const detailsId = btn.dataset.target;
+            const details = document.getElementById(detailsId);
+            if (!details) return;
+            const expanded = details.classList.toggle('expanded');
+            btn.textContent = expanded ? 'Show less ↑' : 'Read more ↓';
+        });
+    });
+}
+
+function initWorkExperienceModal() {
+    // Work is now opened via the sticker hub; this is a no-op placeholder
+}
+
+// ============================================================
+//  CERTS MODAL
+// ============================================================
+
+function renderCertsModal() {
+    const container = document.getElementById('modal-certs-content');
+    if (!container) return;
+
+    container.innerHTML = certificationsData.map(cert => `
+        <div class="cert-card">
+            <div>
+                <div class="cert-name">${cert.name}</div>
+                <div class="cert-provider">${cert.provider}</div>
+            </div>
+            <a href="${cert.link}" target="_blank" class="cert-btn" rel="noopener noreferrer">View ↗</a>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+//  TECH STACK MODAL
+// ============================================================
+
+function renderTechModal() {
+    const container = document.getElementById('modal-tech-content');
+    if (!container) return;
+
+    const categories = {
+        'Programming & Languages': skillsData.programming,
+        'AI & Machine Learning': skillsData.ai,
+        'Creative Tools': skillsData.creative_tools,
+        'Dev Tools': skillsData.dev_tools,
+        'Data Tools': skillsData.data_tools
+    };
+
+    container.innerHTML = Object.entries(categories).map(([label, skills]) => `
+        <div class="tech-category">
+            <h3 class="tech-category-label">${label}</h3>
+            <div class="tech-pills">
+                ${skills.map(s => `
+                    <div class="tech-pill">
+                        <span class="tech-name">${s.name}</span>
+                        <span class="tech-stars">${'●'.repeat(s.level)}${'○'.repeat(5 - s.level)}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+//  EDUCATION MODAL
+// ============================================================
+
+function renderEducationModal() {
+    const container = document.getElementById('modal-education-content');
+    if (!container) return;
+
+    container.innerHTML = educationData.map(edu => `
+        <div class="education-entry">
+            <div class="education-icon-wrap"><i class="fas ${edu.icon}"></i></div>
+            <div class="education-body">
+                <h3>${edu.institution}</h3>
+                <p class="edu-degree">${edu.degree}</p>
+                <p class="edu-meta">${edu.duration} · ${edu.status}</p>
+                <p class="edu-spec">${edu.specialization}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+//  PROJECTS MODAL
+// ============================================================
+
+function renderProjectsModal() {
+    const container = document.getElementById('modal-projects-content');
+    if (!container) return;
+
+    container.innerHTML = projectsData.map(project => `
+        <div class="project-modal-card">
+            <div class="project-modal-img-wrap">
+                <img src="${project.image}" alt="${project.title}" loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400x180/25344F/D5B893?text=${encodeURIComponent(project.title)}'">
+            </div>
+            <div class="project-modal-body">
+                <span class="project-modal-cat">${project.category}</span>
+                <h3 class="project-modal-title">${project.title}</h3>
+                <p class="project-modal-desc">${project.description}</p>
+                <div class="project-modal-tech">
+                    ${project.techStack.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                </div>
+                <div class="project-modal-links">
+                    ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener" class="project-link-btn">GitHub ↗</a>` : ''}
+                    ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener" class="project-link-btn primary">Live Demo ↗</a>` : ''}
+                    ${project.downloadPaper ? `<a href="${project.downloadPaper}" download class="project-link-btn">Download Paper ↓</a>` : ''}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+//  SCROLL-DRIVEN INTRO REVEAL
+// ============================================================
+
+function initScrollReveal() {
+    const section = document.getElementById('intro-section');
+    const sticky = section ? section.querySelector('.intro-sticky-container') : null;
+    const groups = section ? section.querySelectorAll('.reveal-group') : [];
+
+    if (!section || !groups.length) return;
+
+    function onScroll() {
+        const sectionTop = section.getBoundingClientRect().top;
+        const sectionHeight = section.offsetHeight;
+        const viewH = window.innerHeight;
+
+        // How far into the section we've scrolled (0 → 1)
+        const progress = Math.min(Math.max(-sectionTop / (sectionHeight - viewH), 0), 1);
+
+        const count = groups.length;
+        groups.forEach((group, i) => {
+            // Each group reveals in sequence across the scroll range
+            const threshold = i / count;
+            const groupProgress = Math.min(Math.max((progress - threshold) / (1 / count), 0), 1);
+
+            group.style.opacity = 0.12 + groupProgress * 0.88;
+            group.style.filter = `blur(${6 - groupProgress * 6}px)`;
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // run once on mount
 }
